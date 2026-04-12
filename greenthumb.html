@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GreenThumb — Darren Chia</title>
+  <link href="https://fonts.googleapis.com/css2?family=Caprasimo&family=Domine:wght@600;700&family=IBM+Plex+Mono:wght@500&family=Newsreader:ital,wght@0,600;0,700;0,800;1,600;1,700&family=Space+Grotesk:wght@400;500;700&family=IBM+Plex+Sans:wght@400;500&family=Lora:ital,wght@0,500;0,600;0,700;1,600;1,700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./base.css">
+  <link rel="stylesheet" href="./components.css">
+  <link rel="stylesheet" href="./case-studies.css">
+  <style>
+    :root { --forest: #2d6a4f; }
+    .overview__col-heading { font-family: 'Space Grotesk', sans-serif; }
+    .hero__meta-label { font-family: 'IBM Plex Sans', sans-serif; font-weight: 500; color: var(--muted); letter-spacing: 0.02em; }
+    .hero__meta-value { font-size: 18px; font-weight: 500; color: var(--ink); }
+    .ck-themes { display: flex; flex-direction: column; gap: 32px; }
+    .ck-theme { border-left: 3px solid var(--forest); padding-left: 13px; display: flex; flex-direction: column; gap: 12px; }
+    .ck-theme__label { font-family: 'Space Grotesk', sans-serif; font-size: 17px; font-weight: 700; color: var(--forest); }
+    .overview__lead { font-family: 'Space Grotesk', sans-serif; }
+</style>
+</head>
+<body>
+
+  <!-- Section 1: Navigation -->
+  <div id="nav-placeholder"></div>
+
+  <nav class="sidebar-nav">
+    <a href="#context">OVERVIEW</a>
+    <a href="#method">RESEARCH</a>
+    <a href="#synthesis">FINDINGS</a>
+    <a href="#solutions">SOLUTION</a>
+    <a href="#conclusion">NEXT STEPS</a>
+  </nav>
+
+  <div class="page-wrapper">
+    <!-- Section 1 -->
+    <!-- Section 2 -->
+    <div id="cs-hero"></div>
+    <!-- Section 3 -->
+    <div id="cs-hero-image"></div>
+    <!-- Section 4 -->
+    <div id="cs-overview"></div>
+    <!-- Section 5 -->
+    <div id="cs-pull-quote"></div>
+    <!-- Section 6 -->
+    <section class="context" id="context">
+      <div class="context__inner">
+        <div class="context__header">
+          <span class="context__label">Context</span>
+          <h2 class="context__heading">From Crisis to Community: The Birth of Greenthumb</h2>
+        </div>
+        <div class="img-block img-block--full">
+          <img src="./images/gt-context.webp" alt="GreenThumb community garden" width="680" height="500" loading="lazy">
+        </div>
+        <div class="context__body">
+          <p>NYC's 1970s fiscal crisis hollowed out city services, hitting lower-income neighborhoods hardest. Buildings were abandoned, residents left, and vacant lots became unsafe dumping grounds.</p>
+          <p>In response, neighbors reclaimed those lots and built community gardens from the ground up—acts of care, resistance, and local power. The momentum of resistance eventually evolved into a city-run program. Operation GreenThumb was launched in 1978 to support the growing community garden activism and critically gave community gardens legitimate representation.</p>
+        </div>
+        <div class="context__client">
+          <span class="context__client-label">CLIENT</span>
+          <p class="context__client-heading">GreenThumb is NYC's largest community gardening program — <span>powered by neighborhoods, not the city.</span></p>
+          <p class="context__client-body">City program that empowers rather than controls — providing materials, training, and legitimacy while handing ownership back to the communities it serves.</p>
+          <div class="context__stats">
+            <div class="context__stat">
+              <span class="context__stat-number">550+</span>
+              <span class="context__stat-label">Community Gardens Across NYC</span>
+            </div>
+            <div class="context__stat context__stat--mid">
+              <span class="context__stat-number">20K+</span>
+              <span class="context__stat-label">Volunteers as Daily Stewards</span>
+            </div>
+            <div class="context__stat">
+              <span class="context__stat-number">5</span>
+              <span class="context__stat-label">Boroughs represented</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- Section 7 -->
+    <div class="problem-band" id="problem">
+      <div class="problem-band__inner">
+        <div class="problem-band__header">
+          <span class="problem-band__label">Problem Statement</span>
+          <h2 class="problem-band__heading">Challenge</h2>
+        </div>
+        <p class="problem-band__quote">"Recruitment is one of our biggest challenges because our scope is citywide. We keep it as accessible as possible: no portal, no minimum hours, no prior experience."</p>
+        <p class="problem-band__body">GreenThumb's job is to facilitate and connect—not to run gardens directly. Each garden is independent, shaped by its neighborhood, leadership, and capacity. That independence is a strength, but it also means the volunteer experience changes from garden to garden. For many people, the hardest part isn't showing up once—it's knowing how to join in, what to do, and how to come back.</p>
+      </div>
+    </div>
+    <!-- Section 8 -->
+    <section class="methodology" id="method">
+      <div class="methodology__inner">
+        <div class="methodology__header">
+          <span class="methodology__label">Methodology</span>
+          <h2 class="methodology__heading">What we Did</h2>
+        </div>
+        <div class="img-block img-block--medium">
+          <img class="methodology__image" src="./images/gt-methodology.webp" alt="Research methodology diagram" width="16383" height="12307" loading="lazy">
+        </div>
+        <div class="methodology__text">
+          <p class="methodology__subheading">We used a mixed-method approach moving from Macro to Micro.</p>
+          <p class="methodology__body">We started with system-level interviews with GreenThumb representatives, then interviewed individual garden leaders to understand day-to-day realities. We rounded this out with volunteer-focused research through a survey and a volunteer close-up day (workday observation).</p>
+        </div>
+      </div>
+    </section>
+    <!-- Section 9 -->
+    <section class="findings" id="findings">
+      <div class="findings__inner">
+
+        <!-- Header -->
+        <div class="findings__header">
+          <span class="findings__label">Findings</span>
+          <h2 class="findings__heading">Cross-Network Findings</h2>
+        </div>
+
+        <!-- Constraint block -->
+        <div class="findings__constraint">
+          <span class="findings__constraint-label">CONSTRAINT</span>
+          <div class="findings__stat-row">
+            <span class="findings__stat-number">$10K</span>
+            <span class="findings__stat-text">Annual Budget, 550+ Gardens</span>
+          </div>
+          <p class="findings__constraint-body">GreenThumb supports 550+ gardens with a small team. Volunteer program run on ~$10,000/year. City bureaucracy slows down how quickly GreenThumb can respond to garden needs.</p>
+          <p class="findings__quote">"GreenThumb works with a very small budget every year, less than 1% of the city's budget goes to the parks department"</p>
+        </div>
+
+        <!-- What this creates divider -->
+        <div class="findings__divider">
+          <div class="findings__divider-line"></div>
+          <span class="findings__divider-label">WHAT THIS CREATES</span>
+          <div class="findings__divider-line"></div>
+        </div>
+
+        <!-- Macro findings cards -->
+        <div class="findings__macro-wrap">
+          <div class="findings__macro-card findings__macro-card--1">
+            <span class="findings__macro-card-tag">MACRO 1</span>
+            <p class="findings__macro-card-heading">Volunteers Aging Out</p>
+            <p class="findings__macro-card-body">Legacy gardeners aging out. Without resources to recruit actively, succession stays unresolved.</p>
+            <p class="findings__macro-card-quote">"Challenges in the last decade: increasing committed members and bringing young people to gardens."</p>
+          </div>
+          <div class="findings__macro-card findings__macro-card--2">
+            <span class="findings__macro-card-tag">MACRO 2</span>
+            <p class="findings__macro-card-heading">High Turnover rate</p>
+            <p class="findings__macro-card-body">Seasonal volunteers leave before developing. Relationships break each cycle.</p>
+            <p class="findings__macro-card-quote">"When staff turn over every year, those relationships break. That's the biggest obstacle — continuity."</p>
+          </div>
+        </div>
+
+        <!-- On the ground divider -->
+        <div class="findings__divider">
+          <div class="findings__divider-line"></div>
+          <span class="findings__divider-label">ON THE GROUND</span>
+          <div class="findings__divider-line"></div>
+        </div>
+
+        <!-- Overlapping portraits + core insight -->
+        <div class="findings__portraits">
+          <div class="findings__portrait-stack">
+            <img class="findings__portrait-img" src="./images/gt-findings-01.webp" alt="Garden leader Abby" width="320" height="320" loading="lazy">
+            <img class="findings__portrait-img" src="./images/gt-findings-02.webp" alt="Garden leader Catherine" width="285" height="278" loading="lazy">
+          </div>
+          <p class="findings__portrait-caption">Two garden leaders, two gardens, same systemic pressure.</p>
+        </div>
+
+        <div class="findings__core-insight">
+          <p class="findings__core-insight-label">CORE INSIGHT</p>
+          <p class="findings__core-insight-text">The people most capable of fixing the onboarding problem are the same people too burned out to fix it.</p>
+        </div>
+
+        <!-- Garden leader cards -->
+        <div class="findings__leaders">
+          <div class="findings__leader">
+            <p class="findings__leader-name">Abby</p>
+            <p class="findings__leader-role">462 Halsey · Primary GreenThumb contact · 3 yrs</p>
+            <div class="findings__leader-card">
+              <p class="findings__leader-finding">Finding 1 — Burnout: Burnout is common, and continuity can break quickly when leadership changes or conflict happens.</p>
+              <p class="findings__leader-quote">"If you can't get a leader off of their position with another one lined up to take up on all of the responsibilities that they've been holding then that burnout can cause like things to just combust."</p>
+            </div>
+          </div>
+          <div class="findings__leader">
+            <p class="findings__leader-name">Catherine</p>
+            <p class="findings__leader-role">Green Oasis · New member → volunteer coordinator</p>
+            <div class="findings__leader-card">
+              <p class="findings__leader-finding">Finding 2 — Onboarding: Without visible pathways, people enjoy a visit but don't see themselves as part of the garden long-term.</p>
+              <p class="findings__leader-quote">"It's just, like, if you're not communicating, people don't know how to get involved. And I think we hope that, like, everyone can get involved if they want to. It shouldn't be mysterious."</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Volunteer closeup divider -->
+        <div class="findings__divider">
+          <div class="findings__divider-line"></div>
+          <span class="findings__divider-label">VOLUNTEER CLOSEUP</span>
+          <div class="findings__divider-line"></div>
+        </div>
+
+        <!-- Survey findings -->
+        <div class="findings__survey">
+          <div class="img-block img-block--medium">
+            <img src="./images/gt-findings-03.webp" alt="Survey and workday findings" width="3537" height="8355" loading="lazy">
+          </div>
+          <p class="findings__survey-heading">Survey &amp; Workday Findings</p>
+          <div class="findings__survey-blocks">
+            <div>
+              <p class="findings__survey-block-label">Willingness to Return</p>
+              <p class="findings__survey-block-body">Feeling welcome, having clear instructions, and hands-on learning were all things that they felt made their volunteers more likely to return.</p>
+            </div>
+            <div>
+              <p class="findings__survey-block-label">Discoverability</p>
+              <p class="findings__survey-block-body">Referrals from members and walk-ins during public hours are how they thought new volunteers find their garden most often.</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+    <!-- Section 10 -->
+    <section class="synthesis" id="synthesis">
+      <div class="synthesis__inner">
+
+        <!-- Header -->
+        <div class="synthesis__header">
+          <span class="synthesis__label">Synthesis &amp; Insights</span>
+          <h2 class="synthesis__heading">So What does this all mean?</h2>
+        </div>
+
+        <!-- Body -->
+        <p class="synthesis__body">From our findings, we saw that gardens operate very differently, volunteers struggle with motivation and clear next steps, and a small core group carries most of the work without clear ways to pass on legacy—alongside with burnout being tightly linked to a few highly dedicated members holding everything up.</p>
+
+        <!-- HMW columns -->
+        <div class="synthesis__hmw">
+          <div class="synthesis__hmw-col">
+            <div class="img-block img-block--small">
+              <img src="./images/gt-synthesis-hmw-01.webp" alt="Motivation icon" width="2085" height="2085" loading="lazy">
+            </div>
+            <p class="synthesis__hmw-heading">Motivation &amp; Care</p>
+            <p class="synthesis__hmw-body">What helps people care about and stay motivated to volunteer over time?</p>
+          </div>
+          <div class="synthesis__hmw-col">
+            <div class="img-block img-block--small">
+              <img src="./images/gt-synthesis-hmw-02.webp" alt="Mission icon" width="2085" height="2085" loading="lazy">
+            </div>
+            <p class="synthesis__hmw-heading">Connect to Mission</p>
+            <p class="synthesis__hmw-body">How can volunteers feel closer to each garden's history, mission, and purpose?</p>
+          </div>
+          <div class="synthesis__hmw-col">
+            <div class="img-block img-block--small">
+              <img src="./images/gt-synthesis-hmw-03.webp" alt="Onboarding icon" width="2085" height="2085" loading="lazy">
+            </div>
+            <p class="synthesis__hmw-heading">Clear Onboarding</p>
+            <p class="synthesis__hmw-body">How might we create simple, clear onboarding and entry points that work across many types of gardens?</p>
+          </div>
+        </div>
+
+        <!-- Insight 1 -->
+        <div class="synthesis__insight-1">
+          <div class="synthesis__insight-text">
+            <span class="synthesis__insight-tag">Insight #1</span>
+            <p class="synthesis__insight-heading">Every Garden Has a story to tell</p>
+            <p class="synthesis__insight-body">If the garden's meaning to the neighborhood isn't visible, volunteers don't develop a reason to care beyond the task of the day. GreenThumb should provide an easy template for gardens to share purpose, priorities, and what to do next.</p>
+          </div>
+          <div class="img-block img-block--small" style="flex-shrink: 0; max-width: 40%">
+            <img src="./images/gt-synthesis-01.svg" alt="Insight 1 illustration" width="929" height="823" loading="lazy">
+          </div>
+        </div>
+
+        <!-- Insight 2 -->
+        <div class="synthesis__insight-2">
+          <div class="img-block img-block--small" style="flex-shrink: 0; max-width: 40%">
+            <img src="./images/gt-synthesis-02.svg" alt="Insight 2 illustration" width="257" height="254" loading="lazy">
+          </div>
+          <div class="synthesis__insight-text">
+            <span class="synthesis__insight-tag">Insight #2</span>
+            <p class="synthesis__insight-heading">Early Skill Pathways Grow Roots</p>
+            <p class="synthesis__insight-body">When gardens don't capture volunteers' skills early, people stay "extra hands" and drift away. GreenThumb should help gardens capture skills upfront and offer clear pathways into repeatable roles.</p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+    <!-- Section 11 -->
+    <section class="solution" id="solutions">
+      <div class="solution__inner">
+
+        <!-- Header -->
+        <div class="solution__header">
+          <span class="solution__label">Solution</span>
+          <h2 class="solution__heading">Insights &amp; Design Opportunities</h2>
+        </div>
+
+        <!-- Sub-question -->
+        <div class="solution__subq">
+          <p class="solution__subq-heading">How can GreenThumb tackle these issues in a way that's accessible and scalable for all gardens?</p>
+          <p class="solution__subq-body">The answer had to fit into what already exists — no new systems, no onboarding burden for garden leaders who are already stretched thin.</p>
+        </div>
+
+        <!-- Pamphlet component -->
+        <div class="gt-container">
+          <div class="gt-wrap">
+            <div class="gt-reveal">
+              <div class="gt-reveal-lbl gt-fade">The answer</div>
+              <div class="gt-reveal-title gt-fade gt-d1">Get Growing: What Volunteers Do</div>
+              <div class="gt-reveal-sub gt-fade gt-d2">A take-home pamphlet for first-time volunteers.</div>
+              <div class="gt-spreads gt-fade gt-d3">
+                <div class="gt-spread"><div class="img-block img-block--full"><img src="./images/gt-solution-01.webp" alt="Pamphlet spread 1" width="3125" height="1750" loading="lazy"></div></div>
+                <div class="gt-spread"><div class="img-block img-block--full"><img src="./images/gt-solution-02.webp" alt="Pamphlet spread 2" width="3125" height="1750" loading="lazy"></div></div>
+              </div>
+              <div class="gt-pill-row gt-fade gt-d4">
+                <span class="gt-pill">Take-home format</span>
+                <span class="gt-pill">No digital barrier</span>
+                <span class="gt-pill">Garden-specific</span>
+              </div>
+            </div>
+            <div class="gt-spine-section">
+              <div class="gt-spine-label gt-fade">What each spread solves</div>
+              <div class="gt-spine-wrap">
+                <div class="gt-spine-line"></div>
+                <div class="gt-beat">
+                  <div class="gt-beat-left">
+                    <div class="gt-insight gt-fade">
+                      <div class="gt-insight-lbl">Insight 01</div>
+                      <div class="gt-insight-title">Every garden has a story to tell</div>
+                      <div class="gt-insight-body">If meaning is invisible, volunteers don't develop a reason to care. Spread 1 gives each garden its own origin story — turning an abstract program into a place with history and purpose.</div>
+                    </div>
+                  </div>
+                  <div class="gt-beat-dot"><div class="gt-dot gt-dot-d1"></div></div>
+                  <div class="gt-beat-right">
+                    <div class="gt-mock gt-fade gt-d1"><img src="./images/gt-solution-03.webp" alt="Pamphlet in use" width="384" height="512" loading="lazy"></div>
+                  </div>
+                </div>
+                <div class="gt-beat gt-beat-flip">
+                  <div class="gt-beat-left">
+                    <div class="gt-mock gt-fade gt-d2"><img src="./images/gt-solution-04.webp" alt="Pamphlet open" width="508" height="512" loading="lazy"></div>
+                  </div>
+                  <div class="gt-beat-dot"><div class="gt-dot gt-dot-d2"></div></div>
+                  <div class="gt-beat-right">
+                    <div class="gt-insight gt-fade gt-d3">
+                      <div class="gt-insight-lbl">Insight 02</div>
+                      <div class="gt-insight-title">Enthusiasm needs somewhere to go</div>
+                      <div class="gt-insight-body">120 volunteers, no pathway. Great first visit, no visible next step. Spread 2 closes that gap — giving volunteers a picture of what the work looks like and how to show up again.</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="gt-why gt-fade">
+              <div class="gt-why-lbl">Why this format</div>
+              <div class="gt-why-item">No digital barrier — works for every volunteer regardless of tech access</div>
+              <div class="gt-why-item">Garden-specific — each copy reflects the actual garden, not a generic program</div>
+              <div class="gt-why-item">Fits what already exists — no new systems, no budget ask</div>
+            </div>
+            <div class="gt-closing gt-fade">
+              <div class="gt-closing-line">Good service design doesn't fix what's broken.<br>It reveals what was always true.</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+    <!-- Section 12 -->
+    <section class="next-steps" id="conclusion">
+      <div class="next-steps__inner">
+
+        <div class="next-steps__header">
+          <span class="next-steps__label">Next Steps</span>
+          <h2 class="next-steps__heading">Looking Forward</h2>
+        </div>
+
+        <div class="ck-themes">
+          <div class="ck-theme">
+            <p class="ck-theme__label">What We Learned</p>
+            <p class="methodology__body">Volunteer dropout isn't a motivation problem — it's an information gap. First-time volunteers arrive eager but leave without context: why this garden exists, what their role means, how to come back.</p>
+          </div>
+          <div class="ck-theme">
+            <p class="ck-theme__label">The Pamphlet</p>
+            <p class="methodology__body">A take-home guide addresses that gap at exactly the right moment — after a first workday, when enthusiasm is high but continuity is fragile.</p>
+          </div>
+          <div class="ck-theme">
+            <p class="ck-theme__label">Next Steps</p>
+            <p class="methodology__body"><em>Validate</em> — Test with real volunteers and garden leaders to see if it actually changes how people return.<br><br><em>Scale</em> — Bring findings to GreenThumb to assess fit across the wider network.</p>
+          </div>
+        </div>
+
+
+      </div>
+    </section>
+    <!-- Section 13 -->
+    </div><!-- close .page-wrapper -->
+
+    <div id="footer-placeholder"></div>
+
+<script>
+(function () {
+  var EI = 'cubic-bezier(0.22,1,0.36,1)';
+  var EO = 'ease-out';
+  document.body.style.opacity   = '0';
+  document.body.style.transform = 'translateY(16px)';
+  requestAnimationFrame(function () {
+    requestAnimationFrame(function () {
+      document.body.style.transition = 'opacity 400ms ' + EI + ', transform 400ms ' + EI;
+      document.body.style.opacity    = '1';
+      document.body.style.transform  = 'translateY(0)';
+    });
+  });
+  document.body.addEventListener('transitionend', function handler(e) {
+    if (e.propertyName === 'transform') {
+      document.body.style.transform = '';
+      document.body.removeEventListener('transitionend', handler);
+    }
+  });
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest('a');
+    if (!a) return;
+    var href = a.getAttribute('href');
+    if (!href || href.charAt(0) === '#') return;
+    if (/^(https?:)?\/\/|^mailto:|^tel:/.test(href)) return;
+    if (a.hasAttribute('download') || a.target === '_blank') return;
+    e.preventDefault();
+    document.body.style.transition = 'opacity 250ms ' + EO;
+    document.body.style.opacity    = '0';
+    setTimeout(function () { window.location.href = href; }, 260);
+  });
+})();
+</script>
+<script src="./components/loader.js"></script>
+<script src="./components/templates.js"></script>
+<script>
+  document.getElementById('cs-hero').outerHTML = Components.renderHero({
+    title:    `GreenThumb: Scaling Belonging Across NYC Gardens`,
+    subtitle: `Service Design Case Study`,
+    meta: [
+      { label: `Duration`, values: [`8 Weeks`] },
+      { label: `Team`,     values: [`Kathy Choi`, `Phil Cote`, `Darren Chia`] },
+      { label: `Methods`,  values: [`Service Design`, `User Research`, `Prototyping`] },
+      { label: `Context`,  values: [`SVA IxD`] }
+    ]
+  });
+
+  document.getElementById('cs-hero-image').outerHTML = Components.renderHeroImage({
+    src: `./images/gt-hero.webp`,
+    alt: `GreenThumb hero`
+  });
+
+  document.getElementById('cs-overview').outerHTML = Components.renderOverview({
+    lead: `<strong>GreenThumb's challenge wasn't getting people in—it was keeping them involved.</strong> We designed a pamphlet that closes the gap between a good first visit and returning.`,
+    cols: [
+      { heading: `Problem`,  body: `GreenThumb facilitates many independently-run NYC gardens, and the network's variability makes consistent volunteer commitment hard to sustain.` },
+      { heading: `Approach`, body: `We paired stakeholder interviews with workday fieldwork and volunteer surveys to ground GreenThumb's goals to volunteer reality.` },
+      { heading: `Impact`,   body: `We created a pamphlet that shares each garden's story, captures skills early, and clarifies next steps—reducing drop-off and boosting follow-through.` }
+    ]
+  });
+
+  document.getElementById('cs-pull-quote').outerHTML = Components.renderPullQuote({
+    text: `\u201cVolunteer programs are often seen as \u201cnice-to-haves,\u201d when in reality they\u2019re essential infrastructure. Designers can help elevate that narrative\u2014showing that volunteer work isn\u2019t filler; it\u2019s fundamental.\u201d`
+  });
+</script>
+<script>
+(function () {
+  var EASE_OUT = 'cubic-bezier(0.22,1,0.36,1)';
+
+  var style = document.createElement('style');
+  style.textContent =
+    '.anim-up {' +
+      'opacity: 0;' +
+      'transform: translateY(24px);' +
+      'transition: opacity 420ms ' + EASE_OUT + ', transform 420ms ' + EASE_OUT + ';' +
+      'transition-delay: 80ms;' +
+    '}' +
+    '.anim-up.is-visible { opacity: 1; transform: translateY(0); }';
+  document.head.appendChild(style);
+
+  var simpleEls = Array.from(document.querySelectorAll(
+    '.context__header, .problem-band__header, .methodology__header, ' +
+    '.findings__header, .findings__divider, ' +
+    '.synthesis__header, .synthesis__insight-1, .synthesis__insight-2, ' +
+    '.solution__header, .solution__subq, .next-steps__header'
+  ));
+
+  var macroCards  = Array.from(document.querySelectorAll('.findings__macro-card'));
+  var hmwCols     = Array.from(document.querySelectorAll('.synthesis__hmw-col'));
+
+  simpleEls.forEach(function (el) { el.classList.add('anim-up'); });
+  [macroCards, hmwCols].forEach(function (group) {
+    group.forEach(function (el, i) {
+      el.classList.add('anim-up');
+      el.dataset.animDelay = String(i * 56);
+    });
+  });
+
+  var allEls = simpleEls.concat(macroCards).concat(hmwCols);
+
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (!e.isIntersecting) return;
+      var d = parseInt(e.target.dataset.animDelay || '0');
+      setTimeout(function () { e.target.classList.add('is-visible'); }, d);
+      io.unobserve(e.target);
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+  requestAnimationFrame(function () {
+    allEls.forEach(function (el) { io.observe(el); });
+  });
+})();
+</script>
+<script>
+(function() {
+  const fadeEls = document.querySelectorAll('.gt-fade');
+  const spineLine = document.querySelector('.gt-spine-line');
+  const dot1 = document.querySelector('.gt-dot-d1');
+  const dot2 = document.querySelector('.gt-dot-d2');
+
+  const observer = new IntersectionObserver(
+    (entries) => entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('gt-visible'); observer.unobserve(e.target); }
+    }),
+    { threshold: 0.15, rootMargin: '0px 0px -40px 0px' }
+  );
+  fadeEls.forEach(el => observer.observe(el));
+
+  if (spineLine) {
+    const spineObserver = new IntersectionObserver(
+      (entries) => entries.forEach(e => {
+        if (e.isIntersecting) {
+          spineLine.classList.add('gt-visible');
+          setTimeout(() => dot1?.classList.add('gt-visible'), 500);
+          setTimeout(() => dot2?.classList.add('gt-visible'), 700);
+          spineObserver.unobserve(e.target);
+        }
+      }),
+      { threshold: 0.1 }
+    );
+    spineObserver.observe(spineLine.parentElement);
+  }
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cooking Reframe — Darren Chia</title>
+  <link href="https://fonts.googleapis.com/css2?family=Caprasimo&family=Domine:wght@600;700&family=IBM+Plex+Mono:wght@500&family=Newsreader:ital,wght@0,600;0,700;0,800;1,600;1,700&family=Space+Grotesk:wght@400;500;700&family=IBM+Plex+Sans:wght@400;500&family=Lora:ital,wght@0,500;0,600;0,700;1,600;1,700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./base.css">
+  <link rel="stylesheet" href="./components.css">
+  <link rel="stylesheet" href="./case-studies.css">
+  <style>
+    /* Accent override — must define --cooking value here; styles.css defaults it to var(--ink) */
+    :root { --cooking: #c1622f; --accent: var(--cooking); --forest: var(--cooking); }
+
+
+    /* Hero typography — overrides styles.css defaults */
+    .hero__title    { font-weight: 600; }
+    .hero__subtitle { font-weight: 500; }
+
+    /* Meta block — design system spec (IBM Plex Sans labels, SG 18px values) */
+    .hero__meta-label { font-family: 'IBM Plex Sans', sans-serif; font-weight: 500; color: var(--muted); letter-spacing: 0.02em; }
+    .hero__meta-value { font-size: 18px; font-weight: 500; color: var(--ink); }
+
+    /* Hero image — reference: 1.4 ratio, contain */
+    .hero__image { aspect-ratio: 1.4; object-fit: contain; }
+
+    /* Overview labels — SG 26px 500 (styles.css default is NR 29px 600) */
+    .overview__col-heading { font-family: 'Space Grotesk', sans-serif; font-size: 26px; font-weight: 500; }
+
+    /* Context photo — smaller fixed height, no crop */
+    .context__photo { width: 100%; height: 320px; object-fit: contain; display: block; }
+
+    /* Context body — remove first-child accent highlight (GreenThumb-specific) */
+    .context__body p:first-child { color: var(--ink); font-weight: 500; }
+
+    /* Accent inline span */
+    .ed-accent { color: var(--cooking); font-weight: 700; }
+
+    /* Step structure */
+    .ed-steps { display: flex; flex-direction: column; gap: 32px; }
+    .ed-step { display: flex; flex-direction: column; gap: 48px; padding: 50px 0; border-bottom: 1px solid rgba(0,0,0,0.08); }
+
+    /* Step mini-header + sub-label */
+    .ed-step-label { font-family: 'Space Grotesk', sans-serif; font-size: 17px; font-weight: 500; letter-spacing: 0.02em; color: var(--muted); }
+    .ed-sub-label { font-family: 'Space Grotesk', sans-serif; font-size: 14px; font-weight: 700; color: var(--muted); }
+
+    /* Pills */
+    .ed-pills { display: flex; flex-direction: row; flex-wrap: wrap; gap: 8px; }
+    .ed-pill { font-family: 'Space Grotesk', sans-serif; font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.02em; padding: 2px 9px; border-radius: 20px; background: var(--pill-bg); color: var(--pill-txt); }
+    .ed-pill--inactive { background: transparent; border: 0.5px solid var(--muted); color: var(--muted); opacity: 0.45; text-decoration: line-through; }
+
+    /* Competitor rows */
+    .ed-competitors { display: flex; flex-direction: column; gap: 12px; }
+    .ed-competitor { display: flex; flex-direction: row; align-items: baseline; gap: 12px; opacity: 0.4; }
+    .ed-competitor__tag { font-family: 'IBM Plex Sans', sans-serif; font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); min-width: 64px; }
+    .ed-competitor__name { font-family: 'Space Grotesk', sans-serif; font-size: 15px; font-weight: 700; color: var(--ink); }
+    .ed-competitor__note { font-family: 'Space Grotesk', sans-serif; font-size: 14px; font-weight: 500; color: var(--ink); }
+
+    /* Benchmark card — high-impact */
+    .ed-benchmark { background: var(--card-bg); border-top: 3px solid var(--cooking); border-radius: 6px; padding: 20px; display: flex; flex-direction: column; gap: 8px; }
+    .ed-benchmark__tag { font-family: 'IBM Plex Sans', sans-serif; font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.06em; color: var(--cooking); }
+    .ed-benchmark__name { font-family: 'Space Grotesk', sans-serif; font-size: 15px; font-weight: 700; color: var(--ink); }
+    .ed-benchmark__note { font-family: 'Space Grotesk', sans-serif; font-size: 14px; font-weight: 500; line-height: 1.5em; color: var(--ink); }
+    .ed-benchmark__pills { display: flex; flex-direction: row; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
+
+    /* Features 2×2 grid */
+    .ed-features-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .ed-feature { background: var(--card-bg); border-top: 1px solid var(--card-border); border-radius: 6px; padding: 16px 18px; display: flex; flex-direction: column; gap: 6px; }
+    .ed-feature__num { font-family: 'Space Grotesk', sans-serif; font-size: 30px; font-weight: 700; letter-spacing: -0.04em; color: var(--cooking); line-height: 1; }
+    .ed-feature__title { font-family: 'Space Grotesk', sans-serif; font-size: 14px; font-weight: 700; color: var(--ink); }
+    .ed-feature__desc { font-family: 'Space Grotesk', sans-serif; font-size: 13px; font-weight: 500; line-height: 1.5em; color: var(--muted-2); }
+    .ed-feature__count { font-family: 'IBM Plex Sans', sans-serif; font-size: 11px; font-weight: 500; letter-spacing: 0.02em; color: var(--muted); margin-top: 4px; }
+
+    /* Spine layout */
+    .ed-spine-wrap { display: flex; flex-direction: row; gap: 28px; align-items: stretch; }
+    .ed-spine { display: flex; flex-direction: column; align-items: center; width: 14px; flex-shrink: 0; }
+    .ed-spine__dot { width: 10px; height: 10px; border-radius: 50%; background: var(--cooking); flex-shrink: 0; }
+    .ed-spine__line { width: 2px; flex: 1; background: var(--cooking); opacity: 0.5; }
+    .ed-spine__content { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 80px; }
+
+    /* Section grouping */
+    .ed-quant-sections { display: flex; flex-direction: column; gap: 80px; }
+
+    /* Individual survey block */
+    .ed-survey { display: flex; flex-direction: column; gap: 24px; }
+
+    /* Pull quote */
+    .ed-pull-quote { font-family: 'Space Grotesk', sans-serif; font-size: 30px; font-weight: 500; line-height: 1.3em; color: var(--ink); padding: 12px 0; }
+
+    /* Hero stat */
+    .ed-hero-stat { display: flex; flex-direction: column; gap: 6px; }
+    .ed-hero-stat__num { font-family: 'Space Grotesk', sans-serif; font-size: 77px; font-weight: 500; color: var(--cooking); line-height: 1; letter-spacing: -0.03em; }
+    .ed-hero-stat__label { font-family: 'Space Grotesk', sans-serif; font-size: 18px; font-weight: 500; line-height: 1.5em; color: var(--ink); }
+
+    /* Inline stat row */
+    .ed-stats { display: flex; flex-direction: row; gap: 0; width: 100%; }
+    .ed-stat { display: flex; flex-direction: column; gap: 4px; flex: 1; }
+    .ed-stat__num { font-family: 'Space Grotesk', sans-serif; font-size: 30px; font-weight: 700; color: var(--cooking); letter-spacing: -0.04em; line-height: 1; }
+    .ed-stat__label { font-family: 'Space Grotesk', sans-serif; font-size: 12px; font-weight: 500; color: var(--muted-2); line-height: 1.4em; }
+
+    /* Principles subsection */
+    .ed-principles { display: flex; flex-direction: column; gap: 12px; }
+    .ed-principles__intro { font-family: 'Space Grotesk', sans-serif; font-size: 18px; font-weight: 500; line-height: 1.6em; color: var(--ink); margin-bottom: 12px; }
+    .ed-card { background: var(--card-bg); border-top: 1px solid var(--card-border); border-radius: 6px; padding: 16px 18px; display: flex; flex-direction: column; gap: 6px; }
+    .ed-card--highlight { border-top-width: 3px; border-top-color: var(--cooking); }
+    .ed-card__tag { font-family: 'IBM Plex Sans', sans-serif; font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); }
+    .ed-card--highlight .ed-card__tag { color: var(--cooking); }
+    .ed-card__title { font-family: 'Space Grotesk', sans-serif; font-size: 15px; font-weight: 700; color: var(--ink); }
+    .ed-card__body { font-family: 'Space Grotesk', sans-serif; font-size: 13px; font-weight: 500; line-height: 1.5em; color: var(--muted-2); }
+
+    /* Outcome / Solution */
+    .ed-outcome { max-width: 680px; margin: 0 auto; display: flex; flex-direction: column; }
+    .ed-outcome__heading { font-family: 'Newsreader', serif; font-size: 32px; font-weight: 700; color: var(--ink); margin-bottom: 80px; }
+    .ed-feat-heading { font-family: 'Space Grotesk', sans-serif; font-size: 24px; font-weight: 700; color: var(--cooking); letter-spacing: -0.04em; margin-bottom: 40px; }
+    .ed-outcome-feature { display: flex; flex-direction: column; }
+    .ed-outcome-feature + .ed-outcome-feature { margin-top: 120px; }
+    .ed-outcome-feature__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; }
+    .ed-phones { display: flex; flex-direction: row; gap: 16px; }
+    .ed-phone-col { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+    .ed-phone-img { width: 100%; height: auto; display: block; }
+    .ed-phone-label { font-family: 'Space Grotesk', sans-serif; font-size: 13px; font-weight: 600; color: var(--muted); text-align: center; }
+    .ed-callouts { display: flex; flex-direction: column; gap: 48px; justify-content: center; }
+    .ed-callout { border-left: 3px solid var(--cooking); padding-left: 13px; display: flex; flex-direction: column; gap: 6px; }
+    .ed-callout__label { font-family: 'Space Grotesk', sans-serif; font-size: 17px; font-weight: 700; color: var(--ink); }
+    .ed-callout__body { font-family: 'Space Grotesk', sans-serif; font-size: 15px; font-weight: 500; color: var(--muted-2); }
+
+    /* ── Testing — Spine grid (findings ↔ principles) ── */
+    .ck-spine-grid { display: flex; flex-direction: column; }
+    .ck-spine-row { display: grid; grid-template-columns: 1fr 24px 1fr; padding: 24px 0; border-top: 0.5px solid rgba(0,0,0,0.08); align-items: start; }
+    .ck-spine-row:last-child { border-bottom: 0.5px solid rgba(0,0,0,0.08); }
+    .ck-spine-center { display: flex; flex-direction: column; align-items: center; padding-top: 4px; }
+    .ck-spine-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--cooking); flex-shrink: 0; }
+    .ck-spine-line { width: 1px; flex: 1; min-height: 60px; background: rgba(0,0,0,0.12); margin-top: 4px; }
+
+    .ck-finding-card { background: var(--card-bg); border-top: 1px solid var(--card-border); border-radius: 6px; padding: 14px 16px; display: flex; flex-direction: column; gap: 6px; }
+    .ck-finding-card--hi { border-top-width: 3px; border-top-color: var(--cooking); }
+    .ck-finding-tag { font-family: 'IBM Plex Sans', sans-serif; font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.06em; color: var(--cooking); }
+    .ck-finding-tag--default { color: var(--muted); }
+    .ck-finding-title { font-family: 'Space Grotesk', sans-serif; font-size: 18px; font-weight: 700; color: var(--cooking); line-height: 1.2; }
+    .ck-finding-title--default { color: var(--ink); }
+    .ck-finding-body { font-family: 'Space Grotesk', sans-serif; font-size: 12px; font-weight: 500; color: var(--muted-2); line-height: 1.6; }
+    .ck-finding-quote { font-style: italic; font-family: 'Space Grotesk', sans-serif; font-size: 12px; color: var(--ink); padding-top: 10px; border-top: 0.5px solid rgba(0,0,0,0.07); line-height: 1.55; }
+
+    .ck-principle-card { background: var(--card-bg); border-top: 1px solid var(--card-border); border-radius: 6px; padding: 14px 16px; display: flex; flex-direction: column; gap: 6px; }
+    .ck-principle-title { font-family: 'Space Grotesk', sans-serif; font-size: 18px; font-weight: 700; color: var(--ink); line-height: 1.2; }
+    .ck-principle-body { font-family: 'Space Grotesk', sans-serif; font-size: 12px; font-weight: 500; color: var(--muted-2); line-height: 1.6; }
+
+    /* ── Testing — Winning reframe 3-col ── */
+    .ck-frames-grid { display: grid; grid-template-columns: 1fr 1.1fr 1fr; gap: 10px; align-items: start; }
+    .ck-frame-card { background: var(--card-bg); border-top: 1px solid var(--card-border); border-radius: 6px; padding: 16px 18px; display: flex; flex-direction: column; gap: 6px; }
+    .ck-frame-card--winner { border-top-width: 3px; border-top-color: var(--cooking); }
+    .ck-frame-eyebrow { font-family: 'IBM Plex Sans', sans-serif; font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); }
+    .ck-frame-card--winner .ck-frame-eyebrow { color: var(--cooking); }
+    .ck-frame-badge { display: inline-block; font-family: 'Space Grotesk', sans-serif; font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.02em; background: var(--cooking); color: white; padding: 2px 9px; border-radius: 20px; align-self: flex-start; }
+    .ck-frame-title { font-family: 'Space Grotesk', sans-serif; font-size: 17px; font-weight: 700; color: var(--ink); line-height: 1.2; }
+    .ck-frame-card--winner .ck-frame-title { color: var(--cooking); }
+    .ck-frame-tagline { font-family: 'Space Grotesk', sans-serif; font-size: 12px; font-weight: 500; color: var(--muted); line-height: 1.55; }
+    .ck-frame-tags { display: flex; flex-direction: column; gap: 4px; margin-top: 10px; padding-top: 10px; border-top: 0.5px solid rgba(0,0,0,0.07); }
+    .ck-frame-tag { font-family: 'Space Grotesk', sans-serif; font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.02em; padding: 2px 9px; border-radius: 20px; display: inline-block; align-self: flex-start; }
+    .ck-frame-tag--on { background: var(--pill-bg); color: var(--pill-txt); }
+    .ck-frame-tag--off { border: 0.5px solid var(--muted); color: var(--muted); opacity: 0.45; text-decoration: line-through; }
+
+    /* ── Testing — Why environment left-border block ── */
+    .ck-why-block { border-left: 3px solid var(--cooking); padding-left: 13px; display: flex; flex-direction: column; }
+    .ck-why-label { font-family: 'IBM Plex Sans', sans-serif; font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin-bottom: 12px; }
+    .ck-why-row { display: flex; gap: 12px; align-items: flex-start; padding: 11px 0; border-top: 0.5px solid rgba(0,0,0,0.08); font-family: 'Space Grotesk', sans-serif; font-size: 13px; font-weight: 500; line-height: 1.65; color: var(--ink); }
+    .ck-why-row:last-child { border-bottom: 0.5px solid rgba(0,0,0,0.08); }
+    .ck-why-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--cooking); flex-shrink: 0; margin-top: 7px; }
+
+    /* ── Design Implications ── */
+    .ck-di-features { display: flex; flex-direction: column; gap: 40px; }
+    .ck-di-phones { display: flex; flex-direction: row; gap: 10px; margin-top: 16px; }
+    .ck-di-phones .img-block { flex: 1; min-width: 0; border-radius: 4px; }
+    .img-block--screen img { height: auto; object-fit: contain; }
+    .ck-di-details { display: flex; flex-direction: column; gap: 80px; margin-top: 80px; }
+    .ck-di-detail { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; }
+    .ck-di-detail__text { display: flex; flex-direction: column; gap: 10px; }
+    .ck-di-detail__title { font-family: 'Space Grotesk', sans-serif; font-size: 18px; font-weight: 700; line-height: 1.3em; color: var(--ink); }
+    .ck-di-detail__body { font-family: 'Space Grotesk', sans-serif; font-size: 14px; font-weight: 500; line-height: 1.6em; color: var(--muted-2); }
+    .ck-di-detail__phone { width: 100%; height: auto; display: block; }
+
+    /* Takeaways */
+    .next-steps { margin-bottom: 200px; }
+    .ck-takeaways-img { width: 265px; height: auto; display: block; margin: 0 auto; }
+    .ed-takeaways { display: flex; flex-direction: column; }
+    .ed-takeaways__heading { font-family: 'Space Grotesk', sans-serif; font-size: 24px; font-weight: 700; letter-spacing: -0.04em; color: var(--cooking); margin-bottom: 32px; }
+    .ed-takeaways__body { display: flex; flex-direction: column; gap: 48px; }
+    .ed-takeaways__body p { font-family: 'Space Grotesk', sans-serif; font-size: 18px; font-weight: 500; line-height: 1.6em; color: var(--ink); }
+    .ed-takeaways__body strong { font-weight: 700; }
+
+    /* ── Research section ── */
+    .ck-section-label { font-family: 'Space Grotesk', sans-serif; font-size: 24px; font-weight: 600; letter-spacing: -0.04em; line-height: 1.3em; }
+    .ck-step-heading { font-family: 'Space Grotesk', sans-serif; font-size: 24px; font-weight: 700; letter-spacing: -0.04em; line-height: 1.3em; }
+    .ck-step-header { display: flex; flex-direction: column; gap: 10px; }
+    .ck-step-header .methodology__body { margin-top: 22px; }
+    .ck-audit-card__title { font-family: 'Space Grotesk', sans-serif; font-size: 14px; font-weight: 700; color: var(--cooking); }
+    .ck-audit-card__body { font-family: 'Space Grotesk', sans-serif; font-size: 13px; font-weight: 500; line-height: 1.5em; color: var(--muted-2); }
+    .ck-audit-card__refs { font-family: 'IBM Plex Sans', sans-serif; font-size: 11px; font-weight: 500; letter-spacing: 0.02em; color: var(--muted); margin-top: 4px; }
+    .ck-hmw-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+    .ck-hmw-card { background: var(--card-bg); border-top: 1px solid var(--card-border); border-radius: 6px; padding: 16px 18px; display: flex; flex-direction: column; gap: 8px; min-height: 140px; }
+    .ck-hmw-card__body { font-family: 'Space Grotesk', sans-serif; font-size: 13px; font-weight: 500; line-height: 1.5em; color: var(--ink); flex: 1; }
+    .ck-hmw-card__attr { font-family: 'IBM Plex Sans', sans-serif; font-size: 11px; font-weight: 500; letter-spacing: 0.02em; color: var(--muted); padding-top: 8px; border-top: 0.5px solid rgba(0,0,0,0.07); }
+    .ck-themes { display: flex; flex-direction: column; gap: 32px; }
+    .ck-theme { border-left: 3px solid var(--cooking); padding-left: 13px; display: flex; flex-direction: column; gap: 12px; }
+    .ck-theme__label { font-family: 'Space Grotesk', sans-serif; font-size: 17px; font-weight: 700; color: var(--cooking); }
+    .ck-theme__items { display: flex; flex-direction: column; }
+    .ck-theme__item { font-family: 'Space Grotesk', sans-serif; font-size: 13px; font-weight: 500; line-height: 1.5em; color: var(--muted-2); padding: 8px 0; border-top: 0.5px solid rgba(0,0,0,0.07); }
+    .ck-theme__item:first-child { border-top: none; padding-top: 0; }
+
+    /* ── Background photo collage ── */
+    .ck-photo-grid { position: relative; height: 566px; width: 100%; }
+    .ck-photo-grid__img { position: absolute; display: block; object-fit: contain; }
+    .ck-photo-grid__img:nth-child(1) { width: 258px; height: 164px; top: 54px;    left: 15px;  }
+    .ck-photo-grid__img:nth-child(2) { width: 235px; height: 230px; bottom: 69px; left: 90px;  }
+    .ck-photo-grid__img:nth-child(3) { width: 220px; height: 242px; top: 54px;    left: 354px; }
+    .ck-photo-grid__img:nth-child(4) { width: 188px; height: 228px; bottom: 37px; left: 379px; }
+
+    /* ── Reframes section ── */
+    .ck-reframes { display: flex; flex-direction: column; gap: 56px; margin-top: 48px; }
+    .ck-reframe { display: flex; flex-direction: row; gap: 75px; align-items: center; width: 100%; }
+    .ck-reframe__img { flex: none; width: 179px; }
+    .ck-reframe__img img { width: 100%; height: auto; display: block; }
+    .ck-reframe__card { flex: 1; background: var(--card-bg); border-top: 1px solid var(--card-border); border-radius: 6px; padding: 16px 18px; display: flex; flex-direction: column; gap: 22px; }
+    .ck-reframe__header { display: flex; flex-direction: column; gap: 8px; }
+    .ck-reframe__tag { font-family: 'IBM Plex Sans', sans-serif; font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.06em; }
+    .ck-reframe__heading { font-family: 'Space Grotesk', sans-serif; font-size: 24px; font-weight: 700; letter-spacing: -0.04em; line-height: 1.3em; }
+    .ck-reframe__body { font-family: 'Space Grotesk', sans-serif; font-size: 15px; font-weight: 500; line-height: 1.6em; color: var(--ink); }
+
+    /* ── Problem band — content stack ── */
+    .ck-problem-content { display: flex; flex-direction: column; gap: 28px; }
+
+/* ── Shared band — full-bleed tinted section (reuse this class on any future band) ── */
+    .ck-band { background: #f7f4ed; position: relative; left: 50%; right: 50%; margin-left: -50vw; margin-right: -50vw; width: 100vw; padding: 150px 40px; }
+
+    /* ── Stats band ── */
+    .ck-stats-band { margin-bottom: 160px; }
+    .ck-stats-inner { max-width: 680px; margin: 0 auto; display: flex; flex-direction: row; }
+    .ck-stat-item { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 25px; }
+    .ck-stat-item--bordered { border-left: 2px solid var(--cooking); }
+    .ck-stat-num { font-family: 'Newsreader', serif; font-size: 62px; font-weight: 700; color: var(--cooking); letter-spacing: -0.04em; line-height: 1; }
+    .ck-stat-label { font-family: 'Space Grotesk', sans-serif; font-size: 15px; font-weight: 500; line-height: 1.5em; color: var(--ink); text-align: center; max-width: 200px; }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <div id="nav-placeholder"></div>
+
+  <nav class="sidebar-nav">
+    <a href="#background">BACKGROUND</a>
+    <a href="#research">RESEARCH</a>
+    <a href="#testing">TESTING</a>
+    <a href="#solution">SOLUTION</a>
+    <a href="#takeaways">TAKEAWAYS</a>
+  </nav>
+
+  <div class="page-wrapper">
+
+    <!-- Hero -->
+    <div id="ck-hero"></div>
+
+    <!-- Hero Image -->
+    <div id="ck-hero-image"></div>
+
+    <!-- Overview block -->
+    <div id="ck-overview"></div>
+
+    <!-- Stats band -->
+    <div class="ck-band ck-stats-band">
+      <div class="ck-stats-inner">
+        <div class="ck-stat-item">
+          <span class="ck-stat-num">1 in 5</span>
+          <p class="ck-stat-label">adults skips cooking after work because they're too exhausted.</p>
+        </div>
+        <div class="ck-stat-item ck-stat-item--bordered">
+          <span class="ck-stat-num">64%</span>
+          <p class="ck-stat-label">of Americans say prep time is their biggest barrier to eating nutritiously.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Background -->
+    <section class="context" id="background">
+      <div class="context__inner">
+
+        <div class="context__header">
+          <p class="context__label" style="color: var(--cooking);">Background</p>
+          <h2 class="context__heading">We're not very healthy….</h2>
+        </div>
+
+        <div class="context__body">
+          <p>Our Framing User Experiences course at SVA made us each catalog our eating habits for an entire week. We then grouped them together to find commonalities and themes.</p>
+          <p><strong>Some of them were kind of concerning.</strong></p>
+        </div>
+
+        <div class="ck-photo-grid">
+          <img class="ck-photo-grid__img" src="./images/cooking-context-diary-01.webp" alt="Food diary entry" width="3602" height="2368" loading="lazy">
+          <img class="ck-photo-grid__img" src="./images/cooking-context-diary-02.webp" alt="Food diary entry" width="2194" height="2212" loading="lazy">
+          <img class="ck-photo-grid__img" src="./images/cooking-context-diary-03.webp" alt="Food diary entry" width="2278" height="2296" loading="lazy">
+          <img class="ck-photo-grid__img" src="./images/cooking-context-diary-04.webp" alt="Food diary entry" width="2189" height="2443" loading="lazy">
+        </div>
+
+        <div class="context__body">
+          <p>We realized that unhealthy eating often isn't a conscious choice. When circumstances make cooking feel impossible, convenience wins — and convenience usually means prepackaged, fast, or skipped entirely.</p>
+          <p>We then audited the existing solution landscape — looking at what was already out there and where the trends were pointing. It gave us directions to explore.</p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Problem band -->
+    <section class="problem-band" id="problem">
+      <div class="problem-band__inner">
+        <div class="problem-band__header">
+          <p class="problem-band__label">Problem Statement</p>
+          <h2 class="problem-band__heading">The Paradox that keeps us stuck</h2>
+        </div>
+        <div class="ck-problem-content">
+          <div class="problem-band__quote">
+            <em>I want to break unhealthy eating habits, but I don't have time, money, or drive.</em>
+          </div>
+          <p class="problem-band__body">We then audited the existing solution landscape — looking at what was already out there and where the trends were pointing. It gave us directions to explore.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Research -->
+    <section class="methodology" id="research">
+      <div class="methodology__inner">
+
+        <div class="methodology__header">
+          <p class="ck-section-label" style="color: var(--cooking);">Research</p>
+          <h2 class="methodology__heading">What currently exists?</h2>
+        </div>
+
+        <div class="ed-steps">
+
+          <!-- Step 1: Design Audit -->
+          <div class="ed-step">
+            <div class="ck-step-header">
+              <p class="ed-step-label">STEP 1 — DESIGN AUDIT</p>
+              <h3 class="ck-step-heading" style="color: var(--cooking);">Mapped the existing landscape</h3>
+              <p class="methodology__body" style="max-width: 680px;">Key patterns that informed our solution vocabulary</p>
+            </div>
+            <div class="ed-features-grid">
+              <div class="ed-card">
+                <span class="ck-audit-card__title">Convenience wins</span>
+                <p class="ck-audit-card__body">Fast food apps are highly optimized — easy to use, aggressive marketing, low friction to order.</p>
+                <span class="ck-audit-card__refs">McDonald's, Uber Eats, DoorDash</span>
+              </div>
+              <div class="ed-card">
+                <span class="ck-audit-card__title">Social incentives work</span>
+                <p class="ck-audit-card__body">Apps like Recime and cookware communities use shared experiences to drive engagement.</p>
+                <span class="ck-audit-card__refs">Recime, Instant Pot Community</span>
+              </div>
+              <div class="ed-card">
+                <span class="ck-audit-card__title">Onboarding matters</span>
+                <p class="ck-audit-card__body">HelloFresh, Hungryroot, and MyFitnessPal succeed with encouraging, non-intimidating onboarding.</p>
+                <span class="ck-audit-card__refs">HelloFresh, Hungryroot, MyFitnessPal</span>
+              </div>
+              <div class="ed-card">
+                <span class="ck-audit-card__title">Reduce friction</span>
+                <p class="ck-audit-card__body">Utility features — AI, scanning, recipe import — exist to remove repetitive steps and lower cognitive load.</p>
+                <span class="ck-audit-card__refs">Yummly, Cronometer, Samsung Food</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 2: Individual HMWs -->
+          <div class="ed-step">
+            <div class="ck-step-header">
+              <p class="ed-step-label">STEP 2 — INDIVIDUAL HMWs</p>
+              <h3 class="ck-step-heading" style="color: var(--cooking);">Each teammate explored independently</h3>
+              <p class="methodology__body" style="max-width: 680px;">A selection of HMW questions generated before the team converged</p>
+              <p class="methodology__body" style="max-width: 680px;"><strong>Some Examples:</strong></p>
+            </div>
+            <div class="ck-hmw-grid">
+              <div class="ck-hmw-card">
+                <p class="ck-hmw-card__body">HMW make breaking unhealthy eating habits less intimidating and more digestible to approach?</p>
+                <span class="ck-hmw-card__attr">—Darren</span>
+              </div>
+              <div class="ck-hmw-card">
+                <p class="ck-hmw-card__body">HMW help people who don't identify as "a cook" eat healthier without needing to become good at cooking first?</p>
+                <span class="ck-hmw-card__attr">—Feifey</span>
+              </div>
+              <div class="ck-hmw-card">
+                <p class="ck-hmw-card__body">HMW make cooking accessible for dorm students and one-person households with small kitchens?</p>
+                <span class="ck-hmw-card__attr">—JuJu</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 3: Clustered by Themes -->
+          <div class="ed-step">
+            <div class="ck-step-header">
+              <p class="ed-step-label">STEP 3 — CLUSTERED BY THEMES</p>
+              <h3 class="ck-step-heading" style="color: var(--cooking);">Three root causes emerged</h3>
+              <p class="methodology__body" style="max-width: 680px;">When we grouped by similarity, three distinct angles surfaced</p>
+            </div>
+            <div class="ck-themes">
+              <div class="ck-theme">
+                <span class="ck-theme__label">Mindset</span>
+                <div class="ck-theme__items">
+                  <p class="ck-theme__item">HMW make breaking habits less intimidating?</p>
+                  <p class="ck-theme__item">HMW incorporate low-stakes meals into busy lives?</p>
+                  <p class="ck-theme__item">HMW get people to prioritize health on the same level as career?</p>
+                </div>
+              </div>
+              <div class="ck-theme">
+                <span class="ck-theme__label">Environment</span>
+                <div class="ck-theme__items">
+                  <p class="ck-theme__item">HMW make cooking easier for people who are not fully equipped?</p>
+                  <p class="ck-theme__item">HMW make cooking accessible for dorm students and small kitchens?</p>
+                  <p class="ck-theme__item">HMW show it's possible to cook healthy without a fancy kitchen?</p>
+                </div>
+              </div>
+              <div class="ck-theme">
+                <span class="ck-theme__label">Identity</span>
+                <div class="ck-theme__items">
+                  <p class="ck-theme__item">HMW help people who don't identify as "a cook" eat healthier?</p>
+                  <p class="ck-theme__item">HMW make eating well feel less like a chore for people who live alone?</p>
+                  <p class="ck-theme__item">HMW make healthy eating feel worth it when no one else is involved?</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Reframes -->
+    <section class="findings ck-band" id="reframes">
+      <div class="methodology__inner">
+
+        <div class="methodology__header">
+          <p class="ed-step-label">REFRAME</p>
+          <h2 class="methodology__heading">Three Reframes</h2>
+        </div>
+
+        <div class="content-inner">
+          <p class="methodology__body">Using our journal data and the audit, we developed three distinct ways to reframe the problem, each approached from a different angle.</p>
+        </div>
+
+        <div class="ck-reframes">
+
+          <!-- Reframe 1: Mindset -->
+          <div class="ck-reframe">
+            <div class="ck-reframe__img">
+              <img src="./images/cooking-reframe-mindset.svg" alt="Mindset reframe illustration" width="872" height="870" loading="lazy">
+            </div>
+            <div class="ck-reframe__card">
+              <div class="ck-reframe__header">
+                <span class="ck-reframe__tag" style="color: var(--cooking);">Mindset Reframe</span>
+                <h3 class="ck-reframe__heading" style="color: var(--cooking);">Get rid of all-or-nothing thinking</h3>
+              </div>
+              <p class="ck-reframe__body">Unhealthy eating habits are sustained by shame and the pressure to be perfect. <em>Build habits incrementally, with no pressure to be perfect.</em></p>
+            </div>
+          </div>
+
+          <!-- Reframe 2: Environment -->
+          <div class="ck-reframe">
+            <div class="ck-reframe__img">
+              <img src="./images/cooking-reframe-environment.svg" alt="Environment reframe illustration" width="247" height="251" loading="lazy">
+            </div>
+            <div class="ck-reframe__card">
+              <div class="ck-reframe__header">
+                <span class="ck-reframe__tag" style="color: var(--cooking);">Environment Reframe</span>
+                <h3 class="ck-reframe__heading" style="color: var(--cooking);">Frame 2: You don't need a fancy kitchen</h3>
+              </div>
+              <p class="ck-reframe__body">People are failing because their environment sets them up to fail. <em>Cook within your actual constraints, not an assumed ideal.</em></p>
+            </div>
+          </div>
+
+          <!-- Reframe 3: Identity -->
+          <div class="ck-reframe">
+            <div class="ck-reframe__img">
+              <img src="./images/cooking-reframe-identity.svg" alt="Identity reframe illustration" width="855" height="874" loading="lazy">
+            </div>
+            <div class="ck-reframe__card">
+              <div class="ck-reframe__header">
+                <span class="ck-reframe__tag" style="color: var(--cooking);">Identity Reframe</span>
+                <h3 class="ck-reframe__heading" style="color: var(--cooking);">Frame 3: I'm not a cook</h3>
+              </div>
+              <p class="ck-reframe__body">The perceived learning curve keeps people from ever starting. <em>Build confidence through shared cooking experiences and community.</em></p>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Testing -->
+    <section class="synthesis" id="testing">
+      <div class="synthesis__inner">
+
+        <div class="synthesis__header">
+          <p class="ck-section-label" style="color: var(--cooking);">Reframe</p>
+          <h2 class="synthesis__heading">Frame Validation</h2>
+        </div>
+
+        <div class="methodology__body">
+          <p><strong>To test which frame resonated most, we presented all three to 10 participants and asked them to respond to each - rating their gut reactions, voting on what resonated most with their lived experience, and dot voting across all three frames.</strong></p>
+          <p>Grouping feedback across participants regardless of which frame they referenced, several patterns and design principles formed:</p>
+        </div>
+
+        <!-- Findings + Principles -->
+        <div class="ck-spine-grid">
+
+          <div class="ck-spine-row">
+            <div class="ck-finding-card ck-finding-card--hi">
+              <p class="ck-finding-tag">Finding 1</p>
+              <p class="ck-finding-title">Variability</p>
+              <p class="ck-finding-body">Kitchens, tools, and ingredients change constantly. People aren't failing to cook - their conditions keep shifting.</p>
+              <p class="ck-finding-quote">"I moved a lot so the condition of the kitchen I could have were always changing."</p>
+            </div>
+            <div class="ck-spine-center">
+              <div class="ck-spine-dot"></div>
+              <div class="ck-spine-line"></div>
+            </div>
+            <div class="ck-principle-card">
+              <span class="ed-pill">Principle 1</span>
+              <p class="ck-principle-title">Flexibility</p>
+              <p class="ck-principle-body">Support multiple ways to complete the same meal based on what you actually have - not what a recipe assumes.</p>
+            </div>
+          </div>
+
+          <div class="ck-spine-row">
+            <div class="ck-finding-card ck-finding-card--hi">
+              <p class="ck-finding-tag">Finding 2</p>
+              <p class="ck-finding-title">Overwhelm</p>
+              <p class="ck-finding-body">The biggest cooking barrier is mental overload - too much information, too many steps, all at once.</p>
+              <p class="ck-finding-quote">"I get overwhelmed trying to follow a recipe while managing heat, timing, and everything else."</p>
+            </div>
+            <div class="ck-spine-center">
+              <div class="ck-spine-dot"></div>
+              <div class="ck-spine-line"></div>
+            </div>
+            <div class="ck-principle-card">
+              <span class="ed-pill">Principle 2</span>
+              <p class="ck-principle-title">Pacing</p>
+              <p class="ck-principle-body">Address and guide through uncontrollable external factors - give people more room to breathe and alleviate cognitive load.</p>
+            </div>
+          </div>
+
+          <div class="ck-spine-row">
+            <div class="ck-finding-card">
+              <p class="ck-finding-tag ck-finding-tag--default">Finding 3</p>
+              <p class="ck-finding-title ck-finding-title--default">Pressure</p>
+              <p class="ck-finding-body">Cooking feels easier when it's low-pressure and forgiving. The expectation to do it "right" is the real barrier.</p>
+              <p class="ck-finding-quote">"I just want it to feel like it doesn't matter if I mess up - that's when I actually try."</p>
+            </div>
+            <div class="ck-spine-center">
+              <div class="ck-spine-dot"></div>
+              <div class="ck-spine-line"></div>
+            </div>
+            <div class="ck-principle-card">
+              <span class="ed-pill">Principle 3</span>
+              <p class="ck-principle-title">Low-stakes</p>
+              <p class="ck-principle-body">Non-committal and low-stakes allows relief from pressure and expectation - to cook the "right" way.</p>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Solution -->
+    <section class="synthesis" id="solution" style="margin-bottom: 200px;">
+      <div class="ck-band" style="background: #f7f4ed;">
+        <div style="max-width: 680px; margin: 0 auto; display: flex; flex-direction: column; gap: 48px;">
+
+          <div class="synthesis__header">
+            <p class="ck-section-label" style="color: var(--cooking);">Reframe</p>
+            <h2 class="synthesis__heading">The Winning Reframe</h2>
+          </div>
+
+          <div class="ck-frames-grid">
+            <div class="ck-frame-card">
+              <p class="ck-frame-eyebrow">Frame 1</p>
+              <p class="ck-frame-title">Mindset</p>
+              <p class="ck-frame-tagline">Get rid of all-or-nothing thinking</p>
+              <div class="ck-frame-tags">
+                <span class="ck-frame-tag ck-frame-tag--off">Flexibility</span>
+                <span class="ck-frame-tag ck-frame-tag--on">Pacing</span>
+                <span class="ck-frame-tag ck-frame-tag--off">Low-stakes</span>
+              </div>
+            </div>
+            <div class="ck-frame-card ck-frame-card--winner">
+              <p class="ck-frame-eyebrow">Frame 2</p>
+              <span class="ck-frame-badge">winning frame</span>
+              <p class="ck-frame-title">Environment</p>
+              <p class="ck-frame-tagline">You don't need a fancy kitchen</p>
+              <div class="ck-frame-tags">
+                <span class="ck-frame-tag ck-frame-tag--on">Flexibility</span>
+                <span class="ck-frame-tag ck-frame-tag--on">Pacing</span>
+                <span class="ck-frame-tag ck-frame-tag--on">Low-stakes</span>
+              </div>
+            </div>
+            <div class="ck-frame-card">
+              <p class="ck-frame-eyebrow">Frame 3</p>
+              <p class="ck-frame-title">Identity</p>
+              <p class="ck-frame-tagline">I'm not a cook</p>
+              <div class="ck-frame-tags">
+                <span class="ck-frame-tag ck-frame-tag--off">Flexibility</span>
+                <span class="ck-frame-tag ck-frame-tag--off">Pacing</span>
+                <span class="ck-frame-tag ck-frame-tag--on">Low-stakes</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="ck-why-block">
+            <p class="ck-why-label">Why environment</p>
+            <div class="ck-why-row">
+              <div class="ck-why-dot"></div>
+              <span>The only direction that directly addressed what our insights kept pointing to - cooking conditions are unstable, overwhelming, and full of unspoken pressure.</span>
+            </div>
+            <div class="ck-why-row">
+              <div class="ck-why-dot"></div>
+              <span>Rather than changing behavior, it starts by meeting people where they actually are.</span>
+            </div>
+            <div class="ck-why-row">
+              <div class="ck-why-dot"></div>
+              <span>The only frame that satisfied all three principles simultaneously - Mindset got pacing, Identity got low-stakes, but neither got all three.</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Design Implications -->
+    <section class="synthesis" id="outcome" style="margin-bottom: 200px;">
+      <div class="synthesis__inner">
+
+        <div class="synthesis__header">
+          <p class="ck-section-label" style="color: var(--cooking);">Design</p>
+          <h2 class="synthesis__heading">Design Implications</h2>
+        </div>
+
+        <!-- Sub-section 1: Feature Concept overview cards -->
+        <div class="ck-di-features">
+
+          <div class="ed-card ed-card--highlight">
+            <p class="ed-card__tag" style="color: var(--cooking);">Feature Concept 1</p>
+            <div class="ck-di-phones">
+              <div class="img-block img-block--screen"><img src="./images/cooking-feature1-screen-01.webp" alt="Home screen" width="1314" height="2670" loading="lazy"></div>
+              <div class="img-block img-block--screen"><img src="./images/cooking-feature1-screen-02.webp" alt="Recipe page" width="1314" height="2670" loading="lazy"></div>
+              <div class="img-block img-block--screen"><img src="./images/cooking-feature1-screen-03.webp" alt="Comments" width="1314" height="2670" loading="lazy"></div>
+              <div class="img-block img-block--screen"><img src="./images/cooking-feature1-screen-04.webp" alt="Saved recipes" width="1314" height="2670" loading="lazy"></div>
+            </div>
+          </div>
+
+          <div class="ed-card ed-card--highlight">
+            <p class="ed-card__tag" style="color: var(--cooking);">Feature Concept 2</p>
+            <div class="ck-di-phones">
+              <div class="img-block img-block--screen"><img src="./images/cooking-feature2-screen-01.webp" alt="Home screen" width="1311" height="2670" loading="lazy"></div>
+              <div class="img-block img-block--screen"><img src="./images/cooking-feature2-screen-02.webp" alt="Recipe page" width="438" height="890" loading="lazy"></div>
+              <div class="img-block img-block--screen"><img src="./images/cooking-feature2-screen-03.webp" alt="Comments" width="1314" height="2670" loading="lazy"></div>
+              <div class="img-block img-block--screen"><img src="./images/cooking-feature2-screen-04.webp" alt="Saved recipes" width="1314" height="2670" loading="lazy"></div>
+            </div>
+          </div>
+
+          <div class="ed-card">
+            <p class="ed-card__tag" style="color: var(--muted);">Feature Concept 3</p>
+            <div class="ck-di-phones">
+              <div class="img-block img-block--screen"><img src="./images/cooking-feature3-screen-01.webp" alt="Home screen" width="1314" height="2670" loading="lazy"></div>
+              <div class="img-block img-block--screen"><img src="./images/cooking-feature3-screen-02.webp" alt="Recipe page" width="438" height="890" loading="lazy"></div>
+              <div class="img-block img-block--screen"><img src="./images/cooking-feature3-screen-03.webp" alt="Comments" width="438" height="890" loading="lazy"></div>
+              <div class="img-block img-block--screen"><img src="./images/cooking-feature3-screen-04.webp" alt="Saved recipes" width="438" height="890" loading="lazy"></div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Sub-section 2: Feature detail explanations -->
+        <div class="ck-di-details">
+
+          <div class="ck-di-detail">
+            <div class="ck-di-detail__text">
+              <p class="ck-di-detail__title" style="color: var(--cooking);"><strong>Configure your kitchen</strong></p>
+              <p class="ck-di-detail__body">People's kitchens are never the same twice. By defining their limitations upfront, users only ever see recipes they can actually make.</p>
+            </div>
+            <div class="img-block img-block--screen ck-di-detail__phone"><img src="./images/cooking-detail-kitchen.webp" alt="Configure your kitchen screen" width="1314" height="2670" loading="lazy"></div>
+          </div>
+
+          <div class="ck-di-detail">
+            <div class="img-block img-block--screen ck-di-detail__phone"><img src="./images/cooking-detail-browse.webp" alt="Browse recipes screen" width="1311" height="2670" loading="lazy"></div>
+            <div class="ck-di-detail__text">
+              <p class="ck-di-detail__title" style="color: var(--cooking);"><strong>Browse recipes matched to you</strong></p>
+              <p class="ck-di-detail__body">Low effort browsing built around your kitchen profile. The match percentage takes the thinking out of it.</p>
+            </div>
+          </div>
+
+          <div class="ck-di-detail">
+            <div class="ck-di-detail__text">
+              <p class="ck-di-detail__title"><strong>Create a substitute recipe</strong></p>
+              <p class="ck-di-detail__body">The most direct answer to the reframe. People are already doing this manually - searching for workarounds when a recipe assumes equipment they don't have. This feature does it for them.</p>
+            </div>
+            <div class="img-block img-block--screen ck-di-detail__phone"><img src="./images/cooking-detail-substitute.webp" alt="Create a substitute recipe screen" width="438" height="890" loading="lazy"></div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Takeaways -->
+    <section class="next-steps" id="takeaways">
+      <div style="max-width: 680px; margin: 0 auto; display: flex; flex-direction: column; gap: 48px;">
+
+        <div class="synthesis__header">
+          <p class="ck-section-label" style="color: var(--cooking);">Reframe</p>
+          <h2 class="synthesis__heading">Takeaways</h2>
+        </div>
+
+        <div class="ck-takeaways-img"><svg width="100%" height="auto" viewBox="0 0 1047 1127" fill="none">
+<path d="M269.495 106.219C269.495 106.219 318.552 57.1401 328.275 48.3265C337.998 39.5376 390.757 3.41931 390.757 3.41931C390.757 3.41931 428.241 29.3415 425.946 32.1313C423.651 34.921 349.571 90.9377 340.786 100.196C332.001 109.454 321.81 120.563 321.81 120.563C321.81 120.563 370.398 172.432 373.656 244.669C376.888 316.906 366.722 391.463 369.954 397.487C373.187 403.511 394.952 449.356 394.952 449.356C394.952 449.356 294.048 476.216 280.155 482.709C266.262 489.202 206.1 508.187 197.315 519.297C188.53 530.406 158.425 552.181 156.13 551.712C153.81 551.243 141.793 494.288 139.473 451.677C138.412 431.926 140.855 301.179 148.727 271.085C156.599 240.99 182.509 186.801 197.784 168.754C213.059 150.682 246.398 120.143 251.95 115.971C257.502 111.799 269.544 106.244 269.544 106.244L269.495 106.219Z" fill="#F2B200"/>
+<path d="M757.38 160.409C757.38 160.409 724.041 172.901 718.489 189.59C712.937 206.255 714.319 222.944 714.319 222.944C714.319 222.944 887.895 392.895 888.808 397.067C889.721 401.239 890.659 606.84 892.041 607.309C893.423 607.778 906.847 631.848 908.229 632.786C909.611 633.725 929.525 630.466 963.307 604.075C997.09 577.683 1024.41 543.886 1029.49 525.345C1034.57 506.829 1044.77 465.6 1039.68 431.803C1034.6 398.005 1019.77 363.738 995.708 340.112C971.648 316.486 952.203 308.166 939.692 301.204C927.205 294.267 889.697 267.406 879.974 244.249C870.251 221.092 854.063 197.021 834.149 179.888C814.235 162.755 764.709 159.051 757.306 160.434L757.38 160.409Z" fill="#6AA49A"/>
+<path d="M751.802 184.48C739.735 186.603 707.828 196.059 712.912 235.88C717.995 275.702 724.485 322.485 720.784 333.595C717.082 344.704 701.338 386.846 695.317 402.128C689.296 417.41 687.445 422.051 687.445 422.051C687.445 422.051 727.249 378.526 762.882 376.206C798.516 373.885 833.705 386.846 858.233 403.535C882.762 420.2 902.676 453.553 899.419 485.499C896.186 517.445 891.547 528.554 883.206 540.133C874.866 551.712 855.889 561.908 855.889 561.908L898.925 618.394C898.925 618.394 924.392 596.174 931.326 585.978C938.26 575.782 956.324 533.64 956.793 507.718C957.261 481.796 956.324 427.137 932.264 396.573C908.204 366.01 877.654 335.915 863.761 319.695C849.868 303.5 836 283.108 831.36 271.529C826.721 259.951 811.101 213.76 794.789 198.355C778.478 182.949 759.6 183.073 751.753 184.455L751.802 184.48Z" fill="#AACF6D"/>
+<path d="M791.163 376.65C769.374 376.65 727.744 379.44 703.684 404.893C679.624 430.371 672.665 440.098 672.196 449.8C671.728 459.527 670.346 466.465 670.346 466.465C670.346 466.465 759.676 498.88 792.076 518.803C824.477 538.726 855.965 561.858 855.965 561.858C855.965 561.858 873.559 549.811 885.133 534.529C896.706 519.247 903.196 483.598 898.088 462.761C893.004 441.925 890.685 433.58 868.476 412.275C846.267 390.969 815.717 376.625 791.188 376.625L791.163 376.65Z" fill="#D86F6F"/>
+<path d="M513.45 446.122C471.351 446.122 431.992 443.801 380.615 454.911C329.237 466.02 232.949 500.756 214.441 510.952C195.933 521.148 166.765 544.305 156.574 554.477C146.382 564.673 124.642 591.977 121.385 621.628C118.152 651.253 121.854 678.582 129.726 703.591C137.597 728.6 171.38 800.367 183.891 823.525C196.378 846.682 272.752 988.834 272.752 988.834C272.752 988.834 594.439 999.475 606.95 1000.41C619.437 1001.33 788.867 1003.65 793.482 999.475C798.121 995.303 809.695 967.529 814.778 950.865C819.861 934.2 880.048 797.578 885.6 784.148C891.153 770.717 910.598 731.365 912.449 703.097C914.3 674.855 917.532 644.291 898.556 614.641C879.579 585.015 836.987 543.318 798.565 522.037C760.144 500.731 692.579 477.574 664.792 468.785C637.031 459.996 530.551 446.097 513.425 446.097L513.45 446.122Z" fill="#D8906F"/>
+<path d="M183.867 714.232C183.867 714.232 186.656 697.098 196.354 692.926C206.052 688.754 235.688 696.629 236.626 694.309C237.539 691.988 238.477 657.721 250.519 652.636C262.561 647.55 297.257 670.238 297.257 670.238C297.257 670.238 283.833 624.862 290.323 615.135C296.813 605.408 311.619 590.595 322.255 592.447C332.89 594.298 344.02 596.15 349.103 604.025C354.186 611.901 364.378 627.182 364.378 627.182C364.378 627.182 372.25 582.72 404.65 573.931C437.051 565.142 463.431 571.61 463.431 571.61C463.431 571.61 462.962 547.539 471.303 537.343C479.643 527.147 499.533 519.272 509.724 520.21C519.916 521.123 541.212 522.531 544.445 535.492C547.677 548.453 552.316 574.4 552.316 574.4C552.316 574.4 562.952 552.181 574.526 550.773C586.099 549.366 630.986 551.687 636.538 569.758C642.091 587.83 641.622 601.26 641.622 601.26C641.622 601.26 671.234 591.533 682.807 601.26C694.381 610.987 700.402 635.058 700.402 635.058C700.402 635.058 730.952 629.034 742.056 632.737C753.161 636.44 764.734 637.378 767.523 649.871C770.311 662.363 768.905 665.152 768.905 665.152C768.905 665.152 773.988 669.325 779.096 673.497C784.18 677.669 783.735 682.286 783.735 682.286C783.735 682.286 813.816 661.449 828.178 679.965C842.515 698.481 842.515 704.974 840.221 717.466C837.901 729.958 833.286 738.771 833.286 738.771C833.286 738.771 851.794 742.006 854.582 754.053C857.371 766.101 848.092 767.483 848.561 770.248C849.03 773.013 844.391 786.468 844.391 786.468C844.391 786.468 805.056 810.539 761.995 816.094C718.959 821.648 655.539 828.586 579.165 826.29C502.79 823.969 389.844 802.219 374.569 799.899C359.295 797.578 272.284 779.531 235.713 759.608C199.142 739.685 183.867 714.232 183.867 714.232Z" fill="#6AA49A"/>
+<path d="M706.447 730.921C693.27 732.229 690.704 743.882 696.725 757.312C702.746 770.742 711.062 782.321 721.722 780.469C732.358 778.618 743.487 760.102 736.528 747.116C729.594 734.155 715.701 729.983 706.447 730.896V730.921Z" fill="#F2B200"/>
+<path d="M590.738 670.707C585.457 672.46 595.377 696.185 603.693 696.629C612.034 697.098 621.288 693.395 617.586 685.051C613.885 676.706 594.908 669.3 590.738 670.707Z" fill="#D86F6F"/>
+<path d="M585.185 637.847C584.864 643.106 599.991 657.77 609.245 656.832C618.498 655.919 622.2 653.129 623.582 647.105C624.964 641.081 618.498 634.144 608.776 631.824C599.053 629.503 585.629 630.441 585.16 637.847H585.185Z" fill="#AACF6D"/>
+<path d="M381.972 672.559C387.08 679.842 404.65 685.989 414.842 680.903C425.033 675.817 435.2 670.707 431.499 660.536C427.797 650.34 401.418 646.636 395.865 652.191C390.313 657.746 378.74 667.942 381.972 672.559Z" fill="#AACF6D"/>
+<path d="M362.552 713.318C365.02 721.91 372.275 723.045 378.765 721.193C385.255 719.342 393.571 714.256 391.72 708.701C389.869 703.147 381.084 697.592 375.976 700.826C370.893 704.06 360.701 706.85 362.552 713.318Z" fill="#F2B200"/>
+<path d="M293.111 728.131C286.992 733.241 288.941 748.498 300.046 753.609C311.15 758.719 316.702 760.102 321.342 754.078C325.981 748.054 328.745 742.03 321.342 734.624C313.939 727.217 298.664 723.514 293.111 728.131Z" fill="#D86F6F"/>
+<path d="M228.779 994.858C227.15 993.229 174.169 950.395 155.192 943.927C136.216 937.434 82.9882 936.052 64.0117 945.31C45.0353 954.568 -1.72726 988.834 5.70046 1026.36C13.1035 1063.86 29.3162 1096.75 57.5464 1108.32C85.7767 1119.9 126.518 1131.95 164.002 1121.75C201.486 1111.56 225.571 1096.28 232.974 1082.85C240.377 1069.42 247.78 1041.64 252.888 1041.17C257.971 1040.7 586.617 990.686 600.041 989.303C613.465 987.921 697.712 968.936 705.584 966.146C713.456 963.357 730.631 950.914 725.029 942.076C719.427 933.213 720.39 932.818 699.118 933.731C677.822 934.669 431.573 968.936 419.999 970.319C408.426 971.701 231.148 997.179 228.828 994.858H228.779Z" fill="#D86F6F"/>
+<path d="M0 1013.65C0.740304 1011.74 1.77673 1009.89 2.17156 1007.92C7.57578 980.564 23.1715 960.814 47.6509 948.223C71.4146 936.003 96.8564 932.719 123.261 935.731C140.559 937.706 157.611 940.298 173.749 947.606C194.182 956.839 211.628 969.825 225.62 987.205C229.716 992.291 233.566 994.537 240.229 993.5C269.076 988.958 297.997 984.81 326.894 980.589C347.375 977.601 367.832 974.614 388.339 971.775C418.79 967.554 449.241 963.431 479.717 959.357C494.498 957.382 509.378 956.049 524.11 953.778C539.139 951.457 553.969 947.754 569.022 945.631C596.759 941.755 624.594 938.545 652.405 935.188C666.619 933.484 680.882 932.225 695.096 930.448C703.486 929.386 711.58 930.423 719.378 933.213C729.964 936.99 732.851 945.186 727.423 955.111C723.746 961.801 717.922 966.541 711.111 969.306C700.698 973.503 690.087 977.601 679.179 980.046C656.921 985.033 634.391 988.859 611.985 993.18C610.874 993.402 609.838 994.019 608.777 994.439C609.764 994.883 610.701 995.525 611.738 995.747C612.922 995.994 614.181 995.846 615.39 995.87C648.654 996.438 681.919 996.907 715.183 997.623C730.112 997.944 745.042 999.179 759.971 999.277C769.694 999.351 779.417 997.969 789.164 997.599C793.285 997.426 795.136 995.204 796.394 991.846C798.516 986.143 800.639 980.416 802.81 974.713C820.972 927.14 838.814 879.443 857.445 832.042C863.91 815.625 872.226 799.923 879.826 783.95C886.366 770.224 893.547 756.769 899.543 742.795C906.28 727.168 907.415 710.331 908.402 693.543C910.204 662.659 902.11 634.885 885.7 608.469C873.411 588.694 855.841 574.844 839.529 559.365C836.42 556.402 834.076 556.773 831.139 559.933C813.693 578.745 796.073 597.384 778.528 616.073C777.911 616.739 777.344 617.48 776.751 618.171C774.284 620.936 771.495 624.541 767.695 621.134C764.142 617.949 766.831 614.271 769.2 611.481C774.531 605.21 780.009 599.038 785.61 592.99C797.653 580.004 809.892 567.216 821.91 554.18C826.993 548.675 827.067 548.082 820.577 543.935C798.738 529.986 777.467 514.853 754.468 503.126C737.022 494.214 717.28 489.893 698.625 483.326C694.158 481.771 692.653 484.487 690.802 487.449C682.116 501.447 673.479 515.495 664.571 529.369C660.45 535.788 655.761 541.836 651.221 547.959C649.962 549.662 648.531 551.489 646.729 552.428C645.372 553.143 642.855 553.143 641.695 552.304C640.585 551.489 639.869 548.996 640.264 547.564C640.856 545.293 642.436 543.244 643.744 541.195C655.638 522.703 667.606 504.286 679.426 485.746C683.621 479.179 683.374 479.031 675.996 476.735C652.38 469.353 628.493 463.304 603.817 460.762C592.589 459.601 581.287 459.206 570.083 457.947C544.987 455.133 520.014 450.985 494.844 449.356C475.152 448.072 455.163 448.664 435.496 450.417C415.261 452.22 395.224 456.466 375.087 459.651C373.878 459.848 372.644 459.922 371.484 460.243C365.907 461.774 365.488 462.366 367.265 467.798C370.744 478.512 374.446 489.177 377.925 499.892C380.467 507.718 382.86 515.593 385.254 523.444C385.97 525.765 387.031 528.184 386.907 530.505C386.809 532.258 385.402 534.874 383.996 535.344C382.688 535.788 379.85 534.331 379.011 532.924C377.481 530.381 376.889 527.271 375.951 524.382C370.325 507.002 364.822 489.572 359.097 472.217C356.432 464.168 356.086 463.872 348.017 466.44C324.228 474.019 300.514 481.845 276.775 489.646C262.882 494.214 248.989 498.805 235.145 503.57C230.827 505.052 226.681 507.051 222.56 509.002C213.109 513.47 213.133 514.038 219.5 522.58C221.869 525.74 223.621 525.888 226.952 523.888C237.391 517.568 247.78 511.1 258.761 505.842C267.472 501.645 276.972 499.077 286.201 495.966C288.176 495.3 290.52 494.979 292.494 495.423C294.246 495.818 296.738 497.3 297.01 498.682C297.281 500.065 295.529 502.311 294.073 503.447C292.741 504.508 290.693 504.755 288.891 505.101C268.804 509.125 251.234 519 233.837 529.172C227.767 532.727 227.816 533.072 231.69 538.948C238.082 548.626 244.621 558.204 251.111 567.833C252.296 569.61 254.097 571.24 254.516 573.19C254.961 575.19 254.097 577.486 253.801 579.658C251.629 579.239 249.137 579.288 247.336 578.226C245.633 577.214 244.473 575.091 243.313 573.338C236.749 563.414 230.086 553.538 223.794 543.466C221.598 539.935 219.895 538.578 216.045 541.417C212.146 544.305 207.927 546.897 203.559 549.021C174.095 563.389 157.167 588.743 144.384 617.406C142.212 622.269 142.854 628.713 143.249 634.342C143.668 640.366 145.396 646.315 146.432 652.314C148.308 663.325 152.157 673.349 158.968 682.384C164.668 689.914 169.406 698.135 174.86 705.862C178.216 710.627 179.302 710.356 181.794 705.023C189.172 689.099 202.843 682.829 221.351 686.853C224.88 687.618 228.433 688.383 231.987 689.124C232.431 685.569 232.628 681.94 233.418 678.434C234.479 673.694 235.417 668.781 237.415 664.436C245.115 647.747 260.858 642.834 276.972 651.747C278.033 652.339 279.045 653.055 280.131 653.623C282.451 654.808 284.82 655.919 287.164 657.079C286.917 654.734 286.67 652.364 286.448 650.019C285.288 637.181 284.918 624.417 289.459 612.024C293.802 600.149 300.563 590.447 314.062 588.99C329.114 587.385 343.501 588.99 353.051 603.26C354.852 605.926 357.197 608.247 359.269 610.716C360.701 607.852 362.132 604.988 363.613 602.124C369.362 590.891 378.098 582.448 389.005 576.449C407.365 566.327 427.007 561.982 447.983 564.549C449.488 564.722 451.042 564.747 452.548 564.944C456.447 565.438 457.705 563.685 458.199 559.859C461.481 533.912 481.592 515.692 507.774 515.791C515.474 515.815 523.518 517.84 530.773 520.58C541.31 524.555 548.664 532.085 549.824 544.182C550.07 546.897 550.712 549.588 551.28 552.279C552.39 557.489 553.352 557.908 557.35 554.008C564.482 547.046 573.563 545.268 582.668 545.367C595.451 545.515 608.184 547.243 620.325 551.934C631.553 556.279 638.932 564.475 643.595 575.239C646.113 581.065 645.273 587.163 643.966 593.237C642.781 598.717 643.003 598.643 648.778 597.977C655.712 597.162 662.695 596.15 669.654 596.174C688.285 596.273 699.365 605.383 702.968 623.701C704.325 630.614 704.35 631.725 712.444 628.935C727.028 623.948 741.414 625.578 754.937 632.589C766.807 638.761 774.136 648.364 774.308 662.412C774.308 663.868 774.531 666.51 774.975 666.584C781.292 667.646 783.365 674.558 788.424 676.361C790.965 677.274 794.988 673.892 798.393 672.583C813.471 666.806 827.512 670.584 836.42 683.347C845.97 697.049 847.771 711.96 842.071 727.711C840.985 730.748 838.666 734.13 839.357 736.722C839.825 738.524 844.415 739.29 847.204 740.475C855.322 743.882 861.492 748.745 861.294 758.62C861.294 759.558 862.01 760.521 862.38 761.484C863.17 761.064 864.206 760.867 864.7 760.225C869.141 754.423 874.151 748.918 877.68 742.598C887.081 725.736 888.883 707.393 886.391 688.458C883.627 667.695 875.928 648.439 868.401 629.108C867.735 627.404 866.328 625.726 866.402 624.072C866.501 622.245 867.513 619.998 868.895 618.912C869.734 618.27 872.275 619.134 873.608 620.023C874.743 620.763 875.311 622.467 876.026 623.775C891.869 653.055 897.841 684.532 895.175 717.441C893.917 732.846 887.698 746.943 877.803 759.114C854.755 787.431 826.302 807.058 790.2 815.353C764.364 821.278 738.774 828.191 711.975 828.363C697.366 828.462 682.733 829.499 668.124 830.24C649.246 831.178 630.369 832.388 611.466 833.227C583.952 834.437 556.634 831.77 529.391 828.586C514.881 826.882 500.396 824.882 486.009 822.414C474.017 820.365 462.246 817.032 450.228 815.057C430.117 811.749 409.906 809.008 389.696 806.194C364.353 802.663 339.01 798.788 314.53 791.159C289.829 783.432 265.078 775.606 240.994 766.15C217.427 756.892 197.488 741.734 180.807 722.502C173.009 713.516 165.532 704.184 157.068 695.864C143.693 682.705 137.993 666.535 136.018 648.463C135.451 643.328 134.859 638.119 133.452 633.157C131.478 626.145 132.86 619.801 136.093 613.727C147.592 591.977 161.732 572.153 180.264 555.81C185.249 551.415 191.319 548.231 196.921 544.552C202.004 541.195 207.088 537.812 212.27 534.578C215.996 532.258 216.958 529.863 214.589 525.592C209.21 515.988 209.012 515.717 199.857 521.963C177.476 537.244 158.622 556.205 141.768 577.387C129.356 592.99 125.778 611.135 124.174 630.318C122.545 649.796 125.087 668.658 130.343 687.272C134.661 702.53 139.128 717.737 143.915 732.846C145.47 737.734 147.987 742.376 150.454 746.918C160.745 765.953 171.553 784.74 181.424 803.997C186.828 814.538 191.072 825.722 195.243 836.856C200.203 850.064 206.915 862.235 214.293 874.234C223.547 889.268 231.666 905.044 239.982 920.647C250.445 940.298 260.636 960.098 270.927 979.848C271.494 980.91 272.457 982.021 272.457 983.082C272.457 984.391 271.815 985.847 271.001 986.884C270.754 987.18 268.607 986.637 267.99 985.897C263.523 980.49 258.391 975.429 255.059 969.356C241.364 944.52 228.038 919.486 215.009 894.28C208.988 882.652 204.275 870.358 198.451 858.656C194.651 851.027 189.518 844.09 185.644 836.486C176.637 818.834 167.901 801.059 159.338 783.209C149.714 763.163 140.559 742.894 130.935 722.872C122.348 705.023 119.14 685.89 115.586 666.633C111.12 642.415 117.61 619.998 124.322 597.532C128.591 583.213 138.19 571.857 147.937 560.846C150.997 557.365 154.798 554.403 150.035 549.391C148.974 548.255 149.073 545.959 148.776 544.182C144.853 520.457 140.658 496.756 137.154 472.957C135.525 461.823 134.637 450.516 134.415 439.258C133.921 414.521 133.23 389.759 134.094 365.047C135.846 313.77 144.779 263.753 164.964 216.303C181.202 178.16 206.841 146.954 238.797 120.958C246.299 114.86 255.306 110.639 263.598 105.528C266.164 103.948 269.372 102.788 271.05 100.517C282.944 84.3707 298.367 71.7799 312.778 58.1769C331.015 40.9942 349.868 24.5274 370.645 10.4306C375.68 7.02371 381.158 4.23398 386.611 1.51832C390.954 -0.629522 395.322 -0.703585 399.443 2.62927C406.55 8.38154 413.83 13.9363 421.011 19.5898C422.442 20.7255 423.898 21.8611 425.206 23.1449C432.017 29.7859 431.819 33.7606 424.293 39.4388C411.387 49.1659 398.703 59.2632 385.353 68.373C365.537 81.9019 348.634 98.6156 331.631 115.305C326.671 120.168 326.696 120.366 331.113 125.649C354.902 154.139 370.325 186.504 376.543 223.166C381.133 250.1 381.429 277.109 378.271 304.29C376.05 323.349 374.964 342.556 373.385 361.714C373.237 363.541 373.434 365.417 373.039 367.195C369.584 382.649 373.385 396.771 380.566 410.398C386.365 421.409 391.695 432.691 397.469 443.702C397.987 444.714 400.48 445.282 401.936 445.109C410.104 444.171 418.198 442.591 426.366 441.851C441.517 440.493 456.718 438.839 471.919 438.74C484.356 438.666 496.793 440.592 509.206 441.727C523.148 443.011 537.115 444.048 550.983 445.85C562.754 447.381 574.328 450.195 586.099 451.775C599.079 453.528 612.182 454.244 625.162 455.898C636.02 457.305 646.779 459.33 657.538 461.305C664.373 462.564 664.225 462.737 665.533 456.096C667.606 445.504 672.023 435.852 677.477 426.569C679.599 422.989 680.907 418.94 682.585 415.089C684.164 411.46 685.669 407.806 687.249 404.177C696.873 382.106 706.546 360.06 716.17 337.964C720.686 327.595 718.07 317.794 714.097 307.87C710.963 300.044 706.99 292.02 706.299 283.848C704.572 263.802 704.572 243.632 703.807 223.487C702.894 199.342 714.837 182.307 733.839 169.297C737.195 167.001 739.564 164.557 741.488 160.755C744.178 155.398 748.102 150.485 752.198 146.016C756.615 141.202 761.205 141.029 764.364 146.436C770.508 156.978 779.565 157.447 790.373 158.41C819.936 161.051 843.552 174.95 859.542 200.626C868.722 215.389 877.754 230.276 887.205 244.866C900.234 264.962 918.224 280.121 937.644 293.526C951.167 302.858 966.047 310.314 979.225 320.09C999.509 335.15 1015.67 354.406 1028.92 375.835C1036.87 388.698 1040.32 403.288 1041.41 418.447C1042.67 436.074 1044.57 453.651 1045.85 471.279C1047.43 493.226 1042.1 513.964 1031.61 532.875C1011.11 569.808 983.346 600.347 946.75 621.998C938.212 627.059 928.514 630.318 919.087 633.725C912.153 636.243 912.252 635.7 913.362 643.032C918.273 675.496 920.667 708.035 910.253 739.907C906.379 751.732 901.542 763.41 895.669 774.371C878.593 806.144 864.502 839.177 851.275 872.703C835.285 913.265 818.283 953.432 801.872 993.821C799.726 999.105 796.863 1002.54 790.719 1002.91C781.292 1003.5 771.915 1005.05 762.488 1005.33C742.673 1005.92 722.833 1006.14 702.993 1006.14C658.722 1006.14 614.452 1005.18 570.207 1006.14C544.345 1006.71 518.583 1010.31 492.746 1012.39C487.613 1012.81 482.431 1012.39 477.299 1012.63C454.423 1013.77 431.967 1017.87 409.437 1021.67C387.821 1025.32 366.031 1027.94 344.389 1031.37C324.253 1034.56 304.216 1038.26 284.079 1041.57C277.17 1042.7 270.162 1044.16 263.252 1043.99C255.972 1043.81 252.814 1047.15 251.111 1053.44C247.903 1065.39 241.808 1075.91 234.528 1085.83C228.631 1093.83 221.548 1100.42 213.059 1105.48C195.835 1115.75 177.574 1123.19 157.339 1124.64C143.347 1125.65 129.306 1127.31 115.339 1126.91C59.0763 1125.23 19.5687 1097.66 3.33137 1043.1C2.22091 1039.35 1.18449 1035.59 0.0987072 1031.82V1013.5L0 1013.65ZM474.954 586.176C474.387 585.731 473.819 585.312 473.276 584.867C473.523 585.583 473.77 586.299 474.017 587.015C474.905 588.669 475.769 590.323 476.657 591.977C476.336 590.2 476.015 588.422 475.645 586.67C475.596 586.472 475.201 586.324 474.954 586.176ZM718.884 200.576C722.29 197.095 725.424 193.293 729.125 190.158C744.055 177.493 760.588 175 778.528 182.999C790.373 188.282 799.504 196.873 805.648 208.057C812.385 220.327 818.282 233.066 824.18 245.755C830.991 260.395 836.198 275.948 846.217 288.811C855.396 300.587 865.391 311.721 875.212 322.979C881.825 330.558 889.031 337.643 895.447 345.371C904.207 355.937 911.98 367.367 921.061 377.638C948.872 409.09 959.138 446.615 959.162 487.424C959.162 502.904 957.706 518.63 954.721 533.813C948.206 566.746 939.495 598.915 907.835 618.122C906.897 618.69 905.91 620.887 906.305 621.652C907.02 623.059 908.575 624.417 910.056 624.886C911.314 625.281 912.992 624.393 914.473 624.121C926.021 621.924 936.682 617.332 946.429 610.938C992.846 580.424 1024.26 539.17 1034.72 483.869C1037.29 470.242 1039.83 456.145 1037.46 442.048C1035.86 432.469 1034.03 422.915 1031.91 413.46C1027.3 392.845 1018.26 374.354 1004.32 358.43C996.474 349.469 988.084 340.976 980.483 331.817C971.032 320.461 959.335 312.388 945.738 307.253C925.503 299.599 909.488 286.169 894.484 271.233C880.172 256.988 871.362 239.139 862.651 221.289C856.408 208.476 848.882 196.503 836.741 188.751C826.771 182.381 816.16 176.802 805.377 171.889C794.346 166.902 782.402 165.52 770.459 168.359C765.351 169.568 760.44 170.605 755.159 171.198C737.589 173.222 725.128 183.394 717.379 199.293C717.157 200.33 716.96 201.366 716.738 202.403C717.453 201.811 718.144 201.194 718.86 200.601L718.884 200.576ZM700.007 401.585C702.77 399.709 705.633 397.956 708.273 395.907C732.703 376.922 760.243 368.33 791.163 370.676C811.324 372.206 830.423 376.996 846.463 389.858C856.68 398.054 866.106 407.238 875.681 416.225C880.098 420.372 884.811 424.569 888.044 429.606C904.479 455.404 909.167 483.326 899.987 512.705C893.497 533.418 883.503 552.205 863.935 563.907C860.258 566.105 862.479 567.981 863.935 569.684C874.768 582.473 885.724 595.162 896.557 607.95C898.852 610.666 900.654 609.185 902.825 607.827C911.289 602.593 918.026 595.779 923.43 587.386C933.227 572.153 940.581 555.711 946.75 538.825C951.439 525.937 954.104 512.236 952.401 498.386C950.6 483.894 947.466 469.575 945.59 455.108C942.58 431.63 934.56 410.226 920.913 390.87C919.679 389.142 918.865 387.118 917.755 385.316C909.685 372.305 900.481 360.356 889.031 349.963C871.165 333.767 853.595 317.226 839.579 297.377C832.817 287.823 827.364 277.578 824.674 266.197C820.207 247.335 810.855 231.041 798.985 216.13C793.112 208.773 786.844 201.49 779.688 195.466C767.276 185.048 750.15 185.393 737.466 195.417C726.115 204.378 718.687 215.809 719.575 230.72C720.661 248.965 723.228 267.11 724.264 285.354C725.128 300.241 724.856 315.202 724.807 330.138C724.807 337.619 720.439 343.667 717.651 350.308C711.062 366.034 705.732 382.279 699.982 398.326C699.612 399.338 700.13 400.671 700.229 401.832C699.834 401.659 700.056 401.609 700.056 401.609L700.007 401.585ZM837.333 785.012C834.989 783.358 832.644 781.703 830.325 780.025C832.373 778.025 834.273 775.803 836.519 774.075C840.368 771.112 844.958 768.965 848.29 765.582C854.854 758.917 853.521 752.917 844.859 749.362C840.689 747.634 836.124 746.82 831.682 745.807C824.452 744.153 823.292 741.438 827.216 734.92C828.005 733.612 828.918 732.402 829.782 731.143C834.841 723.761 836.519 715.589 835.704 706.776C833.557 683.446 814.211 672.731 793.606 683.569C790.373 685.273 787.486 687.618 784.278 689.322C780.65 691.247 777.665 689.494 777.319 685.421C777.22 684.236 777.566 683.002 777.813 681.816C778.578 678.484 777.344 676.879 773.963 675.916C764.24 673.176 763.994 673.028 764.512 662.955C764.833 656.635 762.809 651.747 758.318 647.476C746.078 635.823 726.83 632.465 711.506 639.501C697.045 646.118 695.935 645.476 694.652 629.799C693.097 610.691 679.402 598.643 661.708 601.309C655.761 602.198 650.036 604.593 644.163 606.148C641.375 606.889 638.463 607.21 635.6 607.704C635.131 604.568 634.613 601.458 634.243 598.322C634.144 597.458 634.366 596.471 634.662 595.607C640.264 578.276 630.788 568.721 617.685 563.019C606.161 557.982 593.798 555.538 581.213 555.291C565.913 554.97 558.905 562.006 558.485 577.486C558.362 581.757 558.88 586.077 558.387 590.299C558.214 591.903 556.24 594.224 554.734 594.52C553.13 594.841 550.687 593.607 549.429 592.249C548.343 591.113 548.318 588.891 548.022 587.114C545.629 572.375 543.062 557.661 541.039 542.898C540.15 536.43 537.016 532.109 531.341 529.542C515.177 522.234 490.303 522.234 474.485 541.022C469.821 546.577 467.255 552.897 466.737 560.155C466.342 565.487 467.724 569.363 472.733 572.301C479.569 576.325 483.986 582.645 485.467 590.546C486.009 593.409 485.935 596.718 485.072 599.458C482.727 606.864 476.83 608.049 472.511 601.729C468.588 595.977 464.911 589.731 462.764 583.189C460.666 576.819 456.545 574.449 450.894 573.881C429.746 571.832 409.462 574.548 391.103 586.052C372.422 597.754 367.561 609.333 371.114 631.404C371.484 633.651 370.596 637.304 368.967 638.44C365.982 640.514 363.267 638.218 361.466 635.428C360.306 633.626 359.368 631.7 358.258 629.873C353.841 622.566 349.695 615.061 344.883 608.025C337.973 597.927 327.214 596.594 316.332 597.582C305.918 598.544 300.489 605.975 297.627 615.332C292.149 633.354 293.456 650.858 302.241 667.646C304.166 671.324 308.386 675.422 303.993 678.928C299.897 682.211 296.393 677.743 292.963 675.25C284.597 669.176 276.38 662.782 267.422 657.746C260.34 653.771 252.715 656.191 248.1 662.832C245.756 666.214 243.831 670.435 243.387 674.459C242.647 681.051 243.313 687.816 243.313 694.506C243.313 703.196 240.525 704.677 232.628 701.32C225.694 698.357 218.513 695.839 211.233 693.889C202.004 691.42 195.267 695.938 190.085 703.171C184.78 710.578 185.964 716.997 192.75 723.169C213.208 741.709 237.736 753.411 262.536 764.545C274.48 769.903 286.67 774.914 299.132 778.766C310.73 782.345 322.822 784.469 334.815 786.666C356.382 790.616 378.073 793.875 399.616 797.948C416.051 801.059 432.214 805.601 448.674 808.465C467.576 811.749 486.626 814.168 505.677 816.439C527.442 819.032 549.256 822.735 571.07 823.031C621.682 823.747 672.344 824.833 722.808 818.316C749.484 814.884 775.764 810.218 801.502 802.515C814.359 798.664 826.944 793.899 837.259 784.789C837.456 784.518 837.333 784.987 837.333 784.987V785.012ZM143.446 395.758C143.051 395.758 142.681 395.758 142.286 395.758C143.101 415.879 143.249 436.049 144.902 456.12C147.222 484.338 150.578 512.483 153.662 540.651C153.934 543.12 155.661 545.441 156.698 547.836C158.82 546.848 161.213 546.206 163.015 544.799C175.674 534.751 188.062 524.382 200.844 514.532C204.423 511.791 204.719 509.816 202.3 506.385C198.969 501.645 195.81 496.756 192.973 491.72C192.38 490.683 193.589 488.634 193.96 487.054C195.243 487.647 196.995 487.869 197.686 488.881C201.042 493.621 204.324 498.411 207.186 503.447C209.481 507.471 211.776 508.088 216.021 505.99C223.917 502.064 232.036 498.485 240.278 495.325C275.566 481.845 310.36 466.958 346.906 456.96C351.792 455.626 352.582 453.528 350.731 449.084C348.165 442.888 346.191 436.469 343.797 430.198C342.687 427.31 343.674 424.964 346.141 424.248C347.597 423.829 350.188 425.063 351.373 426.371C352.928 428.124 353.717 430.618 354.606 432.864C356.53 437.678 358.702 442.443 360.059 447.405C361.367 452.145 363.687 452.911 368.104 451.602C372.743 450.245 377.654 449.8 382.416 448.739C389.795 447.084 389.819 446.961 386.389 440.616C381.923 432.296 376.889 424.224 372.965 415.632C370.103 409.337 367.215 402.474 366.87 395.734C366.228 383.612 367.215 371.367 368.054 359.22C369.165 343.099 371.879 327.028 371.929 310.931C372.027 281.38 371.929 251.705 366.672 222.45C362.033 196.676 354.334 172.062 338.097 150.979C332.15 143.251 325.561 135.993 319.293 128.513C314.407 122.686 314.358 120.069 319.046 114.045C320.181 112.614 321.415 111.256 322.698 109.947C341.157 91.2586 359.714 72.6934 381.331 57.535C385.081 54.9181 388.66 52.005 391.991 48.8943C392.929 48.0302 393.57 45.3886 392.978 44.5492C387.845 37.3898 382.712 30.1809 376.938 23.5399C371.583 17.3926 370.892 17.3185 364.526 22.8733C344.069 40.7473 323.71 58.72 303.722 77.0878C295.431 84.6917 288.003 93.2583 280.427 101.652C278.774 103.479 277.194 106.466 277.491 108.688C278.132 113.601 275.418 114.342 272.185 113.478C267.694 112.293 264.313 114.169 261.155 116.49C251.136 123.921 240.599 130.858 231.468 139.301C195.909 172.21 172.121 212.303 158.696 258.963C152.774 279.602 147.937 300.34 146.407 321.646C144.655 346.284 144.335 371.046 143.372 395.734L143.446 395.758ZM116.376 941.384C91.5509 941.533 71.464 946.569 53.0551 956.691C-0.419506 986.069 -1.20916 1045.22 32.6968 1080.38C59.7425 1108.4 94.7342 1119.63 132.786 1120.87C159.758 1121.73 184.114 1111.73 207.112 1098.33C215.132 1093.66 221.622 1087.34 227.249 1079.93C235.663 1068.85 241.66 1056.6 245.608 1043.37C246.521 1040.28 247.829 1038.53 250.815 1037.91C256.491 1036.75 262.142 1035.49 267.842 1034.53C299.626 1029.08 331.36 1023.35 363.218 1018.44C384.563 1015.13 406.057 1011.37 427.55 1010.78C460.938 1009.87 493.511 1004.14 526.134 998.117C539.607 995.624 552.933 992.019 566.505 990.217C599.695 985.748 632.91 981.428 665.533 973.627C678.217 970.59 690.852 966.936 703.017 962.295C708.718 960.122 713.826 955.531 718.169 951.037C721.969 947.112 720.859 943.754 715.75 941.952C711.827 940.594 707.36 939.632 703.289 940.002C676.317 942.471 649.37 945.186 622.447 948.149C597.006 950.939 571.564 953.802 546.196 957.185C527.195 959.703 508.317 962.986 489.415 966.072C468.119 969.578 446.872 973.503 425.527 976.762C412.004 978.811 398.308 979.725 384.736 981.527C366.327 983.946 348.017 987.032 329.608 989.304C306.955 992.093 284.227 994.142 261.599 996.957C253.209 997.994 244.621 999.401 236.749 1002.34C229.297 1005.13 229.494 1006.24 224.633 1000.12C207.063 978.021 184.015 963.233 158.672 952.124C144.236 945.779 129.035 940.619 116.376 941.409V941.384ZM783.71 381.39C778.528 381.39 773.247 380.724 768.164 381.489C738.725 385.957 713.998 399.634 693.665 421.187C683.572 431.877 677.477 444.591 675.823 459.502C675.33 464.045 676.021 465.921 680.389 467.254C688.927 469.847 688.828 470.094 693.517 462.761C695.17 460.194 696.453 457.207 698.674 455.256C700.155 453.972 703.165 453.454 705.09 454.022C706.151 454.318 707.212 457.774 706.768 459.404C706.003 462.267 704.128 464.81 702.672 467.477C700.056 472.34 700.081 473.031 705.139 474.562C723.302 480.067 740.477 487.696 756.961 497.201C780.182 510.582 805.253 520.679 827.314 536.232C833.78 540.8 834.002 540.602 839.159 534.628C842.342 530.924 845.082 526.777 848.635 523.493C850.288 521.963 854.064 520.753 855.717 521.642C858.95 523.345 858.086 526.826 856.309 529.616C855.174 531.418 853.743 533.023 852.411 534.702C850.116 537.565 847.747 540.355 845.55 543.293C844.662 544.478 843.552 545.959 843.601 547.243C843.798 551.588 854.705 558.155 858.234 555.711C863.688 551.958 869.339 547.959 873.46 542.898C887.279 525.937 892.757 505.496 894.065 484.24C895.792 456.614 884.071 433.432 865.242 414.447C843.083 392.105 815.519 380.921 783.76 381.365L783.71 381.39ZM413.312 27.3665C412.497 28.5268 411.708 29.2921 411.387 30.2056C411.165 30.8969 411.56 31.8103 411.658 32.6003C412.818 31.835 414.052 31.119 415.088 30.2303C415.187 30.1562 414.225 28.8478 413.287 27.3665H413.312ZM391.892 11.0478L391.078 9.71468C390.806 10.1591 390.338 10.6034 390.338 11.0231C390.338 11.4675 390.831 11.9119 391.103 12.3316C391.374 11.8872 391.621 11.4675 391.892 11.0231V11.0478Z" fill="#571010"/>
+<path d="M553.056 407.066C553.303 377.761 570.354 352.184 597.524 341.421C601.941 339.668 604.507 337.89 604.655 332.558C604.877 323.596 609.541 316.239 615.636 310.042C628.493 296.982 644.039 290.366 662.547 291.551C664.94 291.699 667.433 292.045 669.678 292.86C672.886 294.045 674.688 296.661 673.479 300.118C672.22 303.648 669.358 303.772 665.977 302.883C648.925 298.39 626.741 308.61 619.116 324.46C618.079 326.633 617.413 329.027 616.944 331.397C616.229 335.1 616.944 337.471 621.583 338.409C626.84 339.47 632.194 341.396 636.76 344.186C639.474 345.84 641.646 349.666 642.435 352.9C643.718 358.06 640.609 361.788 635.328 362.603C627.062 363.887 619.165 362.627 613.637 355.912C609.171 350.481 604.655 350.876 599.177 353.419C577.091 363.689 566.48 381.686 564.259 405.288C563.889 409.213 564.185 413.213 564.086 417.188C564.012 419.928 564.259 422.915 560.385 423.409C556.215 423.952 555.129 421.014 554.537 417.928C553.846 414.348 553.525 410.719 553.031 407.115L553.056 407.066Z" fill="#571010"/>
+<path d="M419.432 270.221C417.334 269.209 415.262 268.172 413.164 267.16C415.434 266.024 417.754 263.851 419.95 263.975C424.737 264.246 429.747 264.962 434.139 266.789C455.83 275.8 474.733 289.107 490.402 306.561C494.968 311.647 498.274 318.189 500.939 324.559C502.593 328.484 502.519 333.422 502.149 337.816C501.68 343.47 501.828 347.963 506.196 352.777C511.427 358.529 516.017 365.516 518.707 372.774C525.616 391.438 520.335 408.028 507.479 422.545C506.294 423.878 504.764 425.285 503.136 425.73C501.68 426.149 499.261 425.853 498.348 424.89C497.411 423.878 497.065 421.261 497.707 420.051C499.138 417.41 501.359 415.213 503.284 412.867C515.548 398.03 513.796 374.478 504.147 362.627C498.965 356.258 498.422 356.036 491.019 360.208C484.505 363.886 477.62 364.158 470.686 362.01C464.837 360.208 461.851 355.937 462.024 350.58C462.172 345.371 465.553 341.149 471.648 340.087C476.065 339.322 480.778 339.396 485.27 339.964C493.462 341.001 493.536 341.198 491.044 333.027C484.998 313.35 472.981 297.748 456.719 285.774C448.501 279.726 438.877 275.504 429.698 270.887C426.835 269.455 423.282 269.431 420.024 268.764C419.827 269.258 419.629 269.776 419.432 270.27V270.221ZM480.754 354.332C481.716 353.764 483.616 352.579 485.541 351.419C483.444 350.777 481.346 350.061 479.224 349.543C478.36 349.345 477.348 349.395 476.509 349.666C475.473 349.987 474.511 350.654 473.548 351.148C474.56 352.086 475.498 353.197 476.657 353.913C477.348 354.332 478.434 354.135 480.779 354.332H480.754Z" fill="#571010"/>
+<path d="M741.513 758.991C740.798 767.286 736.751 776.322 729.15 783.506C723.771 788.567 719.304 789.11 713.53 784.888C702.993 777.21 694.627 767.36 689.964 755.164C683.942 739.438 695.17 725.02 711.901 726.057C727.225 727.02 741.735 742.08 741.513 758.966V758.991ZM732.852 756.547C732.58 743.265 718.465 732.822 706.522 736.401C698.798 738.722 695.812 743.289 698.107 750.819C701.315 761.237 707.904 769.582 716.096 776.618C719.131 779.235 722.191 778.889 724.856 775.828C729.816 770.1 732.111 763.311 732.827 756.547H732.852Z" fill="#571010"/>
+<path d="M405.563 647.476C410.203 648.29 418.149 649.155 425.749 651.204C436.015 653.993 438.951 661.77 433.794 671.028C427.674 682.014 417.704 686.952 405.662 686.31C399.493 685.989 393.102 683.643 387.5 680.829C379.48 676.805 377.753 669.67 381.479 661.4C385.057 653.5 394.582 647.081 405.563 647.451V647.476ZM407.414 655.351C399.863 654.808 394.064 657.302 390.042 663.548C386.439 669.127 387.747 673.472 393.916 675.867C401.615 678.854 409.61 678.657 416.939 675.126C420.518 673.398 423.479 669.843 425.996 666.559C428.488 663.276 427.452 659.918 423.331 658.758C418.124 657.302 412.744 656.437 407.439 655.302L407.414 655.351Z" fill="#571010"/>
+<path d="M310.261 760.571C295.702 760.447 280.18 742.302 282.327 728.032C282.944 723.885 285.264 721.712 289.162 720.502C300.39 717.046 317.565 722.354 324.598 731.859C328.793 737.537 330.743 743.734 327.411 750.622C324.426 756.818 317.862 760.62 310.261 760.546V760.571ZM300.045 728.23C299.922 728.6 299.798 728.995 299.699 729.365C297.873 729.365 295.875 728.896 294.295 729.514C293.061 730.007 291.334 732.155 291.581 733.044C293.777 740.771 297.256 747.955 304.191 752.547C309.817 756.275 317.59 754.251 321.045 748.696C324.129 743.734 322.501 737.611 316.06 734.155C311.1 731.489 305.4 730.155 300.045 728.23Z" fill="#571010"/>
+<path d="M379.431 695.321C383.33 697.345 389.03 699.542 393.818 702.999C397.445 705.64 397.963 710.059 395.841 714.553C391.227 724.329 376.914 730.032 367.117 725.736C357.469 721.515 355.124 712.059 362.034 704.282C366.13 699.666 371.066 696.185 379.456 695.321H379.431ZM373.977 718.651C376.346 717.935 379.579 717.639 381.948 716.034C384.144 714.553 385.428 711.689 387.13 709.442C385.033 708.06 382.96 706.578 380.788 705.319C379.505 704.579 378.049 703.962 376.593 703.764C372.373 703.171 364.551 709.467 365.069 713.294C365.686 718.034 369.906 717.836 374.002 718.675L373.977 718.651Z" fill="#571010"/>
+<path d="M599.251 626.466C609.418 627.355 617.388 631.009 623.533 637.773C630.245 645.155 627.012 655.154 617.413 657.795C608.036 660.363 599.3 658.091 591.034 653.722C586.32 651.228 582.446 647.821 582.545 641.723C582.668 635.453 586.444 631.601 591.478 628.935C594.094 627.553 597.178 627.084 599.251 626.466ZM608.061 653.82C612.305 652.784 615.143 652.611 617.462 651.426C621.88 649.228 622.373 645.476 619.239 641.723C614.97 636.613 602.311 633.552 596.438 636.218C590.737 638.81 589.578 643.921 594.612 647.476C598.881 650.488 604.162 652.043 608.036 653.796L608.061 653.82Z" fill="#571010"/>
+<path d="M598.412 667.646C602.385 669.349 609.862 671.867 616.549 675.768C619.042 677.225 620.695 681.718 620.991 685.001C621.608 691.47 615.735 698.827 609.442 700.95C603.791 702.875 598.881 700.876 594.241 693.914C591.231 689.396 588.541 684.557 586.468 679.545C582.989 671.102 585.777 667.3 598.387 667.646H598.412ZM593.748 672.485C592.835 674.558 591.453 676.311 591.848 677.027C594.562 681.668 597.203 686.507 600.756 690.457C603.989 694.012 607.172 693.445 610.084 690.186C613.341 686.532 613.44 681.644 609.368 679.224C604.803 676.509 599.572 674.929 593.723 672.485H593.748Z" fill="#571010"/>
+<path d="M321.02 317.227C317.787 330.04 314.357 343.865 310.779 357.665C310.434 359.048 309.373 360.406 308.311 361.393C306.214 363.368 303.327 362.504 302.685 359.714C302.364 358.282 302.463 356.653 302.759 355.221C305.646 341.248 308.534 327.299 311.667 313.375C312.062 311.598 313.543 309.796 315.048 308.709C315.739 308.215 318.33 309.03 318.898 309.968C319.934 311.647 320.107 313.844 321.02 317.227Z" fill="#571010"/>
+<path d="M293.975 411.114C288.102 408.893 282.106 406.893 276.43 404.251C275.221 403.683 275.097 400.795 274.48 398.993C276.356 399.067 278.577 398.524 280.057 399.314C296.739 408.251 317.221 402.202 326.277 385.464C327.141 383.859 327.536 381.958 328.547 380.477C329.066 379.712 330.694 378.996 331.41 379.292C332.199 379.613 333.137 381.267 332.94 382.057C332.199 384.945 331.41 387.982 329.905 390.525C323.094 402.079 309.053 409.608 294 411.139L293.975 411.114Z" fill="#571010"/>
+<path d="M254.664 372.552C254.862 376.897 251.901 380.403 247.878 380.551C243.881 380.699 240.648 377.49 240.377 373.145C240.081 368.33 242.647 365.343 246.99 365.368C251.308 365.393 254.467 368.355 254.664 372.577V372.552Z" fill="#571010"/>
+<path d="M346.289 332.138C347.03 333.175 348.732 334.582 349.102 336.261C349.818 339.495 346.437 344.037 343.575 344.309C340.49 344.605 339.281 342.828 339.232 340.013C339.158 336.409 342.341 332.261 346.289 332.138Z" fill="#571010"/>
+<path d="M165.926 1062.68C174.415 1061.76 184.187 1061.37 193.663 1059.49C202.448 1057.76 210.023 1052.97 216.044 1046.06C223.99 1036.95 225.274 1022.9 213.478 1013.89C207.531 1009.35 202.645 1003.38 197.463 997.846C196.624 996.932 196.821 995.056 196.525 993.624C197.808 993.871 199.116 994.044 200.399 994.34C209.801 996.685 216.735 1003.33 221.893 1010.41C229.617 1020.98 231.393 1036.48 220.708 1049.39C214.687 1056.68 206.963 1061.66 198.006 1064.13C176.389 1070.08 154.525 1072.63 132.045 1069.12C118.448 1067 104.925 1064.97 92.1916 1059.54C69.5383 1049.91 53.6218 1033.25 42.8133 1011.47C38.7417 1003.25 39.556 994.809 43.6524 986.786C51.9438 970.566 63.6159 958.222 82.3702 954.815C91.0071 953.259 99.8167 952.445 108.577 951.655C110.23 951.507 113.389 952.963 113.488 953.951C113.833 957.21 110.823 956.173 108.898 956.543C99.3726 958.395 89.6499 959.555 80.4208 962.369C64.6276 967.159 55.6453 979.429 49.254 993.846C45.8239 1001.6 47.7487 1008.93 52.4126 1015.47C60.8521 1027.3 71.5125 1036.83 84.1717 1043.96C100.113 1052.95 117.806 1056.5 135.524 1059.61C145.074 1061.29 154.871 1061.61 165.877 1062.7L165.926 1062.68Z" fill="#571010"/>
+<path d="M768.114 438.172C767.201 446.294 766.313 454.417 765.351 462.514C765.178 463.996 765.055 465.847 764.142 466.785C762.858 468.118 760.884 469.353 759.157 469.427C758.293 469.452 756.64 466.835 756.541 465.329C756.319 462.021 756.887 458.688 757.059 455.355C757.652 444.468 758.194 433.58 758.762 422.693C758.787 422.076 758.762 421.483 758.762 420.866C758.762 418.002 758.959 415.163 762.661 414.842C767.004 414.472 767.572 417.755 767.67 420.841C767.868 426.594 767.72 432.346 767.72 438.098C767.843 438.098 767.942 438.123 768.065 438.147L768.114 438.172Z" fill="#571010"/>
+<path d="M764.585 489.4C754.986 488.807 743.24 487.202 733.443 479.401C730.531 477.08 725.547 474.562 728.829 470.044C732.382 465.107 735.664 470.143 738.798 471.945C743.807 474.834 748.669 477.994 753.752 480.685C763.648 485.919 773.592 485.721 783.438 480.389C784.228 479.944 784.993 479.031 785.783 479.031C787.362 479.055 788.917 479.599 790.496 479.919C789.854 481.179 789.558 482.857 788.546 483.647C782.204 488.56 774.752 489.77 764.585 489.424V489.4Z" fill="#571010"/>
+<path d="M719.97 447.85C719.92 444.196 721.746 442.27 725.399 442.048C729.051 441.851 732.086 442.493 732.456 447.01C732.752 450.491 731.716 453.01 727.866 453.454C723.795 453.923 720.192 451.331 719.97 447.85Z" fill="#571010"/>
+<path d="M804.488 460.169C805.5 461.947 807.005 463.625 807.424 465.526C807.943 467.995 807.03 470.711 803.97 470.489C802.514 470.365 800.095 468.316 800.046 467.057C799.947 464.86 801.329 462.589 802.094 460.342L804.488 460.169Z" fill="#571010"/>
+</svg></div>
+        <div class="ck-themes">
+
+          <div class="ck-theme">
+            <p class="ck-theme__label">What I'd do differently:</p>
+            <p class="methodology__body">Name the target user earlier and make the design audit gap explicit on the slide - not just in the room. Insights need to live on the page.</p>
+          </div>
+
+          <div class="ck-theme">
+            <p class="ck-theme__label">What this project taught me:</p>
+            <p class="methodology__body">The hardest part of reframing isn't coming up with the new frame. It's having the discipline to let the evidence make the case for you.</p>
+          </div>
+
+          <div class="ck-theme">
+            <p class="ck-theme__label">What I want to carry forward:</p>
+            <p class="methodology__body">A reframe only works if the audience arrives at it themselves. Your job is to build the path.</p>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+  </div><!-- close .page-wrapper -->
+
+  <div id="footer-placeholder"></div>
+
+  <script>
+  (function () {
+    var EI = 'cubic-bezier(0.22,1,0.36,1)';
+    var EO = 'ease-out';
+    document.body.style.opacity   = '0';
+    document.body.style.transform = 'translateY(16px)';
+    requestAnimationFrame(function () {
+      requestAnimationFrame(function () {
+        document.body.style.transition = 'opacity 400ms ' + EI + ', transform 400ms ' + EI;
+        document.body.style.opacity    = '1';
+        document.body.style.transform  = 'translateY(0)';
+      });
+    });
+    document.body.addEventListener('transitionend', function handler(e) {
+      if (e.propertyName === 'transform') {
+        document.body.style.transform = '';
+        document.body.removeEventListener('transitionend', handler);
+      }
+    });
+    document.addEventListener('click', function (e) {
+      var a = e.target.closest('a');
+      if (!a) return;
+      var href = a.getAttribute('href');
+      if (!href || href.charAt(0) === '#') return;
+      if (/^(https?:)?\/\/|^mailto:|^tel:/.test(href)) return;
+      if (a.hasAttribute('download') || a.target === '_blank') return;
+      e.preventDefault();
+      document.body.style.transition = 'opacity 250ms ' + EO;
+      document.body.style.opacity    = '0';
+      setTimeout(function () { window.location.href = href; }, 260);
+    });
+  })();
+  </script>
+  <script src="./components/loader.js"></script>
+  <script src="./components/templates.js"></script>
+  <script>
+  (function () {
+    var EASE_OUT = 'cubic-bezier(0.22,1,0.36,1)';
+
+    var style = document.createElement('style');
+    style.textContent =
+      '.anim-up {' +
+        'opacity: 0;' +
+        'transform: translateY(24px);' +
+        'transition: opacity 420ms ' + EASE_OUT + ', transform 420ms ' + EASE_OUT + ';' +
+        'transition-delay: 80ms;' +
+      '}' +
+      '.anim-up.is-visible { opacity: 1; transform: translateY(0); }';
+    document.head.appendChild(style);
+
+    var simpleEls = Array.from(document.querySelectorAll(
+      '.ck-stats-band, .context__header, .problem-band__header, ' +
+      '.methodology__header, .synthesis__header'
+    ));
+
+    var reframeCards = Array.from(document.querySelectorAll('.ck-reframe'));
+    var frameCards   = Array.from(document.querySelectorAll('.ck-frame-card'));
+
+    simpleEls.forEach(function (el) { el.classList.add('anim-up'); });
+    [reframeCards, frameCards].forEach(function (group) {
+      group.forEach(function (el, i) {
+        el.classList.add('anim-up');
+        el.dataset.animDelay = String(i * 56);
+      });
+    });
+
+    var allEls = simpleEls.concat(reframeCards).concat(frameCards);
+
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        var d = parseInt(e.target.dataset.animDelay || '0');
+        setTimeout(function () { e.target.classList.add('is-visible'); }, d);
+        io.unobserve(e.target);
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+    requestAnimationFrame(function () {
+      allEls.forEach(function (el) { io.observe(el); });
+    });
+  })();
+  </script>
+  <script>
+    document.getElementById('ck-hero').outerHTML = Components.renderHero({
+      title:    `Reframing Healthy Cooking Habits`,
+      subtitle: `Speculative Design`,
+      meta: [
+        { label: `Duration`, values: [`5 weeks`] },
+        { label: `Team`,     values: [`Feifey Wang`, `Phil Cote`, `Juju Kim`, `Darren Chia`] },
+        { label: `Methods`,  values: [`Concept Validation`, `Competitive Audit`, `Diary Studies`] },
+        { label: `Program`,  values: [`SVA IXD`] }
+      ]
+    });
+
+    document.getElementById('ck-hero-image').outerHTML = Components.renderHeroImage({
+      src: `./images/cooking-hero.webp`,
+      alt: `Reframing Healthy Cooking Habits`
+    });
+
+    document.getElementById('ck-overview').outerHTML = Components.renderOverview({
+      cols: [
+        { heading: `Problem`,  body: `People want to break unhealthy eating habits and cook more, but often struggle having the time, money, or drive to do so.` },
+        { heading: `Solution`, body: `We created a convenience tool that focused on <strong>configuring kitchen limitations</strong>, <strong>browse review save share recipes, and substitute recipes by kitchen limitations</strong>` },
+        { heading: `Impact`,   body: `Reduced cognitive load and increased follow-through by enabling flexible, low-stakes cooking paths that adapt to what people have and real-life constraints` }
+      ]
+    });
+  </script>
+</body>
+</html>

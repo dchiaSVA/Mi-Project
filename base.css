@@ -1,0 +1,56 @@
+/* ── Reset & Root ── */
+
+:root {
+  /* Base */
+  --paper: #FAF7F2;
+  --ink: #3a3a38;
+  --orange: #e33e19;
+  --amber: #BA7517;
+  --muted: #71717B;
+  --muted-2: #666666;
+
+  /* Pills */
+  --pill-bg: #E6F1FB;
+  --pill-txt: #0C447C;
+
+  /* Case study accents — override per case study */
+  --forest: var(--ink);
+  --edily: var(--ink);
+  --cooking: var(--ink);
+
+  /* Card */
+  --card-bg: #F7F4EF;
+  --card-border: rgba(0,0,0,0.13);
+}
+
+html {
+  overflow-x: hidden;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* ── Base ── */
+
+body {
+  font-family: 'Space Grotesk', sans-serif;
+  background: var(--paper);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Layout ── */
+
+.page-wrapper {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0 40px;
+}
+
+.content-inner {
+  max-width: 680px;
+  margin: 0 auto;
+}

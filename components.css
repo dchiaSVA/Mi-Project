@@ -1,0 +1,270 @@
+/* ── Top Nav ── */
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  width: 100%;
+  background: var(--paper);
+}
+
+.site-header__inner {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 24px 20px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.site-header__logo {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--orange);
+  text-decoration: none;
+}
+
+.site-header__links {
+  display: flex;
+  flex-direction: row;
+  gap: 24px;
+  align-items: center;
+}
+
+.site-header__links a {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--ink);
+  text-decoration: none;
+}
+
+/* ── Hero ── */
+
+.hero {
+  padding: 64px 0 0;
+  margin-bottom: 48px;
+}
+
+.hero__title {
+  font-family: 'Newsreader', serif;
+  font-size: 56px;
+  font-weight: 800;
+  letter-spacing: -1px;
+  line-height: 1.3em;
+  color: var(--ink);
+}
+
+.hero__subtitle {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 32px;
+  font-weight: 600;
+  letter-spacing: -1.1px;
+  line-height: 1.3em;
+  color: var(--forest);
+  margin-top: 16px;
+}
+
+.hero__meta {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 0;
+  margin-top: 32px;
+  padding-bottom: 0;
+  width: 100%;
+}
+
+.hero__meta-col {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.hero__meta-label {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.hero__meta-value {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: #808080;
+}
+
+.hero__image {
+  width: 100%;
+  display: block;
+  aspect-ratio: 1.657;
+  object-fit: cover;
+  margin-top: 0;
+  margin-bottom: 64px;
+}
+
+/* ── Image Block ── */
+
+.img-block {
+  display: block;
+  width: 100%;
+  overflow: hidden;
+}
+
+.img-block img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.img-block--hero {
+  aspect-ratio: 1.657;
+}
+
+.img-block--full {
+  height: auto;
+}
+
+.img-block--medium {
+  max-width: 80%;
+  margin: 0 auto;
+  height: auto;
+}
+
+.img-block--small {
+  max-width: 50%;
+  margin: 0 auto;
+  height: auto;
+}
+
+.img-block--full img,
+.img-block--medium img,
+.img-block--small img {
+  height: auto;
+}
+
+/* ── Footer ── */
+
+.footer {
+  padding-bottom: 0;
+}
+
+.footer__connect {
+  max-width: 912px;
+  margin: 0 auto;
+  padding-bottom: 24px;
+  display: flex;
+  flex-direction: row;
+  gap: 24px;
+  align-items: flex-start;
+}
+
+.footer__connect-heading {
+  font-family: 'Lora', serif;
+  font-size: 30px;
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  line-height: 44px;
+  color: #585d74;
+  width: 66%;
+}
+
+.footer__connect-details {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+}
+
+.footer__contact-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.footer__contact-label {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.footer__contact-value {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 18px;
+  font-weight: 500;
+  color: var(--ink);
+}
+
+.footer__bar {
+  max-width: 1152px;
+  margin: 0 auto;
+  padding: 0 24px 24px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.footer__bar-group {
+  display: flex;
+  flex-direction: row;
+  gap: 4px;
+  align-items: center;
+  font-family: 'Space Mono', monospace;
+  font-size: 14px;
+  font-weight: 400;
+  color: #7a7a7a;
+}
+
+.footer__bar-group a {
+  font-family: 'Space Mono', monospace;
+  font-size: 14px;
+  font-weight: 400;
+  color: #7a7a7a;
+  text-decoration: underline;
+}
+
+@media (max-width: 809px) {
+  .footer__connect {
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .footer__connect-heading {
+    width: 100%;
+  }
+
+  .footer__bar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 16px;
+  }
+}
+
+/* ── Mobile ── */
+
+@media (max-width: 809px) {
+  .hero__title {
+    font-size: 36px;
+  }
+
+  .hero__subtitle {
+    font-size: 28px;
+  }
+
+  .hero__meta {
+    flex-wrap: wrap;
+    gap: 24px 32px;
+  }
+
+  .hero__meta-col {
+    width: 45%;
+  }
+}

@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edily Learning — Darren Chia</title>
+  <link href="https://fonts.googleapis.com/css2?family=Caprasimo&family=Domine:wght@600;700&family=IBM+Plex+Mono:wght@500&family=Newsreader:ital,wght@0,600;0,700;0,800;1,600;1,700&family=Space+Grotesk:wght@400;500;700&family=IBM+Plex+Sans:wght@400;500&family=Lora:ital,wght@0,500;0,600;0,700;1,600;1,700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./base.css">
+  <link rel="stylesheet" href="./components.css">
+  <link rel="stylesheet" href="./case-studies.css">
+  <style>
+    /* Accent override — must define --edily value here; styles.css defaults it to var(--ink) */
+    :root { --edily: #1145C0; --accent: var(--edily); --forest: var(--edily); }
+
+
+    /* Hero typography — overrides styles.css defaults */
+    .hero__title    { font-weight: 600; }
+    .hero__subtitle { font-weight: 500; }
+
+    /* Meta block — design system spec (IBM Plex Sans labels, SG 18px values) */
+    .hero__meta-label { font-family: 'IBM Plex Sans', sans-serif; font-weight: 500; color: var(--muted); letter-spacing: 0.02em; }
+    .hero__meta-value { font-size: 18px; font-weight: 500; color: var(--ink); }
+
+    /* Hero image — reference: 1.4 ratio, contain */
+    .hero__image { aspect-ratio: 1.4; object-fit: contain; }
+
+    /* Overview labels — SG 26px 500 (styles.css default is NR 29px 600) */
+    .overview__col-heading { font-family: 'Space Grotesk', sans-serif; font-size: 26px; font-weight: 700; }
+
+    /* Context photo — smaller fixed height, no crop */
+    .context__photo { width: 100%; height: 320px; object-fit: contain; display: block; }
+
+    /* Context body — remove first-child accent highlight (GreenThumb-specific) */
+    .context__body p:first-child { color: var(--ink); font-weight: 500; }
+
+    /* Goals subsection (Edily-specific) */
+    .ed-goals { margin-top: 80px; }
+    .ed-goals__heading { font-family: 'Space Grotesk', sans-serif; font-weight: 700; color: var(--edily); text-align: center; margin-bottom: 48px; }
+    .ed-goals__cols { display: flex; flex-direction: row; gap: 32px; }
+    .ed-goals__col { display: flex; flex-direction: column; align-items: center; gap: 8px; flex: 1; text-align: center; }
+    .ed-goals__icon { width: 80px; height: 80px; display: block; border-radius: 50%; }
+    .ed-goals__label { font-family: 'Space Grotesk', sans-serif; font-size: 17px; font-weight: 700; color: var(--edily); }
+    .ed-goals__body { font-family: 'Space Grotesk', sans-serif; font-size: 14px; font-weight: 500; line-height: 1.6em; color: var(--ink); }
+
+    /* ── Comp Analysis ── */
+
+    /* Accent inline span */
+    .ed-accent { color: var(--edily); font-weight: 700; }
+
+    /* Step structure */
+    .ed-steps { display: flex; flex-direction: column; gap: 80px; }
+    .ed-step { display: flex; flex-direction: column; gap: 24px; }
+
+    /* Step mini-header + sub-label */
+    .ed-step-label { font-family: 'Space Grotesk', sans-serif; font-size: 17px; font-weight: 500; letter-spacing: 0.02em; color: var(--muted); }
+    .ed-sub-label { font-family: 'Space Grotesk', sans-serif; font-size: 14px; font-weight: 700; color: var(--muted); }
+
+    /* Pills */
+    .ed-pills { display: flex; flex-direction: row; flex-wrap: wrap; gap: 8px; }
+    .ed-pill { font-family: 'Space Grotesk', sans-serif; font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.02em; padding: 2px 9px; border-radius: 20px; background: var(--pill-bg); color: var(--pill-txt); }
+    .ed-pill--inactive { background: transparent; border: 0.5px solid var(--muted); color: var(--muted); opacity: 0.45; text-decoration: line-through; }
+
+    /* Competitor rows */
+    .ed-competitors { display: flex; flex-direction: column; gap: 12px; }
+    .ed-competitor { display: flex; flex-direction: row; align-items: baseline; gap: 12px; opacity: 0.4; }
+    .ed-competitor__tag { font-family: 'IBM Plex Sans', sans-serif; font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); min-width: 64px; }
+    .ed-competitor__name { font-family: 'Space Grotesk', sans-serif; font-size: 15px; font-weight: 700; color: var(--ink); }
+    .ed-competitor__note { font-family: 'Space Grotesk', sans-serif; font-size: 14px; font-weight: 500; color: var(--ink); }
+
+    /* Benchmark card — high-impact */
+    .ed-benchmark { background: var(--card-bg); border-top: 3px solid var(--edily); border-radius: 6px; padding: 20px; display: flex; flex-direction: column; gap: 8px; }
+    .ed-benchmark__tag { font-family: 'IBM Plex Sans', sans-serif; font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.06em; color: var(--edily); }
+    .ed-benchmark__name { font-family: 'Space Grotesk', sans-serif; font-size: 15px; font-weight: 700; color: var(--ink); }
+    .ed-benchmark__note { font-family: 'Space Grotesk', sans-serif; font-size: 14px; font-weight: 500; line-height: 1.5em; color: var(--ink); }
+    .ed-benchmark__pills { display: flex; flex-direction: row; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
+
+    /* Features 2×2 grid */
+    .ed-features-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .ed-feature { background: var(--card-bg); border-top: 1px solid var(--card-border); border-radius: 6px; padding: 16px 18px; display: flex; flex-direction: column; gap: 6px; }
+    .ed-feature__num { font-family: 'Space Grotesk', sans-serif; font-size: 30px; font-weight: 700; letter-spacing: -0.04em; color: var(--edily); line-height: 1; }
+    .ed-feature__title { font-family: 'Space Grotesk', sans-serif; font-size: 14px; font-weight: 700; color: var(--ink); }
+    .ed-feature__desc { font-family: 'Space Grotesk', sans-serif; font-size: 13px; font-weight: 500; line-height: 1.5em; color: var(--muted-2); }
+    .ed-feature__count { font-family: 'IBM Plex Sans', sans-serif; font-size: 11px; font-weight: 500; letter-spacing: 0.02em; color: var(--muted); margin-top: 4px; }
+
+    /* ── Quantitative Research ── */
+
+    /* Spine layout */
+    .ed-spine-wrap { display: flex; flex-direction: row; gap: 28px; align-items: stretch; }
+    .ed-spine { display: flex; flex-direction: column; align-items: center; width: 14px; flex-shrink: 0; }
+    .ed-spine__dot { width: 10px; height: 10px; border-radius: 50%; background: var(--edily); flex-shrink: 0; }
+    .ed-spine__line { width: 2px; flex: 1; background: var(--edily); opacity: 0.5; }
+    .ed-spine__content { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 80px; }
+
+    /* Section grouping — 80px between surveys block and principles */
+    .ed-quant-sections { display: flex; flex-direction: column; gap: 80px; }
+
+    /* Individual survey block */
+    .ed-survey { display: flex; flex-direction: column; gap: 24px; }
+
+    /* Pull quote */
+    .ed-pull-quote { font-family: 'Space Grotesk', sans-serif; font-size: 30px; font-weight: 500; line-height: 1.3em; color: var(--ink); padding: 12px 0; }
+
+    /* Hero stat (90%) */
+    .ed-hero-stat { display: flex; flex-direction: column; gap: 6px; }
+    .ed-hero-stat__num { font-family: 'Space Grotesk', sans-serif; font-size: 77px; font-weight: 500; color: var(--edily); line-height: 1; letter-spacing: -0.03em; }
+    .ed-hero-stat__label { font-family: 'Space Grotesk', sans-serif; font-size: 18px; font-weight: 500; line-height: 1.5em; color: var(--ink); }
+
+    /* Inline stat row */
+    .ed-stats { display: flex; flex-direction: row; gap: 0; width: 100%; }
+    .ed-stat { display: flex; flex-direction: column; gap: 4px; flex: 1; }
+    .ed-stat__num { font-family: 'Space Grotesk', sans-serif; font-size: 30px; font-weight: 700; color: var(--edily); letter-spacing: -0.04em; line-height: 1; }
+    .ed-stat__label { font-family: 'Space Grotesk', sans-serif; font-size: 12px; font-weight: 500; color: var(--muted-2); line-height: 1.4em; }
+
+    /* Principles subsection */
+    .ed-principles { display: flex; flex-direction: column; gap: 12px; }
+    .ed-principles__intro { font-family: 'Space Grotesk', sans-serif; font-size: 18px; font-weight: 500; line-height: 1.6em; color: var(--ink); margin-bottom: 12px; }
+    .ed-card { background: var(--card-bg); border-top: 1px solid var(--card-border); border-radius: 6px; padding: 16px 18px; display: flex; flex-direction: column; gap: 6px; }
+    .ed-card--highlight { border-top-width: 3px; border-top-color: var(--edily); }
+    .ed-card__tag { font-family: 'IBM Plex Sans', sans-serif; font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); }
+    .ed-card--highlight .ed-card__tag { color: var(--edily); }
+    .ed-card__title { font-family: 'Space Grotesk', sans-serif; font-size: 15px; font-weight: 700; color: var(--ink); }
+    .ed-card__body { font-family: 'Space Grotesk', sans-serif; font-size: 13px; font-weight: 500; line-height: 1.5em; color: var(--muted-2); }
+
+    /* ── Outcome ── */
+    .ed-outcome { max-width: 680px; margin: 0 auto; display: flex; flex-direction: column; }
+    .ed-outcome__heading { font-family: 'Newsreader', serif; font-size: 32px; font-weight: 700; color: var(--ink); margin-bottom: 80px; }
+    .ed-feat-heading { font-family: 'Space Grotesk', sans-serif; font-size: 24px; font-weight: 700; color: var(--edily); letter-spacing: -0.04em; margin-bottom: 40px; }
+    .ed-outcome-feature { display: flex; flex-direction: column; }
+    .ed-outcome-feature + .ed-outcome-feature { margin-top: 120px; }
+    .ed-outcome-feature__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; }
+    .ed-phones { display: flex; flex-direction: row; gap: 16px; }
+    .ed-phone-col { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+    .ed-phone-img { width: 100%; height: auto; display: block; }
+    .ed-phone-label { font-family: 'Space Grotesk', sans-serif; font-size: 13px; font-weight: 600; color: var(--muted); text-align: center; }
+    .ed-callouts { display: flex; flex-direction: column; gap: 48px; justify-content: center; }
+    .ed-callout { border-left: 3px solid var(--edily); padding-left: 13px; display: flex; flex-direction: column; gap: 6px; }
+    .ed-callout__label { font-family: 'Space Grotesk', sans-serif; font-size: 17px; font-weight: 700; color: var(--ink); }
+    .ed-callout__body { font-family: 'Space Grotesk', sans-serif; font-size: 15px; font-weight: 500; color: var(--muted-2); }
+
+    /* ── Ideation ── */
+    .ed-ideation { max-width: 680px; margin: 0 auto; display: flex; flex-direction: column; }
+    .ed-ideation__heading { font-family: 'Newsreader', serif; font-size: 32px; font-weight: 700; color: var(--ink); margin-bottom: 32px; }
+    .ed-ideation__body { font-family: 'Space Grotesk', sans-serif; font-size: 18px; font-weight: 500; line-height: 1.6em; color: var(--ink); margin-bottom: 48px; }
+    .ed-ideation__image { width: 100%; aspect-ratio: 1.55; object-fit: cover; display: block; }
+    .ed-ideation__image--tall { width: 100%; height: 100vh; object-fit: cover; display: block; margin-top: 48px; }
+
+    /* ── Takeaways ── */
+    .next-steps { margin-bottom: 200px; }
+    .ck-themes { display: flex; flex-direction: column; gap: 32px; }
+    .ck-theme { border-left: 3px solid var(--forest); padding-left: 13px; display: flex; flex-direction: column; gap: 12px; }
+    .ck-theme__label { font-family: 'Space Grotesk', sans-serif; font-size: 17px; font-weight: 700; color: var(--forest); }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <div id="nav-placeholder"></div>
+
+  <nav class="sidebar-nav">
+    <a href="#problem-statement">OVERVIEW</a>
+    <a href="#comp-analysis">RESEARCH</a>
+    <a href="#ideation">IDEATION</a>
+    <a href="#outcome">OUTCOME</a>
+    <a href="#takeaways">TAKEAWAYS</a>
+  </nav>
+
+  <div class="page-wrapper">
+
+    <!-- Hero -->
+    <div id="ed-hero"></div>
+
+    <!-- Hero Image -->
+    <div id="ed-hero-image"></div>
+
+    <!-- Overview -->
+    <div id="ed-overview"></div>
+
+    <!-- Problem Statement -->
+    <section class="context" id="problem-statement">
+      <div class="context__inner">
+
+        <div class="context__header">
+          <h2 class="context__heading">Problem Statement</h2>
+        </div>
+
+        <div class="img-block img-block--full" style="max-width: 60%; margin: 0 auto;">
+          <img class="context__photo" src="./images/edily-context.webp" alt="Problem statement" width="758" height="568" loading="lazy">
+        </div>
+
+        <div class="context__body">
+          <p>Edily is a video-based learning platform targeting Gen-Z students. The content was solid — but users weren't coming back. Retention was dropping, and the team knew the product needed a way to build habit.</p>
+        </div>
+
+        <!-- Goals -->
+        <div class="ed-goals" id="goal">
+          <p class="ed-goals__heading">There were three main objectives we wanted to achieve:</p>
+          <div class="ed-goals__cols">
+            <div class="ed-goals__col">
+              <img class="ed-goals__icon" src="./images/edily-goal-integration.webp" alt="Integration icon" width="2886" height="2886" loading="lazy">
+              <p class="ed-goals__label">Integration</p>
+              <p class="ed-goals__body">Introduce gamification features without disrupting the core infrastructure.</p>
+            </div>
+            <div class="ed-goals__col">
+              <img class="ed-goals__icon" src="./images/edily-goal-retention.webp" alt="Retention icon" width="2886" height="2886" loading="lazy">
+              <p class="ed-goals__label">Retention</p>
+              <p class="ed-goals__body">Create incentive system facilitating learning and maintaining long-term retention.</p>
+            </div>
+            <div class="ed-goals__col">
+              <img class="ed-goals__icon" src="./images/edily-goal-progression.webp" alt="Progression icon" width="2886" height="2886" loading="lazy">
+              <p class="ed-goals__label">Progression</p>
+              <p class="ed-goals__body">Motivate users with a sense of progression and satisfaction.</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Competitive Analysis -->
+    <section class="methodology" id="comp-analysis">
+      <div class="methodology__inner">
+
+        <div class="methodology__header">
+          <h2 class="methodology__heading">Competitive Analysis</h2>
+        </div>
+
+        <p class="methodology__body">Yu-Kai Chou's <strong class="ed-accent">Octalysis framework</strong> maps gamification across <strong>8</strong> human drives. For a learning context, I filtered to drives that are <strong>intrinsic and positive</strong> — mechanics that motivate through reward rather than coercion.</p>
+
+        <div class="ed-steps">
+
+          <!-- Step 1 -->
+          <div class="ed-step">
+            <p class="ed-step-label">STEP 1 - FILTERING THE FRAMEWORK</p>
+            <p class="ed-sub-label">8 drives evaluated - 3 prioritized for a learning context</p>
+            <div class="ed-pills">
+              <span class="ed-pill">Dev &amp; Accomplishment</span>
+              <span class="ed-pill">Ownership</span>
+              <span class="ed-pill">Loss Avoidance</span>
+              <span class="ed-pill ed-pill--inactive">Social Influence</span>
+              <span class="ed-pill ed-pill--inactive">Scarcity</span>
+              <span class="ed-pill ed-pill--inactive">Meaning</span>
+              <span class="ed-pill ed-pill--inactive">Empowerment</span>
+              <span class="ed-pill ed-pill--inactive">Unpredictability</span>
+            </div>
+          </div>
+
+          <!-- Step 2 -->
+          <div class="ed-step">
+            <p class="ed-step-label">STEP 2 - MAPPING COMPETITORS</p>
+            <div class="ed-competitors">
+              <div class="ed-competitor">
+                <span class="ed-competitor__tag">Gaming</span>
+                <span class="ed-competitor__name">Habitica</span>
+                <span class="ed-competitor__note">Too complex — not learning-native</span>
+              </div>
+              <div class="ed-competitor">
+                <span class="ed-competitor__tag">Gaming</span>
+                <span class="ed-competitor__name">Snapchat</span>
+                <span class="ed-competitor__note">Too complex — not learning-native</span>
+              </div>
+              <div class="ed-competitor">
+                <span class="ed-competitor__tag">Gaming</span>
+                <span class="ed-competitor__name">Trivia Crack</span>
+                <span class="ed-competitor__note">Too complex — not learning-native</span>
+              </div>
+              <div class="ed-competitor">
+                <span class="ed-competitor__tag">Gaming</span>
+                <span class="ed-competitor__name">Khan Academy</span>
+                <span class="ed-competitor__note">Too complex — not learning-native</span>
+              </div>
+            </div>
+            <div class="ed-benchmark">
+              <span class="ed-benchmark__tag">Benchmark</span>
+              <span class="ed-benchmark__name">Duolingo</span>
+              <p class="ed-benchmark__note">Only EdTech app hitting all 3 priority drives with a real habit loop</p>
+              <div class="ed-benchmark__pills">
+                <span class="ed-pill">Progression</span>
+                <span class="ed-pill">Ownership</span>
+                <span class="ed-pill">Streaks</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 3 -->
+          <div class="ed-step">
+            <p class="ed-step-label">FEATURES TO INVESTIGATE IN SURVEY</p>
+            <div class="ed-features-grid">
+              <div class="ed-feature">
+                <span class="ed-feature__num">1</span>
+                <span class="ed-feature__title">XP &amp; progress bars</span>
+                <p class="ed-feature__desc">Users need to see growth, not just feel it</p>
+                <span class="ed-feature__count">5 of 6 apps</span>
+              </div>
+              <div class="ed-feature">
+                <span class="ed-feature__num">2</span>
+                <span class="ed-feature__title">Achievements &amp; badges</span>
+                <p class="ed-feature__desc">Milestone rewards build identity</p>
+                <span class="ed-feature__count">5 of 6 apps</span>
+              </div>
+              <div class="ed-feature">
+                <span class="ed-feature__num">3</span>
+                <span class="ed-feature__title">Streak &amp; Daily Tasks</span>
+                <p class="ed-feature__desc">Simplest habit loop — hard to break</p>
+                <span class="ed-feature__count">4 of 6 apps</span>
+              </div>
+              <div class="ed-feature">
+                <span class="ed-feature__num">4</span>
+                <span class="ed-feature__title">Quizzes &amp; practice</span>
+                <p class="ed-feature__desc">Only mechanic serving both learning and engagement</p>
+                <span class="ed-feature__count">4 of 6 apps</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Quantitative Research -->
+    <section class="methodology">
+      <div class="methodology__inner">
+
+        <div class="methodology__header">
+          <h2 class="methodology__heading">Quantitative Research</h2>
+        </div>
+
+        <p class="methodology__body">Two surveys . One on general gamification habits, one on long-term Duolingo users specifically.</p>
+
+        <div class="ed-quant-sections">
+
+          <!-- Survey 1 with spine -->
+          <div class="ed-spine-wrap">
+            <div class="ed-spine">
+              <div class="ed-spine__dot"></div>
+              <div class="ed-spine__line"></div>
+            </div>
+            <div class="ed-spine__content">
+              <div class="ed-survey">
+                <p class="ed-step-label">SURVEY 1 - GENERAL GAMIFICATION - 47 RESPONSES</p>
+                <p class="ed-pull-quote">People don't want to feel like they're grinding. They want to <span class="ed-accent">see they're moving.</span></p>
+                <div class="ed-stats">
+                  <div class="ed-stat">
+                    <span class="ed-stat__num">62%</span>
+                    <span class="ed-stat__label">progress bars most appealing</span>
+                  </div>
+                  <div class="ed-stat">
+                    <span class="ed-stat__num">30%</span>
+                    <span class="ed-stat__label">rated practice questions highest</span>
+                  </div>
+                  <div class="ed-stat">
+                    <span class="ed-stat__num">45%</span>
+                    <span class="ed-stat__label">points &amp; rewards second</span>
+                  </div>
+                </div>
+                <p class="methodology__body">Not leaderboards. Not social. Just visible proof that something is happening — and tasks that make users feel like they actually learned something.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Survey 2 with spine -->
+          <div class="ed-spine-wrap">
+            <div class="ed-spine">
+              <div class="ed-spine__dot"></div>
+              <div class="ed-spine__line"></div>
+            </div>
+            <div class="ed-spine__content">
+              <div class="ed-survey">
+                <p class="ed-step-label">SURVEY 2 - DUOLINGO USERS - LONG TERM RETENTION</p>
+                <div class="ed-hero-stat">
+                  <span class="ed-hero-stat__num">90%</span>
+                  <p class="ed-hero-stat__label">of long-term Duolingo users open the app every single day.</p>
+                </div>
+                <p class="methodology__body">That's not engagement — that's a habit. And it's not driven by leaderboards. It's streaks, visible progress, and the satisfaction of getting something right.</p>
+                <div class="ed-stats">
+                  <div class="ed-stat">
+                    <span class="ed-stat__num">72%</span>
+                    <span class="ed-stat__label">use it for a year or longer</span>
+                  </div>
+                  <div class="ed-stat">
+                    <span class="ed-stat__num">45%</span>
+                    <span class="ed-stat__label">motivated by stats &amp; level progression</span>
+                  </div>
+                  <div class="ed-stat">
+                    <span class="ed-stat__num">45%</span>
+                    <span class="ed-stat__label">motivated by friend quests</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- What This Means for Design -->
+          <div class="ed-principles">
+            <p class="ed-step-label">WHAT THIS MEANS FOR DESIGN</p>
+            <p class="ed-principles__intro">The research told us what to build and what to avoid. Streaks, progress bars, practice questions — yes. Mechanics that make users feel trapped — never.</p>
+            <div class="ed-card">
+              <span class="ed-card__tag">Principle 1</span>
+              <span class="ed-card__title">Progression first</span>
+              <p class="ed-card__body">Visible stats before social or competitive features</p>
+            </div>
+            <div class="ed-card">
+              <span class="ed-card__tag">Principle 2</span>
+              <span class="ed-card__title">Quiz as core loop</span>
+              <p class="ed-card__body">Where learning and gamification meet</p>
+            </div>
+            <div class="ed-card ed-card--highlight">
+              <span class="ed-card__tag">Principle 3</span>
+              <span class="ed-card__title">No coercive mechanics</span>
+              <p class="ed-card__body">Every element feels like a reward, not a trap</p>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Ideation -->
+    <section class="findings" id="ideation" style="margin-bottom: 200px;">
+      <div class="ed-ideation">
+        <h2 class="ed-ideation__heading">Ideation and Wireframing</h2>
+        <p class="ed-ideation__body">I ran a How Might We exercise to reframe the research into design opportunities. Five clusters surfaced: user confidence, engagement frequency, feature discoverability, learning motivation, and technical feasibility.</p>
+        <img
+          class="ed-ideation__image"
+          src="./images/edily-ideation-hmw.webp"
+          alt="Ideation and Wireframing"
+         width="15696" height="10124" loading="lazy">
+        <img
+          class="ed-ideation__image--tall"
+          src="./images/edily-ideation-wireframes.webp"
+          alt="Ideation wireframes"
+         width="11620" height="13204" loading="lazy">
+      </div>
+    </section>
+
+    <!-- Outcome -->
+    <section class="synthesis" id="outcome" style="margin-bottom: 200px;">
+      <div class="ed-outcome">
+
+        <h2 class="ed-outcome__heading">Outcome</h2>
+
+        <!-- Feature 1 -->
+        <div class="ed-outcome-feature">
+          <h3 class="ed-feat-heading">Feature 1: Quiz, Points, and Streaks</h3>
+          <div class="ed-outcome-feature__grid">
+            <div class="ed-phones">
+              <div class="ed-phone-col">
+                <img class="ed-phone-img" src="./images/edily-f1-quiz.webp" alt="Quiz screen" width="291" height="605" loading="lazy">
+                <p class="ed-phone-label">Quiz</p>
+              </div>
+              <div class="ed-phone-col">
+                <img class="ed-phone-img" src="./images/edily-f1-results.webp" alt="Quiz results screen" width="293" height="605" loading="lazy">
+                <p class="ed-phone-label">Quiz Results</p>
+              </div>
+            </div>
+            <div class="ed-callouts">
+              <div class="ed-callout">
+                <p class="ed-callout__label">Quiz</p>
+                <p class="ed-callout__body">Practice Questions based on video content to keep users engaged with material.</p>
+              </div>
+              <div class="ed-callout">
+                <p class="ed-callout__label">Explanations</p>
+                <p class="ed-callout__body">Whether right or wrong, explanation given for users to either learn from their mistakes or promote learning retention.</p>
+              </div>
+              <div class="ed-callout">
+                <p class="ed-callout__label">Incentive System</p>
+                <p class="ed-callout__body">Points are good motivators as a sense of accomplishment and reward. Streaks good for consistent engagement.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Feature 2 -->
+        <div class="ed-outcome-feature">
+          <h3 class="ed-feat-heading">Feature 2: Profile Stats and Achievements</h3>
+          <div class="ed-phones">
+            <div class="ed-phone-col">
+              <img class="ed-phone-img" src="./images/edily-f2-stats.webp" alt="Profile stats" width="286" height="591" loading="lazy">
+              <p class="ed-phone-label">Profile: Stats</p>
+            </div>
+            <div class="ed-phone-col">
+              <img class="ed-phone-img" src="./images/edily-f2-specialties.webp" alt="Profile specialties" width="286" height="591" loading="lazy">
+              <p class="ed-phone-label">Profile: Specialties</p>
+            </div>
+            <div class="ed-phone-col">
+              <img class="ed-phone-img" src="./images/edily-f2-achievements.webp" alt="Profile achievements" width="286" height="591" loading="lazy">
+              <p class="ed-phone-label">Profile: Achievements</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Feature 3 -->
+        <div class="ed-outcome-feature">
+          <h3 class="ed-feat-heading">Feature 3: Updated Settings &amp; Customability</h3>
+          <div class="ed-outcome-feature__grid">
+            <div class="ed-phones">
+              <div class="ed-phone-col">
+                <img class="ed-phone-img" src="./images/edily-f3-banners.webp" alt="Banners screen" width="286" height="591" loading="lazy">
+                <p class="ed-phone-label">Banners</p>
+              </div>
+              <div class="ed-phone-col">
+                <img class="ed-phone-img" src="./images/edily-f3-settings.webp" alt="Settings screen" width="286" height="591" loading="lazy">
+                <p class="ed-phone-label">Settings</p>
+              </div>
+            </div>
+            <div class="ed-callouts">
+              <div class="ed-callout">
+                <p class="ed-callout__label">Badges</p>
+                <p class="ed-callout__body">Interchangeable in profile and allows users to be proud of their accomplishments and specialtys.</p>
+              </div>
+              <div class="ed-callout">
+                <p class="ed-callout__label">Wallpapers</p>
+                <p class="ed-callout__body">Unlockable wallpapers obtained by completing certain miles.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Takeaways -->
+    <section class="next-steps" id="takeaways">
+      <div class="next-steps__inner">
+        <div class="next-steps__header">
+          <h3 class="next-steps__heading">Takeaways</h3>
+        </div>
+        <p class="methodology__body">First end-to-end UX project in a professional setting. First time running a full research pipeline from scratch, solo.</p>
+        <div class="ck-themes">
+          <div class="ck-theme">
+            <p class="ck-theme__label">What worked</p>
+            <p class="methodology__body">Anchoring every decision in a specific research finding made my choices defensible. I wasn't pitching features to my manager — I was showing logic.</p>
+          </div>
+          <div class="ck-theme">
+            <p class="ck-theme__label">What I'd do differently</p>
+            <p class="methodology__body">User testing happened at the end. I'd push for at least one concept testing round earlier — before full mockups — to catch assumptions sooner. I'd also probe the social motivation finding more deeply. The data suggested it mattered less than progression, but Gen-Z users may underreport it.</p>
+          </div>
+          <div class="ck-theme">
+            <p class="ck-theme__label">The bigger lesson</p>
+            <p class="methodology__body">Good gamification isn't about adding fun. It's about understanding why people stop — and designing the thing that makes them come back tomorrow.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div><!-- close .page-wrapper -->
+
+  <div id="footer-placeholder"></div>
+
+  <script>
+  (function () {
+    var EI = 'cubic-bezier(0.22,1,0.36,1)';
+    var EO = 'ease-out';
+    document.body.style.opacity   = '0';
+    document.body.style.transform = 'translateY(16px)';
+    requestAnimationFrame(function () {
+      requestAnimationFrame(function () {
+        document.body.style.transition = 'opacity 400ms ' + EI + ', transform 400ms ' + EI;
+        document.body.style.opacity    = '1';
+        document.body.style.transform  = 'translateY(0)';
+      });
+    });
+    document.body.addEventListener('transitionend', function handler(e) {
+      if (e.propertyName === 'transform') {
+        document.body.style.transform = '';
+        document.body.removeEventListener('transitionend', handler);
+      }
+    });
+    document.addEventListener('click', function (e) {
+      var a = e.target.closest('a');
+      if (!a) return;
+      var href = a.getAttribute('href');
+      if (!href || href.charAt(0) === '#') return;
+      if (/^(https?:)?\/\/|^mailto:|^tel:/.test(href)) return;
+      if (a.hasAttribute('download') || a.target === '_blank') return;
+      e.preventDefault();
+      document.body.style.transition = 'opacity 250ms ' + EO;
+      document.body.style.opacity    = '0';
+      setTimeout(function () { window.location.href = href; }, 260);
+    });
+  })();
+  </script>
+  <script src="./components/loader.js"></script>
+  <script src="./components/templates.js"></script>
+  <script>
+    document.getElementById('ed-hero').outerHTML = Components.renderHero({
+      title:    `Edily Gamification`,
+      subtitle: `Product Design`,
+      meta: [
+        { label: `Duration`, values: [`8 weeks`] },
+        { label: `Team`,     values: [`Solo`] },
+        { label: `Methods`,  values: [`UX Design`, `Gamification Design`, `User Research`] },
+        { label: `Company`,  values: [`Edily Learning`] }
+      ]
+    });
+
+    document.getElementById('ed-hero-image').outerHTML = Components.renderHeroImage({
+      src: `./images/edily-hero.webp`,
+      alt: `Edily Gamification hero`
+    });
+
+    document.getElementById('ed-overview').outerHTML = Components.renderOverview({
+      cols: [
+        { heading: `Problem`,  body: `Good content. No reason to come back for users. Edily needed a habit loop \u2014 but couldn\u2019t afford to rebuild the product to get one` },
+        { heading: `Solution`, body: `Gamification that reinforces learning instead of competing with it \u2014 three features built from research, nothing added arbitrarily.` },
+        { heading: `Impact`,   body: `For the first time, Edily had a gamification direction grounded in real user data \u2014 a feature system the team could build tomorrow, no guesswork required.` }
+      ]
+    });
+  </script>
+</body>
+</html>
