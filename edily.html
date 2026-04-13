@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Edily Learning — Darren Chia</title>
+  <link rel="icon" type="image/svg+xml" href="./favicon.svg">
   <link href="https://fonts.googleapis.com/css2?family=Caprasimo&family=Domine:wght@600;700&family=IBM+Plex+Mono:wght@500&family=Newsreader:ital,wght@0,600;0,700;0,800;1,600;1,700&family=Space+Grotesk:wght@400;500;700&family=IBM+Plex+Sans:wght@400;500&family=Lora:ital,wght@0,500;0,600;0,700;1,600;1,700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="./base.css">
   <link rel="stylesheet" href="./components.css">
@@ -141,7 +142,7 @@
     .ed-ideation { max-width: 680px; margin: 0 auto; display: flex; flex-direction: column; }
     .ed-ideation__heading { font-family: 'Newsreader', serif; font-size: 32px; font-weight: 700; color: var(--ink); margin-bottom: 32px; }
     .ed-ideation__body { font-family: 'Space Grotesk', sans-serif; font-size: 18px; font-weight: 500; line-height: 1.6em; color: var(--ink); margin-bottom: 48px; }
-    .ed-ideation__image { width: 100%; aspect-ratio: 1.55; object-fit: cover; display: block; }
+    .ed-ideation__image { width: 100%; height: auto; display: block; }
     .ed-ideation__image--tall { width: 100%; height: 100vh; object-fit: cover; display: block; margin-top: 48px; }
 
     /* ── Takeaways ── */
@@ -149,20 +150,77 @@
     .ck-themes { display: flex; flex-direction: column; gap: 32px; }
     .ck-theme { border-left: 3px solid var(--forest); padding-left: 13px; display: flex; flex-direction: column; gap: 12px; }
     .ck-theme__label { font-family: 'Space Grotesk', sans-serif; font-size: 17px; font-weight: 700; color: var(--forest); }
+
+/* ── Mobile ── */
+    @media (max-width: 809px) {
+      /* Goals: 3-col → single col */
+      .ed-goals__cols { flex-direction: column; gap: 32px; }
+
+      /* Features 2×2 → single col */
+      .ed-features-grid { grid-template-columns: 1fr; }
+
+      /* Spine layout: hide the visual spine, stack content */
+      .ed-spine-wrap { flex-direction: column; gap: 0; }
+      .ed-spine { display: none; }
+
+      /* Hero stat number — too large on mobile */
+      .ed-hero-stat__num { font-size: 52px; }
+
+      /* Inline stat row — wrap to 2 cols */
+      .ed-stats { flex-wrap: wrap; }
+      .ed-stat { min-width: 45%; padding: 12px 0; }
+
+      /* Outcome feature grid: 1fr 1fr → single col (phones row stays intact above callouts) */
+      .ed-outcome-feature__grid { grid-template-columns: 1fr; gap: 32px; }
+
+      /* Phones: keep as row so screens stay paired and grouped with their callouts.
+         Constrain image height so they don't dominate the viewport. */
+      .ed-phone-img { max-height: 220px; width: auto; margin: 0 auto; }
+
+      /* Pull quote — reduce size */
+      .ed-pull-quote { font-size: 22px; }
+
+      /* Tall ideation image: 100vh clips content on mobile → let it be natural height */
+      .ed-ideation__image--tall { height: auto; object-fit: contain; }
+
+      /* Competitive analysis: reduce step gaps from 80px — too chunky on mobile */
+      .ed-steps { gap: 40px; }
+
+      /* Quantitative research: reduce section and spine content gaps from 80px */
+      .ed-quant-sections { gap: 40px; }
+      .ed-spine__content { gap: 32px; }
+    }
   </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 </head>
 <body>
 
   <!-- Navigation -->
-  <div id="nav-placeholder"></div>
+  <header class="site-header">
+    <div class="site-header__inner">
+      <a class="site-header__logo" href="./index.html">Darren Chia</a>
+      <div class="site-header__links">
+        <a href="./index.html#featured-work">Work</a>
+        <a href="./index.html#info">About me</a>
+        <a href="https://www.linkedin.com/in/darren-chia-648151233" target="_blank" rel="noopener">Connect</a>
+      </div>
+    </div>
+  </header>
 
-  <nav class="sidebar-nav">
-    <a href="#problem-statement">OVERVIEW</a>
-    <a href="#comp-analysis">RESEARCH</a>
-    <a href="#ideation">IDEATION</a>
-    <a href="#outcome">OUTCOME</a>
-    <a href="#takeaways">TAKEAWAYS</a>
+  <nav class="sidebar-nav" id="sidebar-nav">
+    <div class="sidebar-track" id="sidebar-track">
+      <div class="sidebar-track__fill" id="sidebar-fill"></div>
+    </div>
+    <a href="#ed-overview"><span class="sidebar-node"></span><span class="sidebar-label">OVERVIEW</span></a>
+    <a href="#problem-statement"><span class="sidebar-node"></span><span class="sidebar-label">CONTEXT</span></a>
+    <a href="#comp-analysis"><span class="sidebar-node"></span><span class="sidebar-label">RESEARCH</span></a>
+    <a href="#ideation"><span class="sidebar-node"></span><span class="sidebar-label">IDEATION</span></a>
+    <a href="#outcome"><span class="sidebar-node"></span><span class="sidebar-label">OUTCOME</span></a>
+    <a href="#takeaways"><span class="sidebar-node"></span><span class="sidebar-label">TAKEAWAYS</span></a>
   </nav>
+
+  <button class="scroll-top" id="scroll-top" aria-label="Scroll to top">↑</button>
 
   <div class="page-wrapper">
 
@@ -423,14 +481,14 @@
         <p class="ed-ideation__body">I ran a How Might We exercise to reframe the research into design opportunities. Five clusters surfaced: user confidence, engagement frequency, feature discoverability, learning motivation, and technical feasibility.</p>
         <img
           class="ed-ideation__image"
-          src="./images/edily-ideation-hmw.webp"
+          src="./images/edily-ideation-hmw-q90.webp"
           alt="Ideation and Wireframing"
-         width="15696" height="10124" loading="lazy">
+         width="1920" height="1238" loading="lazy">
         <img
           class="ed-ideation__image--tall"
-          src="./images/edily-ideation-wireframes.webp"
+          src="./images/edily-ideation-wireframes-q90.webp"
           alt="Ideation wireframes"
-         width="11620" height="13204" loading="lazy">
+         width="1920" height="2181" loading="lazy">
       </div>
     </section>
 
@@ -581,6 +639,31 @@
     });
   })();
   </script>
+  <footer class="footer">
+    <div class="footer__connect">
+      <p class="footer__connect-heading">Let's Connect</p>
+      <div class="footer__connect-details">
+        <div class="footer__contact-group">
+          <span class="footer__contact-label">Mail</span>
+          <span class="footer__contact-value">dc45008@gmail.com</span>
+        </div>
+        <div class="footer__contact-group">
+          <span class="footer__contact-label">Phone</span>
+          <span class="footer__contact-value">973 873 4508</span>
+        </div>
+        <div class="footer__contact-group">
+          <span class="footer__contact-label">Location</span>
+          <span class="footer__contact-value">New York City, NYC</span>
+        </div>
+      </div>
+    </div>
+    <div class="footer__bar">
+      <div class="footer__bar-group">
+        <span>Last updated:</span>
+        <span>02.01.2026</span>
+      </div>
+    </div>
+  </footer>
   <script src="./components/loader.js"></script>
   <script src="./components/templates.js"></script>
   <script>
@@ -601,6 +684,7 @@
     });
 
     document.getElementById('ed-overview').outerHTML = Components.renderOverview({
+      id: 'ed-overview',
       cols: [
         { heading: `Problem`,  body: `Good content. No reason to come back for users. Edily needed a habit loop \u2014 but couldn\u2019t afford to rebuild the product to get one` },
         { heading: `Solution`, body: `Gamification that reinforces learning instead of competing with it \u2014 three features built from research, nothing added arbitrarily.` },
@@ -608,5 +692,102 @@
       ]
     });
   </script>
+  <script>
+  (function () {
+    var nav      = document.getElementById('sidebar-nav');
+    setTimeout(function () { nav.style.opacity = '1'; }, 300);
+    var links    = Array.from(nav.querySelectorAll('a'));
+    var nodes    = links.map(function (a) { return a.querySelector('.sidebar-node'); });
+    var trackEl  = document.getElementById('sidebar-track');
+    var fillEl   = document.getElementById('sidebar-fill');
+    var sections = links.map(function (a) {
+      return document.querySelector(a.getAttribute('href'));
+    }).filter(Boolean);
+
+    var activeIdx = -1;
+
+    function positionTrack() {
+      var navRect   = nav.getBoundingClientRect();
+      var firstRect = nodes[0].getBoundingClientRect();
+      var lastRect  = nodes[nodes.length - 1].getBoundingClientRect();
+      var topOffset = (firstRect.top + firstRect.height / 2) - navRect.top;
+      var botOffset = (lastRect.top  + lastRect.height / 2) - navRect.top;
+      trackEl.style.top    = topOffset + 'px';
+      trackEl.style.height = (botOffset - topOffset) + 'px';
+    }
+
+    function updateFill(idx) {
+      var navRect    = nav.getBoundingClientRect();
+      var firstRect  = nodes[0].getBoundingClientRect();
+      var activeRect = nodes[idx].getBoundingClientRect();
+      var trackTop   = (firstRect.top + firstRect.height / 2) - navRect.top;
+      var fillHeight = (activeRect.top + activeRect.height / 2) - navRect.top - trackTop;
+      fillEl.style.height = Math.max(0, fillHeight) + 'px';
+    }
+
+    function triggerJiggle(link) {
+      link.classList.remove('is-jiggling');
+      void link.offsetWidth;
+      link.classList.add('is-jiggling');
+      link.addEventListener('animationend', function handler() {
+        link.classList.remove('is-jiggling');
+        link.removeEventListener('animationend', handler);
+      });
+    }
+
+    function update() {
+      var threshold = window.innerHeight * 0.85;
+      var active    = 0;
+      sections.forEach(function (s, i) {
+        if (s.getBoundingClientRect().top <= threshold) active = i;
+      });
+      if (active !== activeIdx) {
+        links.forEach(function (a, i) {
+          a.classList.toggle('is-active',  i === active);
+          a.classList.toggle('is-visited', i < active);
+        });
+        updateFill(active);
+        triggerJiggle(links[active]);
+        activeIdx = active;
+      }
+    }
+
+    window.addEventListener('load', function () { positionTrack(); update(); });
+    window.addEventListener('resize', positionTrack);
+    positionTrack();
+
+    var ticking = false;
+    window.addEventListener('scroll', function () {
+      if (!ticking) {
+        requestAnimationFrame(function () { update(); ticking = false; });
+        ticking = true;
+      }
+    }, { passive: true });
+
+    links.forEach(function (a) {
+      a.addEventListener('click', function (e) {
+        var target = document.querySelector(a.getAttribute('href'));
+        if (!target) return;
+        e.preventDefault();
+        var top = target.getBoundingClientRect().top + window.pageYOffset - 80;
+        window.scrollTo({ top: top, behavior: 'smooth' });
+      });
+    });
+
+    update();
+  })();
+  </script>
+  <script>
+  (function () {
+    var btn = document.getElementById('scroll-top');
+    window.addEventListener('scroll', function () {
+      btn.classList.toggle('is-visible', window.pageYOffset > 400);
+    }, { passive: true });
+    btn.addEventListener('click', function () {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  })();
+  </script>
+  <script src="./animations.js"></script>
 </body>
 </html>

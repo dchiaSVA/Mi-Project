@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Darren Chia's Design Portfolio</title>
+  <link rel="icon" type="image/svg+xml" href="./favicon.svg">
   <meta name="description" content="Darren Chia, Interaction Designer currently pursuing an MFA @SVA">
 
   <meta property="og:type" content="website">
@@ -137,6 +138,12 @@
       z-index: 8;
       width: 100%;
       background: transparent;
+    }
+
+    .site-header__inner {
+      max-width: none;
+      padding-left: 40px;
+      padding-right: 40px;
     }
 
     .nav {
@@ -318,7 +325,7 @@
       }
       .hero-name-row {
         flex-direction: column;
-        gap: 24px;
+        gap: 14px;
       }
       .hero-name {
         white-space: pre-wrap;
@@ -544,7 +551,8 @@
     .card--cooking {
       border-top: 5px solid #c1622f;
       border-radius: 9px;
-      width: 100%;
+      width: calc(100% - 40px);
+      margin: 0 20px;
     }
 
     .card--cooking > a {
@@ -1037,27 +1045,26 @@
 
     @media (max-width: 809px) {
 
-      .page-col { padding: 0 16px 120px; }
+      .page-col { padding: 0 28px 120px; }
 
       /* Nav */
-      .nav {
-        flex-direction: column;
-        align-items: flex-start;
-        width: 100%;
-        padding: 16px 0;
+      .site-header__inner {
+        padding-left: 20px;
+        padding-right: 20px;
+        padding-top: 16px;
+        padding-bottom: 16px;
       }
 
-      .nav-logo {
-        width: 100%;
-        padding: 0 16px;
-        gap: 4px;
+      .site-header__logo {
+        font-size: 17px;
       }
 
-      .nav-links {
-        flex-direction: column;
-        align-items: flex-start;
-        padding: 48px 16px;
-        gap: 12px;
+      .site-header__links {
+        gap: 16px;
+      }
+
+      .site-header__links a {
+        font-size: 14px;
       }
 
       /* Hero: stack vertically */
@@ -1074,18 +1081,33 @@
         padding: 0;
       }
 
+      /* Scale down hero pitch text block proportionally */
+      .hero-pitch-wrap {
+        width: 100%;
+        overflow: visible;
+      }
+
+      .hero-pitch {
+        font-size: 17px;
+        line-height: 1.5;
+      }
+
+      .hero-star { font-size: 28px; }
+
       .hero-rule { display: none; }
 
       /* Featured work */
       .cards-two-col {
         flex-direction: column;
         padding: 0;
+        align-items: center;
       }
 
       .card--greenthumb,
       .card--edily {
         width: 90%;
         height: auto;
+        align-self: center;
       }
 
       .card--greenthumb .card-tags {
@@ -1095,6 +1117,7 @@
 
       .card--cooking {
         width: 90%;
+        margin: 0 auto;
       }
 
       .card--cooking > a {
@@ -1183,6 +1206,8 @@
     }
 
   </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 </head>
 <body>
 
@@ -1191,7 +1216,16 @@
        NAV
   ============================================= -->
 
-  <div id="nav-placeholder"></div>
+  <header class="site-header">
+    <div class="site-header__inner">
+      <a class="site-header__logo" href="./index.html">Darren Chia</a>
+      <div class="site-header__links">
+        <a href="./index.html#featured-work">Work</a>
+        <a href="./index.html#info">About me</a>
+        <a href="https://www.linkedin.com/in/darren-chia-648151233" target="_blank" rel="noopener">Connect</a>
+      </div>
+    </div>
+  </header>
 
 
   <!-- ============================================
@@ -1282,9 +1316,10 @@
             <a href="./greenthumb.html">
               <div class="card-image">
                 <img
-                  src="./images/home-card-gt.webp"
+                  src="./images/home-card-gt-sm.webp"
                   alt="GreenThumb project"
                   loading="lazy"
+                  decoding="async"
                   style="background-color: #E8E4DE" width="4941" height="3294">
               </div>
               <div class="card-content">
@@ -1304,9 +1339,10 @@
             <a href="./edily.html">
               <div class="card-image">
                 <img
-                  src="./images/home-card-edily.webp"
+                  src="./images/home-card-edily-sm.webp"
                   alt="Edily Gamification project"
                   loading="lazy"
+                  decoding="async"
                   style="background-color: #E8E4DE" width="3500" height="2500">
               </div>
               <div class="card-content">
@@ -1326,7 +1362,7 @@
 
 
       <!-- Group 2: Exploration — Cooking (full-width horizontal) -->
-      <div class="card-group">
+      <div class="card-group" style="margin-top: 32px;">
 
         <div class="divider-row" aria-hidden="true">
           <span class="divider-label divider-label--orange">EXPLORATION</span>
@@ -1337,9 +1373,10 @@
           <a href="./cooking.html">
             <div class="card-image card-image--side">
               <img
-                src="./images/home-card-cooking.webp"
+                src="./images/home-card-cooking-sm.webp"
                 alt="Reframing Healthy Cooking Habits project"
                 loading="lazy"
+                decoding="async"
                 style="background-color: #E8E4DE" width="4500" height="3000">
             </div>
             <div class="card-content">
@@ -1550,10 +1587,6 @@
   <footer class="site-footer">
     <div class="footer-left">
       <div class="footer-item">
-        <span class="footer-meta">Made in:</span>
-        <a class="footer-val" href="https://www.framer.com/" target="_blank" rel="noopener noreferrer">Framer</a>
-      </div>
-      <div class="footer-item">
         <span class="footer-meta">Last updated:</span>
         <span class="footer-val">02.01.2026</span>
       </div>
@@ -1586,6 +1619,16 @@
       if (!href || href.charAt(0) === '#') return;
       if (/^(https?:)?\/\/|^mailto:|^tel:/.test(href)) return;
       if (a.hasAttribute('download') || a.target === '_blank') return;
+      var hashMatch = href.match(/^\.\/index\.html#(.+)$/);
+      if (hashMatch) {
+        var target = document.getElementById(hashMatch[1]);
+        if (target) {
+          e.preventDefault();
+          var top = target.getBoundingClientRect().top + window.pageYOffset - 80;
+          window.scrollTo({ top: top, behavior: 'smooth' });
+          return;
+        }
+      }
       e.preventDefault();
       document.body.style.transition = 'opacity 250ms ' + EO;
       document.body.style.opacity    = '0';
@@ -1599,164 +1642,114 @@
   (function () {
 
     var EASE_SPRING = 'cubic-bezier(0.34,1.56,0.64,1)';
-    var EASE_OUT    = 'cubic-bezier(0.22,1,0.36,1)';
+    var EASE_OUT    = 'cubic-bezier(0.16,1,0.3,1)';
 
     /* ── Injected styles ── */
     var style = document.createElement('style');
-    style.textContent =
-      '@keyframes anim-nav-in {' +
-        'from { transform: translateY(-90px); }' +
-        'to   { transform: translateY(0); }' +
-      '}' +
-      'header.site-header {' +
-        'animation: anim-nav-in 560ms ' + EASE_SPRING + ' 420ms both;' +
-      '}' +
-      '.hero-pitch-wrap { overflow: visible; }' +
-      '.anim-up {' +
-        'opacity: 0;' +
-        'transform: translateY(24px);' +
-        'transition: opacity 420ms ' + EASE_OUT + ', transform 420ms ' + EASE_OUT + ';' +
-      '}' +
-      '.anim-up.is-visible { opacity: 1; transform: translateY(0); }';
+    style.textContent = '.hero-pitch-wrap { overflow: visible; }';
     document.head.appendChild(style);
 
     /* ── Helpers ── */
-    function setHidden(el, blur) {
-      el.style.opacity   = '0.001';
-      el.style.transform = 'translateY(10px)';
+    function dropIn(el, delay, duration, blur) {
+      el.style.opacity   = '0';
+      el.style.transform = 'translateY(-20px)';
       if (blur) el.style.filter = 'blur(10px)';
-    }
-
-    function reveal(el, delay, blur) {
-      var t = 'opacity 420ms ' + EASE_OUT + ', transform 420ms ' + EASE_OUT;
-      if (blur) t += ', filter 420ms ' + EASE_OUT;
       setTimeout(function () {
-        el.style.transition = t;
-        el.style.opacity    = '1';
-        el.style.transform  = 'translateY(0)';
-        if (blur) el.style.filter = 'blur(0)';
+        var t = 'opacity ' + duration + 'ms ' + EASE_OUT + ', transform ' + duration + 'ms ' + EASE_OUT;
+        if (blur) t += ', filter ' + duration + 'ms ' + EASE_OUT;
+        requestAnimationFrame(function () {
+          el.style.transition = t;
+          /* getComputedStyle flushes pending styles so transition is committed
+             before we change values — more reliable than double-rAF */
+          getComputedStyle(el).opacity;
+          el.style.opacity   = '1';
+          el.style.transform = 'translateY(0)';
+          if (blur) el.style.filter = 'blur(0)';
+        });
       }, delay);
     }
 
-    function stagger(spans, start, gap) {
-      spans.forEach(function (s, i) {
-        setHidden(s, false);
-        reveal(s, start + i * gap, false);
-      });
-      return start + (spans.length - 1) * gap + 420;
-    }
-
-    /* ── Letter / word wrapping ── */
-    function wrapLetters(el) {
-      var lines = el.textContent.split('\n');
-      el.innerHTML = lines.map(function (line) {
-        return line.split('').map(function (ch) {
-          return '<span style="display:inline-block">' + (ch === ' ' ? '\u00a0' : ch) + '</span>';
-        }).join('');
-      }).join('<br>');
-      return Array.from(el.querySelectorAll('span'));
-    }
-
-    function wrapLettersEl(el) {
-      el.innerHTML = el.textContent.split('').map(function (ch) {
-        return '<span style="display:inline-block">' + (ch === ' ' ? '\u00a0' : ch) + '</span>';
-      }).join('');
-      return Array.from(el.querySelectorAll('span'));
-    }
-
-    function wrapWords(el) {
-      var spans = [];
-      var nodes = Array.from(el.childNodes);
-      el.innerHTML = '';
-      nodes.forEach(function (node) {
+    function scatterLines(root, startDelay, lineGap) {
+      var wordSpans = [];
+      function walk(node) {
         if (node.nodeType === 3) {
+          var frag = document.createDocumentFragment();
           node.textContent.split(/(\s+)/).forEach(function (tok) {
             if (/^\s+$/.test(tok)) {
-              el.appendChild(document.createTextNode(tok));
+              frag.appendChild(document.createTextNode(tok));
             } else if (tok) {
               var s = document.createElement('span');
-              s.style.display = 'inline-block';
+              s.style.cssText = 'display:inline-block;opacity:0;transform:translateY(12px);will-change:opacity,transform';
               s.textContent   = tok;
-              el.appendChild(s);
-              spans.push(s);
+              frag.appendChild(s);
+              wordSpans.push(s);
             }
           });
+          node.parentNode.replaceChild(frag, node);
         } else if (node.nodeType === 1) {
-          var wrap = document.createElement(node.tagName);
-          node.textContent.split(/(\s+)/).forEach(function (tok) {
-            if (/^\s+$/.test(tok)) {
-              wrap.appendChild(document.createTextNode(tok));
-            } else if (tok) {
-              var s = document.createElement('span');
-              s.style.display = 'inline-block';
-              s.textContent   = tok;
-              wrap.appendChild(s);
-              spans.push(s);
-            }
-          });
-          el.appendChild(wrap);
+          Array.from(node.childNodes).forEach(walk);
         }
+      }
+      Array.from(root.childNodes).forEach(walk);
+      requestAnimationFrame(function () {
+        var lineMap = {};
+        wordSpans.forEach(function (s) {
+          var y = Math.round(s.getBoundingClientRect().top);
+          if (!lineMap[y]) lineMap[y] = [];
+          lineMap[y].push(s);
+        });
+        var lineYs = Object.keys(lineMap).map(Number).sort(function (a, b) { return a - b; });
+        lineYs.forEach(function (y, i) {
+          lineMap[y].forEach(function (s) {
+            setTimeout(function () {
+              s.style.transition = 'opacity 400ms ' + EASE_SPRING + ', transform 400ms ' + EASE_SPRING;
+              void s.offsetHeight;
+              s.style.opacity   = '1';
+              s.style.transform = 'translateY(0)';
+            }, startDelay + i * lineGap);
+          });
+        });
       });
-      return spans;
     }
 
     /* ── Hero sequence ── */
 
-    // 2. Dividers — scaleX + opacity, 840ms delay
-    Array.from(document.querySelectorAll('#hero .hero-divider')).forEach(function (el) {
-      el.style.transform = 'scaleX(0.5)';
-      el.style.opacity   = '0.001';
+    // 1. Star
+    dropIn(document.querySelector('.hero-star'), 0, 450, true);
+
+    // 2. Pitch + SVA
+    scatterLines(document.querySelector('.hero-pitch'), 750, 120);
+    scatterLines(document.querySelector('.hero-sva'),   950, 100);
+
+    // 3. Name + nav
+    dropIn(document.querySelector('header.site-header'), 1100, 500);
+
+    var nameEl = document.querySelector('h1.hero-name');
+    var lines   = nameEl.textContent.split('\n');
+    nameEl.innerHTML = lines.map(function (l) {
+      return '<span style="display:block;will-change:opacity,transform;opacity:0;transform:translateY(-20px)">' + l + '</span>';
+    }).join('');
+    nameEl.querySelectorAll('span').forEach(function (span, i) {
       setTimeout(function () {
-        el.style.transition = 'transform 280ms ' + EASE_SPRING + ', opacity 280ms ' + EASE_SPRING;
+        requestAnimationFrame(function () {
+          span.style.transition = 'opacity 480ms ' + EASE_OUT + ', transform 480ms ' + EASE_OUT;
+          getComputedStyle(span).opacity;
+          span.style.opacity   = '1';
+          span.style.transform = 'translateY(0)';
+        });
+      }, 1100 + i * 160);
+    });
+
+    // 4. Dividers
+    Array.from(document.querySelectorAll('#hero .hero-divider')).forEach(function (el) {
+      el.style.transform       = 'scaleX(0)';
+      el.style.transformOrigin = 'center';
+      setTimeout(function () {
+        el.style.transition = 'transform 240ms cubic-bezier(0.25,0,0.3,1)';
+        void el.offsetHeight;
         el.style.transform  = 'scaleX(1)';
-        el.style.opacity    = '1';
-      }, 840);
+      }, 1750);
     });
-
-    // 3. Name — per-letter, starts after dividers finish (840 + 280)
-    var nameEnd = stagger(wrapLetters(document.querySelector('h1.hero-name')), 1120, 21);
-
-    // 4. Pitch — per-word, starts after name finishes
-    var pitchEnd = stagger(wrapWords(document.querySelector('.hero-pitch')), nameEnd, 14);
-
-    // 5. Star — opacity + translateY + blur, starts after pitch finishes
-    var starEl = document.querySelector('.hero-star');
-    setHidden(starEl, true);
-    reveal(starEl, pitchEnd, true);
-    var starEnd = pitchEnd + 420;
-
-    // 6. SVA line — per-letter across both spans, starts after star finishes
-    var svaLetters = wrapLettersEl(document.querySelector('.hero-mfa'))
-      .concat(wrapLettersEl(document.querySelector('.hero-sva-name')));
-    stagger(svaLetters, starEnd, 21);
-
-    /* ── Scroll-triggered (below hero) ── */
-
-    var simpleEls = Array.from(document.querySelectorAll(
-      '.fw-section-header, .divider-row, .about-section, .exp-section, .connect-section'
-    ));
-    var twoCards = Array.from(document.querySelectorAll('.cards-two-col .card'));
-    var cookCard = document.querySelector('.card--cooking');
-
-    simpleEls.forEach(function (el) { el.classList.add('anim-up'); });
-    twoCards.forEach(function (el, i) {
-      el.classList.add('anim-up');
-      el.dataset.animDelay = String(i * 56);
-    });
-    if (cookCard) cookCard.classList.add('anim-up');
-
-    var io = new IntersectionObserver(function (entries) {
-      entries.forEach(function (e) {
-        if (!e.isIntersecting) return;
-        var d = parseInt(e.target.dataset.animDelay || '0');
-        setTimeout(function () { e.target.classList.add('is-visible'); }, d);
-        io.unobserve(e.target);
-      });
-    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
-
-    simpleEls.forEach(function (el) { io.observe(el); });
-    twoCards.forEach(function (el) { io.observe(el); });
-    if (cookCard) io.observe(cookCard);
 
     /* ── Experience accordion ── */
 
@@ -1774,5 +1767,6 @@
 
   })();
   </script>
+  <script src="./animations.js"></script>
 </body>
 </html>

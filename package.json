@@ -20,5 +20,8 @@
   "homepage": "https://github.com/dchiaSVA/Mi-Project#readme",
   "dependencies": {
     "sharp": "^0.34.5"
+  },
+  "devDependencies": {
+    "puppeteer": "^24.40.0"
   }
 }

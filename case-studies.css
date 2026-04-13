@@ -1,3 +1,9 @@
+/* ── Top Nav ── */
+
+.site-header {
+  background: transparent;
+}
+
 /* ── Sidebar Nav ── */
 
 .sidebar-nav {
@@ -8,22 +14,133 @@
   z-index: 50;
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  width: 168px;
+  gap: 12px;
+  width: 130px;
+  opacity: 0;
+  transition: opacity 600ms ease;
 }
 
 .sidebar-nav a {
   font-family: 'Space Grotesk', sans-serif;
-  font-size: 18px;
+  font-size: 13px;
   font-weight: 500;
-  color: var(--ink);
+  color: var(--muted);
   text-decoration: none;
-  text-align: right;
-  display: block;
+  letter-spacing: 0.04em;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  transition: color 200ms ease;
+  will-change: transform;
 }
 
 .sidebar-nav a:hover {
   color: var(--forest);
+}
+
+.sidebar-nav a.is-active {
+  color: var(--forest);
+  font-weight: 700;
+}
+
+.sidebar-nav a.is-visited {
+  color: var(--muted);
+}
+
+/* Label */
+.sidebar-label {
+  flex: 1;
+  text-align: right;
+}
+
+/* Node circles */
+.sidebar-node {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(113, 113, 123, 0.4);
+  background: transparent;
+  flex-shrink: 0;
+  transition: background 250ms ease, border-color 250ms ease, box-shadow 250ms ease, transform 250ms ease;
+}
+
+.sidebar-nav a.is-visited .sidebar-node {
+  background: var(--forest);
+  border-color: var(--forest);
+  opacity: 0.35;
+}
+
+.sidebar-nav a.is-active .sidebar-node {
+  background: var(--forest);
+  border-color: var(--forest);
+  opacity: 1;
+  box-shadow: 0 0 0 2px var(--paper), 0 0 0 3.5px var(--forest);
+  transform: scale(1.2);
+}
+
+/* Track line */
+.sidebar-track {
+  position: absolute;
+  left: 3.5px;
+  width: 2px;
+  background: rgba(113, 113, 123, 0.2);
+}
+
+.sidebar-track__fill {
+  width: 100%;
+  background: var(--forest);
+  height: 0;
+  transition: height 350ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes nav-settle {
+  0%   { transform: translateY(0)      rotate(0deg); }
+  10%  { transform: translateY(-1px)   rotate(-0.2deg); }
+  32%  { transform: translateY(5px)    rotate(1deg); }
+  55%  { transform: translateY(-1.5px) rotate(-0.3deg); }
+  100% { transform: translateY(0)      rotate(0deg); }
+}
+
+.sidebar-nav a.is-jiggling {
+  animation: nav-settle 680ms ease-in-out both;
+}
+
+/* ── Scroll to top ── */
+
+.scroll-top {
+  position: fixed;
+  bottom: 32px;
+  right: 32px;
+  width: 44px;
+  height: 44px;
+  background: var(--ink);
+  color: var(--paper);
+  border: none;
+  border-radius: 6px;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 18px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transform: translateY(10px);
+  pointer-events: none;
+  transition: opacity 300ms ease, transform 500ms cubic-bezier(0.34, 1.9, 0.64, 1);
+  z-index: 60;
+  will-change: transform;
+}
+
+.scroll-top.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.scroll-top:hover {
+  transform: translateY(-8px);
 }
 
 @media (max-width: 1439px) {
@@ -496,7 +613,7 @@
 
 .findings__divider-label {
   font-family: 'Space Grotesk', sans-serif;
-  font-size: 8px;
+  font-size: 11px;
   font-weight: 500;
   color: #2b2b2b;
   letter-spacing: 0.08em;
@@ -1020,16 +1137,99 @@
 .synthesis__insight-2 { margin-top: 80px; }
 .gt-container { margin-top: 32px; }
 
+
 /* ── Mobile ── */
 
 @media (max-width: 809px) {
+  /* Layout */
+  .page-wrapper {
+    padding: 0 20px;
+  }
+
+  /* Overview */
   .overview__col {
     flex-direction: column;
     gap: 8px;
     width: 100%;
   }
 
+  /* Pull quote band */
   .pull-quote-band {
     padding: 80px 20px;
   }
+
+  /* Problem band */
+  .problem-band {
+    padding: 64px 20px;
+  }
+
+  /* Context stats — stack vertically */
+  .context__stats {
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .context__stat--mid {
+    border-left: none;
+    border-right: none;
+    border-top: 1px solid rgba(12, 12, 12, 0.12);
+    border-bottom: 1px solid rgba(12, 12, 12, 0.12);
+    padding: 24px 0;
+  }
+
+  /* Section spacing — reduce from 200–210px to 80px */
+  .overview    { margin-bottom: 80px; }
+  .context     { margin-bottom: 80px; }
+  .problem-band { margin-bottom: 80px; }
+  .methodology { margin-bottom: 80px; }
+  .findings    { margin-bottom: 80px; }
+  .synthesis   { margin-bottom: 80px; }
+  .solution    { margin-bottom: 80px; }
+  .next-steps  { margin-bottom: 80px; }
+
+  /* Subsection spacing — reduce from 80px to 48px within sections */
+  .context__client     { margin-top: 48px; }
+  .methodology__text   { margin-top: 48px; }
+  .findings__macro-wrap { margin-top: 48px; }
+  .findings__portraits { margin-top: 48px; }
+  .findings__leaders   { margin-top: 48px; }
+  .findings__survey    { margin-top: 48px; }
+  .synthesis__insight-1 { margin-top: 48px; }
+  .synthesis__insight-2 { margin-top: 48px; }
+
+  /* Section headings — scale down on mobile */
+  .context__heading,
+  .problem-band__heading,
+  .methodology__heading,
+  .findings__heading,
+  .synthesis__heading,
+  .solution__heading { font-size: 24px; }
+
+  /* Subsection labels — scale down on mobile */
+  .context__label,
+  .problem-band__label,
+  .methodology__label,
+  .findings__label,
+  .synthesis__label,
+  .solution__label { font-size: 19px; }
+
+  /* Overview lead — slightly smaller */
+  .overview__lead { font-size: 17px; }
+
+  /* Pull quote band text */
+  .pull-quote-band__text { font-size: 17px; }
+
+  /* Case study prose body text — scale down proportionally on narrow screens */
+  .context__body p,
+  .findings__constraint-body,
+  .methodology__body { font-size: 16px; }
+
+  /* $10K stat row — stack number above label so they don't collide */
+  .findings__stat-row { flex-direction: column; gap: 4px; }
+
+  /* HMW column icons — smaller on mobile so the 3-stack doesn't feel icon-heavy */
+  .synthesis__hmw-col .img-block--small { max-width: 80px; }
+
+  /* Insight images — show image first, text block below */
+  .synthesis__insight-1 .img-block { order: -1; }
 }

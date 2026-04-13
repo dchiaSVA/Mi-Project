@@ -1,0 +1,1 @@
+Build $ARGUMENTS in an isolated HTML file at `preview/preview.html`. Read CLAUDE.md for styles, fonts, colors, and spacing. Match the existing design system exactly. Once built, use Playwright to screenshot at desktop (1440px) and mobile (375px). Show me both screenshots and wait for my approval before touching any other files.

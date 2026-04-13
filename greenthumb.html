@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>GreenThumb — Darren Chia</title>
+  <link rel="icon" type="image/svg+xml" href="./favicon.svg">
   <link href="https://fonts.googleapis.com/css2?family=Caprasimo&family=Domine:wght@600;700&family=IBM+Plex+Mono:wght@500&family=Newsreader:ital,wght@0,600;0,700;0,800;1,600;1,700&family=Space+Grotesk:wght@400;500;700&family=IBM+Plex+Sans:wght@400;500&family=Lora:ital,wght@0,500;0,600;0,700;1,600;1,700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="./base.css">
   <link rel="stylesheet" href="./components.css">
@@ -18,19 +19,36 @@
     .ck-theme__label { font-family: 'Space Grotesk', sans-serif; font-size: 17px; font-weight: 700; color: var(--forest); }
     .overview__lead { font-family: 'Space Grotesk', sans-serif; }
 </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 </head>
 <body>
 
   <!-- Section 1: Navigation -->
-  <div id="nav-placeholder"></div>
+  <header class="site-header">
+    <div class="site-header__inner">
+      <a class="site-header__logo" href="./index.html">Darren Chia</a>
+      <div class="site-header__links">
+        <a href="./index.html#featured-work">Work</a>
+        <a href="./index.html#info">About me</a>
+        <a href="https://www.linkedin.com/in/darren-chia-648151233" target="_blank" rel="noopener">Connect</a>
+      </div>
+    </div>
+  </header>
 
-  <nav class="sidebar-nav">
-    <a href="#context">OVERVIEW</a>
-    <a href="#method">RESEARCH</a>
-    <a href="#synthesis">FINDINGS</a>
-    <a href="#solutions">SOLUTION</a>
-    <a href="#conclusion">NEXT STEPS</a>
+  <nav class="sidebar-nav" id="sidebar-nav">
+    <div class="sidebar-track" id="sidebar-track">
+      <div class="sidebar-track__fill" id="sidebar-fill"></div>
+    </div>
+    <a href="#cs-overview"><span class="sidebar-node"></span><span class="sidebar-label">OVERVIEW</span></a>
+    <a href="#context"><span class="sidebar-node"></span><span class="sidebar-label">CONTEXT</span></a>
+    <a href="#method"><span class="sidebar-node"></span><span class="sidebar-label">RESEARCH</span></a>
+    <a href="#synthesis"><span class="sidebar-node"></span><span class="sidebar-label">FINDINGS</span></a>
+    <a href="#solutions"><span class="sidebar-node"></span><span class="sidebar-label">SOLUTION</span></a>
+    <a href="#conclusion"><span class="sidebar-node"></span><span class="sidebar-label">NEXT STEPS</span></a>
   </nav>
+
+  <button class="scroll-top" id="scroll-top" aria-label="Scroll to top">↑</button>
 
   <div class="page-wrapper">
     <!-- Section 1 -->
@@ -96,7 +114,7 @@
           <h2 class="methodology__heading">What we Did</h2>
         </div>
         <div class="img-block img-block--medium">
-          <img class="methodology__image" src="./images/gt-methodology.webp" alt="Research methodology diagram" width="16383" height="12307" loading="lazy">
+          <img class="methodology__image" src="./images/gt-methodology-q90.webp" alt="Research methodology diagram" width="1920" height="1442" loading="lazy">
         </div>
         <div class="methodology__text">
           <p class="methodology__subheading">We used a mixed-method approach moving from Macro to Micro.</p>
@@ -199,7 +217,7 @@
         <!-- Survey findings -->
         <div class="findings__survey">
           <div class="img-block img-block--medium">
-            <img src="./images/gt-findings-03.webp" alt="Survey and workday findings" width="3537" height="8355" loading="lazy">
+            <img src="./images/gt-findings-03-v3.webp" alt="Survey and workday findings" width="1360" height="3213" loading="lazy">
           </div>
           <p class="findings__survey-heading">Survey &amp; Workday Findings</p>
           <div class="findings__survey-blocks">
@@ -304,8 +322,8 @@
               <div class="gt-reveal-title gt-fade gt-d1">Get Growing: What Volunteers Do</div>
               <div class="gt-reveal-sub gt-fade gt-d2">A take-home pamphlet for first-time volunteers.</div>
               <div class="gt-spreads gt-fade gt-d3">
-                <div class="gt-spread"><div class="img-block img-block--full"><img src="./images/gt-solution-01.webp" alt="Pamphlet spread 1" width="3125" height="1750" loading="lazy"></div></div>
-                <div class="gt-spread"><div class="img-block img-block--full"><img src="./images/gt-solution-02.webp" alt="Pamphlet spread 2" width="3125" height="1750" loading="lazy"></div></div>
+                <div class="gt-spread"><div class="img-block img-block--full"><img src="./images/gt-solution-01-opt.webp" alt="Pamphlet spread 1" width="1920" height="1075" loading="lazy"></div></div>
+                <div class="gt-spread"><div class="img-block img-block--full"><img src="./images/gt-solution-02-opt.webp" alt="Pamphlet spread 2" width="1920" height="1075" loading="lazy"></div></div>
               </div>
               <div class="gt-pill-row gt-fade gt-d4">
                 <span class="gt-pill">Take-home format</span>
@@ -389,7 +407,31 @@
     <!-- Section 13 -->
     </div><!-- close .page-wrapper -->
 
-    <div id="footer-placeholder"></div>
+    <footer class="footer">
+      <div class="footer__connect">
+        <p class="footer__connect-heading">Let's Connect</p>
+        <div class="footer__connect-details">
+          <div class="footer__contact-group">
+            <span class="footer__contact-label">Mail</span>
+            <span class="footer__contact-value">dc45008@gmail.com</span>
+          </div>
+          <div class="footer__contact-group">
+            <span class="footer__contact-label">Phone</span>
+            <span class="footer__contact-value">973 873 4508</span>
+          </div>
+          <div class="footer__contact-group">
+            <span class="footer__contact-label">Location</span>
+            <span class="footer__contact-value">New York City, NYC</span>
+          </div>
+        </div>
+      </div>
+      <div class="footer__bar">
+        <div class="footer__bar-group">
+          <span>Last updated:</span>
+          <span>02.01.2026</span>
+        </div>
+      </div>
+    </footer>
 
 <script>
 (function () {
@@ -439,11 +481,12 @@
   });
 
   document.getElementById('cs-hero-image').outerHTML = Components.renderHeroImage({
-    src: `./images/gt-hero.webp`,
+    src: `./images/gt-hero-opt.webp`,
     alt: `GreenThumb hero`
   });
 
   document.getElementById('cs-overview').outerHTML = Components.renderOverview({
+    id: 'cs-overview',
     lead: `<strong>GreenThumb's challenge wasn't getting people in—it was keeping them involved.</strong> We designed a pamphlet that closes the gap between a good first visit and returning.`,
     cols: [
       { heading: `Problem`,  body: `GreenThumb facilitates many independently-run NYC gardens, and the network's variability makes consistent volunteer commitment hard to sustain.` },
@@ -458,83 +501,100 @@
 </script>
 <script>
 (function () {
-  var EASE_OUT = 'cubic-bezier(0.22,1,0.36,1)';
+  var nav      = document.getElementById('sidebar-nav');
+  setTimeout(function () { nav.style.opacity = '1'; }, 300);
+  var links    = Array.from(nav.querySelectorAll('a'));
+  var nodes    = links.map(function (a) { return a.querySelector('.sidebar-node'); });
+  var trackEl  = document.getElementById('sidebar-track');
+  var fillEl   = document.getElementById('sidebar-fill');
+  var sections = links.map(function (a) {
+    return document.querySelector(a.getAttribute('href'));
+  }).filter(Boolean);
 
-  var style = document.createElement('style');
-  style.textContent =
-    '.anim-up {' +
-      'opacity: 0;' +
-      'transform: translateY(24px);' +
-      'transition: opacity 420ms ' + EASE_OUT + ', transform 420ms ' + EASE_OUT + ';' +
-      'transition-delay: 80ms;' +
-    '}' +
-    '.anim-up.is-visible { opacity: 1; transform: translateY(0); }';
-  document.head.appendChild(style);
+  var activeIdx = -1;
 
-  var simpleEls = Array.from(document.querySelectorAll(
-    '.context__header, .problem-band__header, .methodology__header, ' +
-    '.findings__header, .findings__divider, ' +
-    '.synthesis__header, .synthesis__insight-1, .synthesis__insight-2, ' +
-    '.solution__header, .solution__subq, .next-steps__header'
-  ));
+  function positionTrack() {
+    var navRect   = nav.getBoundingClientRect();
+    var firstRect = nodes[0].getBoundingClientRect();
+    var lastRect  = nodes[nodes.length - 1].getBoundingClientRect();
+    var topOffset = (firstRect.top + firstRect.height / 2) - navRect.top;
+    var botOffset = (lastRect.top  + lastRect.height / 2) - navRect.top;
+    trackEl.style.top    = topOffset + 'px';
+    trackEl.style.height = (botOffset - topOffset) + 'px';
+  }
 
-  var macroCards  = Array.from(document.querySelectorAll('.findings__macro-card'));
-  var hmwCols     = Array.from(document.querySelectorAll('.synthesis__hmw-col'));
+  function updateFill(idx) {
+    var navRect    = nav.getBoundingClientRect();
+    var firstRect  = nodes[0].getBoundingClientRect();
+    var activeRect = nodes[idx].getBoundingClientRect();
+    var trackTop   = (firstRect.top + firstRect.height / 2) - navRect.top;
+    var fillHeight = (activeRect.top + activeRect.height / 2) - navRect.top - trackTop;
+    fillEl.style.height = Math.max(0, fillHeight) + 'px';
+  }
 
-  simpleEls.forEach(function (el) { el.classList.add('anim-up'); });
-  [macroCards, hmwCols].forEach(function (group) {
-    group.forEach(function (el, i) {
-      el.classList.add('anim-up');
-      el.dataset.animDelay = String(i * 56);
+  function triggerJiggle(link) {
+    link.classList.remove('is-jiggling');
+    void link.offsetWidth;
+    link.classList.add('is-jiggling');
+    link.addEventListener('animationend', function handler() {
+      link.classList.remove('is-jiggling');
+      link.removeEventListener('animationend', handler);
+    });
+  }
+
+  function update() {
+    var threshold = window.innerHeight * 0.85;
+    var active    = 0;
+    sections.forEach(function (s, i) {
+      if (s.getBoundingClientRect().top <= threshold) active = i;
+    });
+    if (active !== activeIdx) {
+      links.forEach(function (a, i) {
+        a.classList.toggle('is-active',  i === active);
+        a.classList.toggle('is-visited', i < active);
+      });
+      updateFill(active);
+      triggerJiggle(links[active]);
+      activeIdx = active;
+    }
+  }
+
+  window.addEventListener('load', function () { positionTrack(); update(); });
+  window.addEventListener('resize', positionTrack);
+  positionTrack();
+
+  var ticking = false;
+  window.addEventListener('scroll', function () {
+    if (!ticking) {
+      requestAnimationFrame(function () { update(); ticking = false; });
+      ticking = true;
+    }
+  }, { passive: true });
+
+  links.forEach(function (a) {
+    a.addEventListener('click', function (e) {
+      var target = document.querySelector(a.getAttribute('href'));
+      if (!target) return;
+      e.preventDefault();
+      var top = target.getBoundingClientRect().top + window.pageYOffset - 80;
+      window.scrollTo({ top: top, behavior: 'smooth' });
     });
   });
 
-  var allEls = simpleEls.concat(macroCards).concat(hmwCols);
-
-  var io = new IntersectionObserver(function (entries) {
-    entries.forEach(function (e) {
-      if (!e.isIntersecting) return;
-      var d = parseInt(e.target.dataset.animDelay || '0');
-      setTimeout(function () { e.target.classList.add('is-visible'); }, d);
-      io.unobserve(e.target);
-    });
-  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
-
-  requestAnimationFrame(function () {
-    allEls.forEach(function (el) { io.observe(el); });
-  });
+  update();
 })();
 </script>
 <script>
-(function() {
-  const fadeEls = document.querySelectorAll('.gt-fade');
-  const spineLine = document.querySelector('.gt-spine-line');
-  const dot1 = document.querySelector('.gt-dot-d1');
-  const dot2 = document.querySelector('.gt-dot-d2');
-
-  const observer = new IntersectionObserver(
-    (entries) => entries.forEach(e => {
-      if (e.isIntersecting) { e.target.classList.add('gt-visible'); observer.unobserve(e.target); }
-    }),
-    { threshold: 0.15, rootMargin: '0px 0px -40px 0px' }
-  );
-  fadeEls.forEach(el => observer.observe(el));
-
-  if (spineLine) {
-    const spineObserver = new IntersectionObserver(
-      (entries) => entries.forEach(e => {
-        if (e.isIntersecting) {
-          spineLine.classList.add('gt-visible');
-          setTimeout(() => dot1?.classList.add('gt-visible'), 500);
-          setTimeout(() => dot2?.classList.add('gt-visible'), 700);
-          spineObserver.unobserve(e.target);
-        }
-      }),
-      { threshold: 0.1 }
-    );
-    spineObserver.observe(spineLine.parentElement);
-  }
+(function () {
+  var btn = document.getElementById('scroll-top');
+  window.addEventListener('scroll', function () {
+    btn.classList.toggle('is-visible', window.pageYOffset > 400);
+  }, { passive: true });
+  btn.addEventListener('click', function () {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
 })();
 </script>
+  <script src="./animations.js"></script>
 </body>
 </html>

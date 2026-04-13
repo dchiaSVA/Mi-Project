@@ -54,3 +54,10 @@ body {
   max-width: 680px;
   margin: 0 auto;
 }
+
+/* ── Scroll animations ── */
+
+.anim-up {
+  will-change: transform;
+  transform: translateZ(0);
+}

@@ -64,8 +64,10 @@ window.Components = {
       ? '<p class="overview__lead">' + data.lead + '</p>'
       : '';
 
+    var idAttr = data.id ? ' id="' + data.id + '"' : '';
+
     return (
-      '<section class="overview">' +
+      '<section class="overview"' + idAttr + '>' +
         '<div class="overview__inner">' +
           lead +
           '<div class="overview__cols">' + cols + '</div>' +

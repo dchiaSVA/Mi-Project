@@ -1,0 +1,996 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mobile Preview — Darren Chia Portfolio</title>
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+  <link href="https://fonts.googleapis.com/css2?family=Caprasimo&family=Newsreader:ital,wght@0,600;0,700;0,800;1,600&family=Space+Grotesk:wght@400;500;700&family=IBM+Plex+Sans:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --paper: #FAF7F2;
+      --ink: #1A1A18;
+      --orange: #e33e19;
+      --muted: #71717B;
+      --muted-2: #666666;
+      --forest: #2d6a4f;
+      --edily: #1145C0;
+      --cooking: #c1622f;
+      --card-bg: #F7F4EF;
+      --card-border: rgba(0,0,0,0.13);
+      --pill-bg: #E6F1FB;
+      --pill-txt: #0C447C;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #E8E4DD;
+      font-family: 'Space Grotesk', sans-serif;
+      min-height: 100vh;
+      padding: 48px 32px 64px;
+    }
+
+    .page-title {
+      text-align: center;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #888;
+      margin-bottom: 40px;
+    }
+
+    .phones-row {
+      display: flex;
+      flex-direction: row;
+      gap: 28px;
+      justify-content: center;
+      align-items: flex-start;
+      flex-wrap: wrap;
+    }
+
+    .phone-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .phone-label {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: #888;
+    }
+
+    /* Phone frame */
+    .phone {
+      width: 260px;
+      height: 562px;
+      border-radius: 36px;
+      border: 2px solid rgba(0,0,0,0.18);
+      background: var(--paper);
+      overflow: hidden;
+      position: relative;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.12), inset 0 0 0 1px rgba(255,255,255,0.5);
+    }
+
+    /* Notch */
+    .phone::before {
+      content: '';
+      position: absolute;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60px;
+      height: 8px;
+      background: rgba(0,0,0,0.15);
+      border-radius: 4px;
+      z-index: 10;
+    }
+
+    .phone-screen-inner {
+      overflow: hidden;
+      width: 100%;
+      height: 100%;
+    }
+
+    /* Scale down 390px design to 260px frame */
+    .phone-content {
+      width: 390px;
+      transform-origin: top left;
+      transform: scale(0.6667);
+      background: var(--paper);
+      min-height: 844px;
+    }
+
+    /* ── Shared Nav ── */
+    .m-nav {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 20px;
+      background: var(--paper);
+    }
+
+    .m-nav__logo {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--orange);
+      letter-spacing: 0.02em;
+    }
+
+    .m-nav__links {
+      display: flex;
+      flex-direction: row;
+      gap: 16px;
+      align-items: center;
+    }
+
+    .m-nav__links a {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--ink);
+      text-decoration: none;
+    }
+
+    /* ── Card ── */
+    .m-card {
+      background: var(--card-bg);
+      border-top: 1px solid var(--card-border);
+      border-radius: 6px;
+      padding: 14px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .m-card--hi { border-top-width: 3px; }
+
+    .m-card__tag {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 10px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--muted);
+    }
+
+    .m-card__title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--ink);
+      line-height: 1.3;
+    }
+
+    .m-card__body {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--muted-2);
+      line-height: 1.5;
+    }
+
+    /* ── Pill ── */
+    .m-pill {
+      display: inline-block;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 10px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+      padding: 3px 10px;
+      border-radius: 20px;
+      background: var(--pill-bg);
+      color: var(--pill-txt);
+    }
+
+    /* ══════════════════════════════════════════
+       PAGE 1: HOMEPAGE
+    ══════════════════════════════════════════ */
+
+    .hp-hero {
+      padding: 24px 20px 28px;
+    }
+
+    .hp-hero__name {
+      font-family: 'Caprasimo', cursive;
+      font-size: 72px;
+      font-weight: 400;
+      color: var(--forest);
+      letter-spacing: -0.03em;
+      line-height: 1em;
+      margin-bottom: 16px;
+    }
+
+    .hp-hero__pitch {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--ink);
+      line-height: 1.5;
+      margin-bottom: 8px;
+    }
+
+    .hp-hero__pitch strong { color: var(--orange); font-weight: 700; }
+
+    .hp-divider {
+      height: 1px;
+      background: rgba(0,0,0,0.1);
+      margin: 0 20px 20px;
+    }
+
+    .hp-section-label {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      color: #707070;
+      text-align: center;
+      margin-bottom: 16px;
+    }
+
+    .hp-card-big {
+      background: var(--card-bg);
+      border-radius: 10px;
+      overflow: hidden;
+      margin: 0 20px 14px;
+    }
+
+    .hp-card-big__img {
+      width: 100%;
+      height: 130px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .hp-card-big__img-label {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      opacity: 0.45;
+    }
+
+    .hp-card-big__body { padding: 16px; }
+
+    .hp-card-big__tag {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 10px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 6px;
+    }
+
+    .hp-card-big__title {
+      font-family: 'Newsreader', serif;
+      font-size: 22px;
+      font-weight: 800;
+      line-height: 1.2;
+      margin-bottom: 8px;
+    }
+
+    .hp-card-big__desc {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--ink);
+      line-height: 1.5;
+      margin-bottom: 10px;
+    }
+
+    /* ══════════════════════════════════════════
+       PAGE 2: GREENTHUMB
+    ══════════════════════════════════════════ */
+
+    .gt-hero {
+      padding: 24px 20px 20px;
+    }
+
+    .gt-hero__case-label {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .gt-hero__title {
+      font-family: 'Newsreader', serif;
+      font-size: 28px;
+      font-weight: 800;
+      line-height: 1.25;
+      color: var(--ink);
+      margin-bottom: 8px;
+    }
+
+    .gt-hero__subtitle {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--forest);
+      margin-bottom: 16px;
+    }
+
+    .gt-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .gt-meta-row {
+      display: flex;
+      flex-direction: row;
+      gap: 8px;
+    }
+
+    .gt-meta-label {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--ink);
+      min-width: 68px;
+    }
+
+    .gt-meta-val {
+      font-size: 13px;
+      font-weight: 400;
+      color: var(--muted);
+      line-height: 1.4;
+    }
+
+    .gt-hero-img {
+      width: 100%;
+      height: 120px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    .gt-stats {
+      padding: 0 20px 20px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .gt-stat {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      padding: 12px 0;
+      border-top: 1px solid rgba(0,0,0,0.1);
+    }
+
+    .gt-stat:last-child { border-bottom: 1px solid rgba(0,0,0,0.1); }
+
+    .gt-stat__num {
+      font-family: 'Newsreader', serif;
+      font-size: 34px;
+      font-weight: 700;
+      color: var(--forest);
+      letter-spacing: -0.04em;
+      line-height: 1;
+    }
+
+    .gt-stat__label {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--ink);
+    }
+
+    .gt-client-block {
+      padding: 0 20px 20px;
+    }
+
+    .gt-client-label {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 10px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+
+    .gt-client-heading {
+      font-family: 'Newsreader', serif;
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--ink);
+      line-height: 1.35;
+      margin-bottom: 16px;
+    }
+
+    .gt-cards {
+      padding: 0 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    /* ══════════════════════════════════════════
+       PAGE 3: EDILY
+    ══════════════════════════════════════════ */
+
+    .ed-hero {
+      padding: 24px 20px 20px;
+    }
+
+    .ed-hero__case-label {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .ed-hero__title {
+      font-family: 'Newsreader', serif;
+      font-size: 26px;
+      font-weight: 700;
+      line-height: 1.25;
+      color: var(--ink);
+      margin-bottom: 8px;
+    }
+
+    .ed-hero__subtitle {
+      font-size: 17px;
+      font-weight: 500;
+      color: var(--edily);
+      margin-bottom: 14px;
+    }
+
+    .ed-hero-img {
+      width: 100%;
+      height: 120px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    .ed-goals-section {
+      padding: 0 20px 20px;
+    }
+
+    .ed-goals-heading {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--edily);
+      text-align: center;
+      margin-bottom: 16px;
+    }
+
+    /* STACKED — was 3-col flex row */
+    .ed-goals {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .ed-goal {
+      display: flex;
+      flex-direction: row;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .ed-goal__dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--edily);
+      flex-shrink: 0;
+      margin-top: 5px;
+    }
+
+    .ed-goal__label {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--edily);
+    }
+
+    .ed-goal__body {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--muted-2);
+      line-height: 1.5;
+    }
+
+    /* SINGLE COL — was 2-col grid */
+    .ed-features {
+      padding: 0 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .ed-feat {
+      background: var(--card-bg);
+      border-top: 1px solid var(--card-border);
+      border-radius: 6px;
+      padding: 14px 16px;
+    }
+
+    .ed-feat__num {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--edily);
+      letter-spacing: -0.04em;
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+
+    .ed-feat__title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--ink);
+    }
+
+    .ed-feat__desc {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--muted-2);
+      line-height: 1.5;
+      margin-top: 4px;
+    }
+
+    /* ══════════════════════════════════════════
+       PAGE 4: COOKING REFRAME
+    ══════════════════════════════════════════ */
+
+    .ck-hero {
+      padding: 24px 20px 20px;
+    }
+
+    .ck-hero__case-label {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .ck-hero__title {
+      font-family: 'Newsreader', serif;
+      font-size: 26px;
+      font-weight: 700;
+      line-height: 1.25;
+      color: var(--ink);
+      margin-bottom: 8px;
+    }
+
+    .ck-hero__subtitle {
+      font-size: 17px;
+      font-weight: 500;
+      color: var(--cooking);
+      margin-bottom: 14px;
+    }
+
+    .ck-hero-img {
+      width: 100%;
+      height: 120px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    /* SINGLE COL — was 3-col grid */
+    .ck-frames-section {
+      padding: 0 20px 20px;
+    }
+
+    .ck-section-mini {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
+
+    .ck-frames {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .ck-frame {
+      background: var(--card-bg);
+      border-top: 1px solid var(--card-border);
+      border-radius: 6px;
+      padding: 14px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .ck-frame--winner { border-top: 3px solid var(--cooking); }
+
+    .ck-frame__eyebrow {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 10px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--muted);
+    }
+
+    .ck-frame--winner .ck-frame__eyebrow { color: var(--cooking); }
+
+    .ck-frame__title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--ink);
+      line-height: 1.3;
+    }
+
+    .ck-frame--winner .ck-frame__title { color: var(--cooking); }
+
+    .ck-frame__tagline {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--muted-2);
+      line-height: 1.5;
+    }
+
+    .ck-badge {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      background: var(--cooking);
+      color: white;
+      padding: 2px 8px;
+      border-radius: 20px;
+      letter-spacing: 0.02em;
+      align-self: flex-start;
+      margin-top: 2px;
+    }
+
+    /* SINGLE COL — was 3-col grid */
+    .ck-hmw-section {
+      padding: 0 20px;
+    }
+
+    .ck-hmw-cards {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .ck-hmw-card {
+      background: var(--card-bg);
+      border-top: 1px solid var(--card-border);
+      border-radius: 6px;
+      padding: 12px 14px;
+    }
+
+    .ck-hmw-card__q {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--ink);
+      line-height: 1.4;
+    }
+  </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+</head>
+<body>
+
+  <p class="page-title">Mobile Preview — 390px viewport · All pages</p>
+
+  <div class="phones-row">
+
+    <!-- ══════════════════════════
+         PHONE 1: HOMEPAGE
+    ══════════════════════════ -->
+    <div class="phone-wrap">
+      <div class="phone">
+        <div class="phone-screen-inner">
+          <div class="phone-content">
+
+            <nav class="m-nav">
+              <span class="m-nav__logo">Darren Chia</span>
+              <div class="m-nav__links">
+                <a href="#">Work</a>
+                <a href="#">About me</a>
+                <a href="#">Connect</a>
+              </div>
+            </nav>
+
+            <div class="hp-hero">
+              <h1 class="hp-hero__name">Darren<br>Chia</h1>
+              <p class="hp-hero__pitch"><strong>Interaction designer</strong> who leads with story and builds with systems that make experiences feel human.</p>
+              <p style="font-family:'IBM Plex Sans',sans-serif;font-size:13px;color:var(--muted);margin-top:8px;">Pursuing MFA <span style="color:var(--orange);">@ SVA</span></p>
+              <p style="font-family:'IBM Plex Sans',sans-serif;font-size:12px;color:var(--muted);margin-top:6px;letter-spacing:0.01em;">Interaction Designer · SVA MFA Candidate · NYC</p>
+            </div>
+
+            <div class="hp-divider"></div>
+            <p class="hp-section-label">Featured Work</p>
+
+            <div class="hp-card-big">
+              <div class="hp-card-big__img" style="background:linear-gradient(135deg,#2d6a4f18,#2d6a4f44);">
+                <span class="hp-card-big__img-label" style="color:var(--forest);">Hero Image</span>
+              </div>
+              <div class="hp-card-big__body">
+                <p class="hp-card-big__tag" style="color:var(--forest);">Service Design</p>
+                <p class="hp-card-big__title" style="color:var(--forest);">GreenThumb: Scaling Belonging</p>
+                <p class="hp-card-big__desc">Helping NYC's 550+ community gardens retain volunteers through better onboarding design.</p>
+                <div style="display:flex;gap:6px;flex-wrap:wrap;">
+                  <span class="m-pill">Service Design</span>
+                  <span class="m-pill">User Research</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="hp-card-big">
+              <div class="hp-card-big__img" style="background:linear-gradient(135deg,#1145C011,#1145C033);">
+                <span class="hp-card-big__img-label" style="color:var(--edily);">Hero Image</span>
+              </div>
+              <div class="hp-card-big__body">
+                <p class="hp-card-big__tag" style="color:var(--edily);">UX Design · Gamification</p>
+                <p class="hp-card-big__title" style="color:var(--edily);">Edily: Gamification Design</p>
+                <p class="hp-card-big__desc">Redesigning an ed-tech platform's engagement system from the ground up.</p>
+                <div style="display:flex;gap:6px;flex-wrap:wrap;">
+                  <span class="m-pill">UX Research</span>
+                  <span class="m-pill">Product Design</span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+      <p class="phone-label">Homepage</p>
+    </div>
+
+    <!-- ══════════════════════════
+         PHONE 2: GREENTHUMB
+    ══════════════════════════ -->
+    <div class="phone-wrap">
+      <div class="phone">
+        <div class="phone-screen-inner">
+          <div class="phone-content">
+
+            <nav class="m-nav">
+              <span class="m-nav__logo">Darren Chia</span>
+              <div class="m-nav__links">
+                <a href="#">Work</a>
+                <a href="#">About me</a>
+                <a href="#">Connect</a>
+              </div>
+            </nav>
+
+            <div class="gt-hero">
+              <p class="gt-hero__case-label">Service Design Case Study</p>
+              <h1 class="gt-hero__title">GreenThumb: Scaling Belonging Across NYC Gardens</h1>
+              <p class="gt-hero__subtitle">Service Design</p>
+              <div class="gt-meta">
+                <div class="gt-meta-row">
+                  <span class="gt-meta-label">Duration</span>
+                  <span class="gt-meta-val">8 Weeks</span>
+                </div>
+                <div class="gt-meta-row">
+                  <span class="gt-meta-label">Team</span>
+                  <span class="gt-meta-val">Kathy Choi, Phil Cote, Darren Chia</span>
+                </div>
+                <div class="gt-meta-row">
+                  <span class="gt-meta-label">Methods</span>
+                  <span class="gt-meta-val">Service Design · User Research · Prototyping</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="gt-hero-img" style="background:linear-gradient(135deg,#2d6a4f18,#2d6a4f44);">
+              <span style="font-size:11px;color:var(--forest);opacity:0.45;font-weight:500;letter-spacing:.06em;text-transform:uppercase;">Hero Image</span>
+            </div>
+
+            <!-- CLIENT block -->
+            <div class="gt-client-block">
+              <p class="gt-client-label">Client</p>
+              <p class="gt-client-heading">GreenThumb is NYC's largest community gardening program — <span style="color:var(--forest);">powered by neighborhoods, not the city.</span></p>
+            </div>
+
+            <!-- Stats — STACKED (was 3-col flex row) -->
+            <div class="gt-stats">
+              <div class="gt-stat">
+                <span class="gt-stat__num">550+</span>
+                <span class="gt-stat__label">Community Gardens Across NYC</span>
+              </div>
+              <div class="gt-stat">
+                <span class="gt-stat__num">20K+</span>
+                <span class="gt-stat__label">Volunteers as Daily Stewards</span>
+              </div>
+              <div class="gt-stat">
+                <span class="gt-stat__num">5</span>
+                <span class="gt-stat__label">Boroughs represented</span>
+              </div>
+            </div>
+
+            <!-- Findings cards -->
+            <div class="gt-cards">
+              <div class="m-card m-card--hi" style="border-top-color:var(--forest);">
+                <p class="m-card__tag" style="color:var(--forest);">Macro 1</p>
+                <p class="m-card__title">Volunteers Aging Out</p>
+                <p class="m-card__body">Legacy gardeners aging out. Without resources to recruit actively, succession stays unresolved.</p>
+              </div>
+              <div class="m-card m-card--hi" style="border-top-color:var(--forest);">
+                <p class="m-card__tag" style="color:var(--forest);">Macro 2</p>
+                <p class="m-card__title">High Turnover Rate</p>
+                <p class="m-card__body">Seasonal volunteers leave before developing. Relationships break each cycle.</p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+      <p class="phone-label">GreenThumb</p>
+    </div>
+
+    <!-- ══════════════════════════
+         PHONE 3: EDILY
+    ══════════════════════════ -->
+    <div class="phone-wrap">
+      <div class="phone">
+        <div class="phone-screen-inner">
+          <div class="phone-content">
+
+            <nav class="m-nav">
+              <span class="m-nav__logo">Darren Chia</span>
+              <div class="m-nav__links">
+                <a href="#">Work</a>
+                <a href="#">About me</a>
+                <a href="#">Connect</a>
+              </div>
+            </nav>
+
+            <div class="ed-hero">
+              <p class="ed-hero__case-label">UX Design · Gamification</p>
+              <h1 class="ed-hero__title">Edily: Redesigning for Engagement</h1>
+              <p class="ed-hero__subtitle">Interaction Design</p>
+              <div style="display:flex;gap:6px;flex-wrap:wrap;">
+                <span class="m-pill">UX Research</span>
+                <span class="m-pill">Product Design</span>
+                <span class="m-pill">Gamification</span>
+              </div>
+            </div>
+
+            <div class="ed-hero-img" style="background:linear-gradient(135deg,#1145C011,#1145C033);">
+              <span style="font-size:11px;color:var(--edily);opacity:0.45;font-weight:500;letter-spacing:.06em;text-transform:uppercase;">Hero Image</span>
+            </div>
+
+            <!-- Goals — STACKED (was 3-col flex row) -->
+            <div class="ed-goals-section">
+              <p class="ed-goals-heading">Design Goals</p>
+              <div class="ed-goals">
+                <div class="ed-goal">
+                  <div class="ed-goal__dot"></div>
+                  <div>
+                    <p class="ed-goal__label">Motivation</p>
+                    <p class="ed-goal__body">Design systems that make learners want to return and progress.</p>
+                  </div>
+                </div>
+                <div class="ed-goal">
+                  <div class="ed-goal__dot"></div>
+                  <div>
+                    <p class="ed-goal__label">Clarity</p>
+                    <p class="ed-goal__body">Remove confusion about where to go next in the learning flow.</p>
+                  </div>
+                </div>
+                <div class="ed-goal">
+                  <div class="ed-goal__dot"></div>
+                  <div>
+                    <p class="ed-goal__label">Retention</p>
+                    <p class="ed-goal__body">Build habits through reward loops grounded in research.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Features — SINGLE COL (was 2-col grid) -->
+            <div class="ed-features" style="margin-top:20px;">
+              <div class="ed-feat">
+                <p class="ed-feat__num">90%</p>
+                <p class="ed-feat__title">Users wanted clearer progress signals</p>
+                <p class="ed-feat__desc">Survey finding from 42 active learners on the platform.</p>
+              </div>
+              <div class="ed-feat">
+                <p class="ed-feat__num">3×</p>
+                <p class="ed-feat__title">Improvement in session completion</p>
+                <p class="ed-feat__desc">After implementing milestone-based progress indicators.</p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+      <p class="phone-label">Edily</p>
+    </div>
+
+    <!-- ══════════════════════════
+         PHONE 4: COOKING REFRAME
+    ══════════════════════════ -->
+    <div class="phone-wrap">
+      <div class="phone">
+        <div class="phone-screen-inner">
+          <div class="phone-content">
+
+            <nav class="m-nav">
+              <span class="m-nav__logo">Darren Chia</span>
+              <div class="m-nav__links">
+                <a href="#">Work</a>
+                <a href="#">About me</a>
+                <a href="#">Connect</a>
+              </div>
+            </nav>
+
+            <div class="ck-hero">
+              <p class="ck-hero__case-label">Content Strategy · UX</p>
+              <h1 class="ck-hero__title">Cooking Reframe: Changing How People Learn to Cook</h1>
+              <p class="ck-hero__subtitle">Content Design</p>
+              <div style="display:flex;gap:6px;flex-wrap:wrap;">
+                <span class="m-pill">Content Strategy</span>
+                <span class="m-pill">Prototyping</span>
+              </div>
+            </div>
+
+            <div class="ck-hero-img" style="background:linear-gradient(135deg,#c1622f11,#c1622f33);">
+              <span style="font-size:11px;color:var(--cooking);opacity:0.45;font-weight:500;letter-spacing:.06em;text-transform:uppercase;">Hero Image</span>
+            </div>
+
+            <!-- Reframe cards — SINGLE COL (was 3-col grid) -->
+            <div class="ck-frames-section">
+              <p class="ck-section-mini">Three Reframes</p>
+              <div class="ck-frames">
+                <div class="ck-frame">
+                  <p class="ck-frame__eyebrow">Option A</p>
+                  <p class="ck-frame__title">Technique First</p>
+                  <p class="ck-frame__tagline">Lead with skills, ingredients follow from mastery.</p>
+                </div>
+                <div class="ck-frame ck-frame--winner">
+                  <p class="ck-frame__eyebrow">Winner</p>
+                  <span class="ck-badge">Selected</span>
+                  <p class="ck-frame__title">Context First</p>
+                  <p class="ck-frame__tagline">Start with why a dish exists, then teach how to make it.</p>
+                </div>
+                <div class="ck-frame">
+                  <p class="ck-frame__eyebrow">Option C</p>
+                  <p class="ck-frame__title">Emotion First</p>
+                  <p class="ck-frame__tagline">Anchor learning in memory and feeling.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- HMW cards — SINGLE COL (was 3-col grid) -->
+            <div class="ck-hmw-section" style="margin-top:20px;">
+              <p class="ck-section-mini">How Might We</p>
+              <div class="ck-hmw-cards">
+                <div class="ck-hmw-card">
+                  <p class="ck-hmw-card__q">Make cooking feel less intimidating for first-timers?</p>
+                </div>
+                <div class="ck-hmw-card">
+                  <p class="ck-hmw-card__q">Connect dishes to personal context before teaching technique?</p>
+                </div>
+                <div class="ck-hmw-card">
+                  <p class="ck-hmw-card__q">Help people build a mental model of a cuisine, not just a recipe?</p>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+      <p class="phone-label">Cooking Reframe</p>
+    </div>
+
+  </div>
+
+  <script src="../animations.js"></script>
+</body>
+</html>

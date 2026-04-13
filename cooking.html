@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Cooking Reframe — Darren Chia</title>
+  <link rel="icon" type="image/svg+xml" href="./favicon.svg">
   <link href="https://fonts.googleapis.com/css2?family=Caprasimo&family=Domine:wght@600;700&family=IBM+Plex+Mono:wght@500&family=Newsreader:ital,wght@0,600;0,700;0,800;1,600;1,700&family=Space+Grotesk:wght@400;500;700&family=IBM+Plex+Sans:wght@400;500&family=Lora:ital,wght@0,500;0,600;0,700;1,600;1,700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="./base.css">
   <link rel="stylesheet" href="./components.css">
@@ -160,6 +161,9 @@
     .ck-frame-tag--on { background: var(--pill-bg); color: var(--pill-txt); }
     .ck-frame-tag--off { border: 0.5px solid var(--muted); color: var(--muted); opacity: 0.45; text-decoration: line-through; }
 
+    /* Swipe hint — hidden on desktop, shown on mobile */
+    .ck-swipe-hint { display: none; }
+
     /* ── Testing — Why environment left-border block ── */
     .ck-why-block { border-left: 3px solid var(--cooking); padding-left: 13px; display: flex; flex-direction: column; }
     .ck-why-label { font-family: 'IBM Plex Sans', sans-serif; font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin-bottom: 12px; }
@@ -198,6 +202,115 @@
     .ck-audit-card__refs { font-family: 'IBM Plex Sans', sans-serif; font-size: 11px; font-weight: 500; letter-spacing: 0.02em; color: var(--muted); margin-top: 4px; }
     .ck-hmw-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
     .ck-hmw-card { background: var(--card-bg); border-top: 1px solid var(--card-border); border-radius: 6px; padding: 16px 18px; display: flex; flex-direction: column; gap: 8px; min-height: 140px; }
+
+/* ── Mobile ── */
+    @media (max-width: 809px) {
+      /* Spine finding ↔ principle grid: 3-col → stack */
+      .ck-spine-row { grid-template-columns: 1fr; gap: 12px; }
+      .ck-spine-center { display: none; }
+
+      /* Winning reframe: horizontal scroll so all 3 frames stay side-by-side.
+         min-width 180px lets 2 cards show + third peeks as natural swipe affordance.
+         width: 100% prevents scroll container from inheriting the 680px max-width parent,
+         which would otherwise create empty scroll space after the last card. */
+      .ck-frames-grid {
+        display: flex;
+        flex-direction: row;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        gap: 8px;
+        padding-bottom: 8px;
+        width: 100%;
+        box-sizing: border-box;
+      }
+      .ck-frame-card {
+        min-width: 180px;
+        flex: none;
+        padding: 10px 10px;
+      }
+      /* Winning frame appears first (leftmost) on mobile */
+      .ck-frame-card--winner { order: -1; }
+      /* Scale down frame title slightly for compact cards */
+      .ck-frame-title { font-size: 14px; }
+
+      /* HMW 3-col → single col */
+      .ck-hmw-grid { grid-template-columns: 1fr; }
+
+      /* Design implication detail: flex col so phone can always be ordered to top */
+      .ck-di-detail { display: flex; flex-direction: column; gap: 24px; }
+
+      /* Phone always on top regardless of DOM order */
+      .ck-di-detail .ck-di-detail__phone {
+        order: -1;
+        max-width: 200px;
+        margin: 0 auto;
+      }
+
+      /* Feature concept phone screens: 4-up row → 2×2 grid (keeps grouping, avoids wall of images) */
+      .ck-di-phones {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+      }
+
+      /* Reframe rows: stack illustration on top, card below */
+      .ck-reframe { flex-direction: column; gap: 20px; align-items: center; }
+      .ck-reframe__img { width: 55%; max-width: 160px; flex: none; }
+      .ck-reframe__card { width: 100%; }
+
+      /* Stats band: 2-col → stacked rows */
+      .ck-stats-inner { flex-direction: column; }
+      .ck-stat-item { align-items: flex-start; padding: 24px 0; }
+      .ck-stat-label { text-align: left; }
+      .ck-stat-num { font-size: 44px; }
+      .ck-stat-item--bordered {
+        border-left: none;
+        border-top: 1px solid rgba(193,98,47,0.2);
+      }
+
+      /* Band internal padding — was 150px, far too much on mobile */
+      .ck-band { padding: 64px 20px; }
+
+      /* Outcome feature grid → single col */
+      .ed-outcome-feature__grid { grid-template-columns: 1fr; gap: 24px; }
+
+      /* Spine layout → hide spine */
+      .ed-spine-wrap { flex-direction: column; gap: 0; }
+      .ed-spine { display: none; }
+
+      /* Hero stat → smaller */
+      .ed-hero-stat__num { font-size: 52px; }
+
+      /* Photo collage: absolute positions break at mobile widths → 2×2 grid */
+      .ck-photo-grid {
+        position: relative;
+        height: auto;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+      }
+      .ck-photo-grid__img {
+        position: static;
+        width: 100%;
+        height: 150px;
+        object-fit: cover;
+      }
+
+      /* Takeaway image — constrain so it doesn't dominate the screen */
+      .ck-takeaways-img { width: 75%; max-width: 260px; margin: 0 auto; display: block; }
+
+      /* Swipe hint — visible on mobile only */
+      .ck-swipe-hint {
+        display: block;
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: 11px;
+        font-weight: 500;
+        color: var(--muted);
+        text-align: center;
+        letter-spacing: 0.04em;
+        margin-top: 2px;
+      }
+    }
     .ck-hmw-card__body { font-family: 'Space Grotesk', sans-serif; font-size: 13px; font-weight: 500; line-height: 1.5em; color: var(--ink); flex: 1; }
     .ck-hmw-card__attr { font-family: 'IBM Plex Sans', sans-serif; font-size: 11px; font-weight: 500; letter-spacing: 0.02em; color: var(--muted); padding-top: 8px; border-top: 0.5px solid rgba(0,0,0,0.07); }
     .ck-themes { display: flex; flex-direction: column; gap: 32px; }
@@ -239,20 +352,52 @@
     .ck-stat-item--bordered { border-left: 2px solid var(--cooking); }
     .ck-stat-num { font-family: 'Newsreader', serif; font-size: 62px; font-weight: 700; color: var(--cooking); letter-spacing: -0.04em; line-height: 1; }
     .ck-stat-label { font-family: 'Space Grotesk', sans-serif; font-size: 15px; font-weight: 500; line-height: 1.5em; color: var(--ink); text-align: center; max-width: 200px; }
+
+    /* ── Mobile overrides (must come AFTER regular CSS to win the cascade) ── */
+    @media (max-width: 809px) {
+      /* Reframe rows: stack illustration on top, card below */
+      .ck-reframe { flex-direction: column; gap: 20px; align-items: center; }
+      .ck-reframe__img { flex: none; width: 55%; max-width: 160px; }
+      .ck-reframe__card { width: 100%; }
+
+      /* Stats band: stack rows vertically, hide the left-border divider */
+      .ck-stats-inner { flex-direction: column; }
+      .ck-stat-item { align-items: flex-start; padding: 24px 0; }
+      .ck-stat-label { text-align: left; max-width: none; }
+      .ck-stat-num { font-size: 44px; }
+      .ck-stat-item--bordered { border-left: none; border-top: none; }
+    }
   </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 </head>
 <body>
 
   <!-- Navigation -->
-  <div id="nav-placeholder"></div>
+  <header class="site-header">
+    <div class="site-header__inner">
+      <a class="site-header__logo" href="./index.html">Darren Chia</a>
+      <div class="site-header__links">
+        <a href="./index.html#featured-work">Work</a>
+        <a href="./index.html#info">About me</a>
+        <a href="https://www.linkedin.com/in/darren-chia-648151233" target="_blank" rel="noopener">Connect</a>
+      </div>
+    </div>
+  </header>
 
-  <nav class="sidebar-nav">
-    <a href="#background">BACKGROUND</a>
-    <a href="#research">RESEARCH</a>
-    <a href="#testing">TESTING</a>
-    <a href="#solution">SOLUTION</a>
-    <a href="#takeaways">TAKEAWAYS</a>
+  <nav class="sidebar-nav" id="sidebar-nav">
+    <div class="sidebar-track" id="sidebar-track">
+      <div class="sidebar-track__fill" id="sidebar-fill"></div>
+    </div>
+    <a href="#ck-overview"><span class="sidebar-node"></span><span class="sidebar-label">OVERVIEW</span></a>
+    <a href="#background"><span class="sidebar-node"></span><span class="sidebar-label">BACKGROUND</span></a>
+    <a href="#research"><span class="sidebar-node"></span><span class="sidebar-label">RESEARCH</span></a>
+    <a href="#testing"><span class="sidebar-node"></span><span class="sidebar-label">TESTING</span></a>
+    <a href="#solution"><span class="sidebar-node"></span><span class="sidebar-label">SOLUTION</span></a>
+    <a href="#takeaways"><span class="sidebar-node"></span><span class="sidebar-label">TAKEAWAYS</span></a>
   </nav>
+
+  <button class="scroll-top" id="scroll-top" aria-label="Scroll to top">↑</button>
 
   <div class="page-wrapper">
 
@@ -612,6 +757,8 @@
             </div>
           </div>
 
+          <p class="ck-swipe-hint">swipe to compare ↔</p>
+
           <div class="ck-why-block">
             <p class="ck-why-label">Why environment</p>
             <div class="ck-why-row">
@@ -809,55 +956,33 @@
     });
   })();
   </script>
+  <footer class="footer">
+    <div class="footer__connect">
+      <p class="footer__connect-heading">Let's Connect</p>
+      <div class="footer__connect-details">
+        <div class="footer__contact-group">
+          <span class="footer__contact-label">Mail</span>
+          <span class="footer__contact-value">dc45008@gmail.com</span>
+        </div>
+        <div class="footer__contact-group">
+          <span class="footer__contact-label">Phone</span>
+          <span class="footer__contact-value">973 873 4508</span>
+        </div>
+        <div class="footer__contact-group">
+          <span class="footer__contact-label">Location</span>
+          <span class="footer__contact-value">New York City, NYC</span>
+        </div>
+      </div>
+    </div>
+    <div class="footer__bar">
+      <div class="footer__bar-group">
+        <span>Last updated:</span>
+        <span>02.01.2026</span>
+      </div>
+    </div>
+  </footer>
   <script src="./components/loader.js"></script>
   <script src="./components/templates.js"></script>
-  <script>
-  (function () {
-    var EASE_OUT = 'cubic-bezier(0.22,1,0.36,1)';
-
-    var style = document.createElement('style');
-    style.textContent =
-      '.anim-up {' +
-        'opacity: 0;' +
-        'transform: translateY(24px);' +
-        'transition: opacity 420ms ' + EASE_OUT + ', transform 420ms ' + EASE_OUT + ';' +
-        'transition-delay: 80ms;' +
-      '}' +
-      '.anim-up.is-visible { opacity: 1; transform: translateY(0); }';
-    document.head.appendChild(style);
-
-    var simpleEls = Array.from(document.querySelectorAll(
-      '.ck-stats-band, .context__header, .problem-band__header, ' +
-      '.methodology__header, .synthesis__header'
-    ));
-
-    var reframeCards = Array.from(document.querySelectorAll('.ck-reframe'));
-    var frameCards   = Array.from(document.querySelectorAll('.ck-frame-card'));
-
-    simpleEls.forEach(function (el) { el.classList.add('anim-up'); });
-    [reframeCards, frameCards].forEach(function (group) {
-      group.forEach(function (el, i) {
-        el.classList.add('anim-up');
-        el.dataset.animDelay = String(i * 56);
-      });
-    });
-
-    var allEls = simpleEls.concat(reframeCards).concat(frameCards);
-
-    var io = new IntersectionObserver(function (entries) {
-      entries.forEach(function (e) {
-        if (!e.isIntersecting) return;
-        var d = parseInt(e.target.dataset.animDelay || '0');
-        setTimeout(function () { e.target.classList.add('is-visible'); }, d);
-        io.unobserve(e.target);
-      });
-    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
-
-    requestAnimationFrame(function () {
-      allEls.forEach(function (el) { io.observe(el); });
-    });
-  })();
-  </script>
   <script>
     document.getElementById('ck-hero').outerHTML = Components.renderHero({
       title:    `Reframing Healthy Cooking Habits`,
@@ -871,11 +996,12 @@
     });
 
     document.getElementById('ck-hero-image').outerHTML = Components.renderHeroImage({
-      src: `./images/cooking-hero.webp`,
+      src: `./images/cooking-hero-opt.webp`,
       alt: `Reframing Healthy Cooking Habits`
     });
 
     document.getElementById('ck-overview').outerHTML = Components.renderOverview({
+      id: 'ck-overview',
       cols: [
         { heading: `Problem`,  body: `People want to break unhealthy eating habits and cook more, but often struggle having the time, money, or drive to do so.` },
         { heading: `Solution`, body: `We created a convenience tool that focused on <strong>configuring kitchen limitations</strong>, <strong>browse review save share recipes, and substitute recipes by kitchen limitations</strong>` },
@@ -883,5 +1009,102 @@
       ]
     });
   </script>
+  <script>
+  (function () {
+    var nav      = document.getElementById('sidebar-nav');
+    setTimeout(function () { nav.style.opacity = '1'; }, 300);
+    var links    = Array.from(nav.querySelectorAll('a'));
+    var nodes    = links.map(function (a) { return a.querySelector('.sidebar-node'); });
+    var trackEl  = document.getElementById('sidebar-track');
+    var fillEl   = document.getElementById('sidebar-fill');
+    var sections = links.map(function (a) {
+      return document.querySelector(a.getAttribute('href'));
+    }).filter(Boolean);
+
+    var activeIdx = -1;
+
+    function positionTrack() {
+      var navRect   = nav.getBoundingClientRect();
+      var firstRect = nodes[0].getBoundingClientRect();
+      var lastRect  = nodes[nodes.length - 1].getBoundingClientRect();
+      var topOffset = (firstRect.top + firstRect.height / 2) - navRect.top;
+      var botOffset = (lastRect.top  + lastRect.height / 2) - navRect.top;
+      trackEl.style.top    = topOffset + 'px';
+      trackEl.style.height = (botOffset - topOffset) + 'px';
+    }
+
+    function updateFill(idx) {
+      var navRect    = nav.getBoundingClientRect();
+      var firstRect  = nodes[0].getBoundingClientRect();
+      var activeRect = nodes[idx].getBoundingClientRect();
+      var trackTop   = (firstRect.top + firstRect.height / 2) - navRect.top;
+      var fillHeight = (activeRect.top + activeRect.height / 2) - navRect.top - trackTop;
+      fillEl.style.height = Math.max(0, fillHeight) + 'px';
+    }
+
+    function triggerJiggle(link) {
+      link.classList.remove('is-jiggling');
+      void link.offsetWidth;
+      link.classList.add('is-jiggling');
+      link.addEventListener('animationend', function handler() {
+        link.classList.remove('is-jiggling');
+        link.removeEventListener('animationend', handler);
+      });
+    }
+
+    function update() {
+      var threshold = window.innerHeight * 0.85;
+      var active    = 0;
+      sections.forEach(function (s, i) {
+        if (s.getBoundingClientRect().top <= threshold) active = i;
+      });
+      if (active !== activeIdx) {
+        links.forEach(function (a, i) {
+          a.classList.toggle('is-active',  i === active);
+          a.classList.toggle('is-visited', i < active);
+        });
+        updateFill(active);
+        triggerJiggle(links[active]);
+        activeIdx = active;
+      }
+    }
+
+    window.addEventListener('load', function () { positionTrack(); update(); });
+    window.addEventListener('resize', positionTrack);
+    positionTrack();
+
+    var ticking = false;
+    window.addEventListener('scroll', function () {
+      if (!ticking) {
+        requestAnimationFrame(function () { update(); ticking = false; });
+        ticking = true;
+      }
+    }, { passive: true });
+
+    links.forEach(function (a) {
+      a.addEventListener('click', function (e) {
+        var target = document.querySelector(a.getAttribute('href'));
+        if (!target) return;
+        e.preventDefault();
+        var top = target.getBoundingClientRect().top + window.pageYOffset - 80;
+        window.scrollTo({ top: top, behavior: 'smooth' });
+      });
+    });
+
+    update();
+  })();
+  </script>
+  <script>
+  (function () {
+    var btn = document.getElementById('scroll-top');
+    window.addEventListener('scroll', function () {
+      btn.classList.toggle('is-visible', window.pageYOffset > 400);
+    }, { passive: true });
+    btn.addEventListener('click', function () {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  })();
+  </script>
+  <script src="./animations.js"></script>
 </body>
 </html>
